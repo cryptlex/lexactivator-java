@@ -19,13 +19,10 @@ public class LexActivator
     public static final int LA_UV_TRIAL = 2;
 
     /**
-     * Sets the path of the Product.dat file. This should be used if your
-     * application and Product.dat file are in different folders or you have
-     * renamed the Product.dat file.<p>
+     * Sets the path of the Product.dat file.<p>
      * </p>
      * If this function is used, it must be called on every start of your
      * program before any other functions are called.
-     *
      * @param filePath path of the product file (Product.dat)
      * @throws LexActivatorException
      */
@@ -38,6 +35,19 @@ public class LexActivator
             throw new LexActivatorException(status);
         }
     }
+    
+    /**
+    * Embeds the Product.dat file in the application.<p>
+    * </p>
+    * It can be used instead of SetProductFile() in case you want
+    * to embed the Product.dat file in your application.
+    * This function must be called on every start of your program
+    * before any other functions are called.
+    * @param productData content of the Product.dat file
+    * @throws LexActivatorException
+    */
+
+    public static void SetProductData(String productData) throws LexActivatorException
 
     /**
      * Sets the version GUID of your application.
