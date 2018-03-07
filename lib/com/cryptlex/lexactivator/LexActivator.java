@@ -14,14 +14,12 @@ public class LexActivator {
     public static final int LA_SYSTEM = 2;
 
     /**
-     * Sets the path of the Product.dat file. This should be used if your
-     * application and Product.dat file are in different folders or you have
-     * renamed the Product.dat file.<p>
+     * Sets the absolute path of the Product.dat file.<p>
      * </p>
-     * If this function is used, it must be called on every start of your
-     * program before any other functions are called.
+     * This function must be called on every start of your program
+     * before any other functions are called.
      *
-     * @param filePath path of the product file (Product.dat)
+     * @param filePath absolute path of the product file (Product.dat)
      * @throws LexActivatorException
      */
     public static void SetProductFile(String filePath) throws LexActivatorException {
@@ -34,14 +32,15 @@ public class LexActivator {
     }
 
     /**
-     * Sets the path of the Product.dat file. This should be used if your
-     * application and Product.dat file are in different folders or you have
-     * renamed the Product.dat file.<p>
+     * Embeds the Product.dat file in the application.<p>
      * </p>
-     * If this function is used, it must be called on every start of your
-     * program before any other functions are called.
+     * It can be used instead of SetProductFile() in case you want
+     * to embed the Product.dat file in your application.<p>
+     * </p>
+     * This function must be called on every start of your program
+     * before any other functions are called.
      *
-     * @param filePath path of the product file (Product.dat)
+     * @param productData content of the Product.dat file
      * @throws LexActivatorException
      */
     public static void SetProductData(String productData) throws LexActivatorException {
@@ -57,9 +56,9 @@ public class LexActivator {
      * Sets the version GUID of your application.
      * <p>
      * </p>
-     * This function must be called on every start of your program before any
-     * other functions are called, with the exception of SetProductFile()
-     * function.
+     * This function must be called on every start of your program before
+     * any other functions are called, with the exception of SetProductFile()
+     * or SetProductData() function.
      *
      * @param versionGUID the unique version GUID of your application as
      * mentioned on the product version page of your application in the
@@ -94,18 +93,18 @@ public class LexActivator {
     }
 
     /**
-     * Sets the extra data which you may want to fetch from the user at the time
-     * of activation.
+     * Sets the extra data which you may want to fetch from the user
+     * at the time of activation.
      * <p>
      * </p>
-     * The extra data appears along with activation details of the product key
+     * The extra data appears along with the activation details of the product key
      * in dashboard.
      * <p>
      * </p>
-     * <b>Note: </b>If the length of the string is more than 256, it throws
+     * <b>Note: </b>If the length of the string is more than 1024, it throws
      * an exception.
      *
-     * @param extraData string of maximum length 256 characters with utf-8
+     * @param extraData string of maximum length 1024 characters with utf-8 encoding.
      * encoding.
      * @throws LexActivatorException
      */
@@ -119,18 +118,17 @@ public class LexActivator {
     }
 
     /**
-     * Sets the extra data which you may want to fetch from the user at the time
-     * of activation.
+     * Sets the extra data which you may want to fetch from the user
+     * at the time of trial activation.
      * <p>
      * </p>
-     * The extra data appears along with activation details of the product key
-     * in dashboard.
+     * The extra data appears along with the trial activation details in dashboard.
      * <p>
      * </p>
-     * <b>Note: </b>If the length of the string is more than 256, it throws
+     * <b>Note: </b>If the length of the string is more than 1024, it throws
      * an exception.
      *
-     * @param extraData string of maximum length 256 characters with utf-8
+     * @param extraData string of maximum length 1024 characters with utf-8 encoding.
      * encoding.
      * @throws LexActivatorException
      */
@@ -168,9 +166,9 @@ public class LexActivator {
     }
 
     /**
-     * Gets the stored product key which was used for activation.
+     * Gets the app version of the product as set in the dashboard.
      *
-     * @return Returns the product key.
+     * @return Returns the app version.
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
@@ -222,9 +220,9 @@ public class LexActivator {
     }
 
     /**
-     * Gets the stored product key which was used for activation.
+     * Gets the email associated with product key used for activation.
      *
-     * @return Returns the product key.
+     * @return Returns the product key email.
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
@@ -277,7 +275,8 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetProductKeyCustomField(String fieldId) throws LexActivatorException, UnsupportedEncodingException {
+    public static String GetProductKeyCustomField(String fieldId)
+            throws LexActivatorException, UnsupportedEncodingException {
 
         int status;
         if (Platform.isWindows()) {
@@ -297,7 +296,7 @@ public class LexActivator {
     }
 
     /**
-     * Gets the value of the extra activation data.
+     * Gets the value of the activation extra data.
      *
      * @return Returns the extra activation data.
      * @throws LexActivatorException
@@ -322,7 +321,7 @@ public class LexActivator {
     }
 
     /**
-     * Gets the value of the extra activation data.
+     * Gets the value of the trial activation extra data.
      *
      * @return Returns the extra activation data.
      * @throws LexActivatorException
@@ -347,19 +346,9 @@ public class LexActivator {
     }
 
     /**
-     * Gets the number of remaining trial days.
-     * <p>
-     * </p>
-     * If the trial has expired or has been tampered, daysLeft is set to 0 days.
-     * <p>
-     * </p>
-     * <b>Note: </b>The trial must be started by calling ActivateTrial() or
-     * InitializeTrial() at least once in the past before calling this function.
-     *
-     * @param trialType depending upon whether your application uses verified
-     * trial or not, this parameter can have one of the following values:
-     * LA_V_TRIAL, LA_UV_TRIAL
-     * @return Returns number of trial days left.
+     * Gets the trial expiry date timestamp.
+     * 
+     * @return Returns trial expiry date timestamp.
      * @throws LexActivatorException
      */
     public static int GetTrialExpiryDate() throws LexActivatorException {
@@ -377,19 +366,9 @@ public class LexActivator {
     }
 
     /**
-     * Gets the number of remaining trial days.
-     * <p>
-     * </p>
-     * If the trial has expired or has been tampered, daysLeft is set to 0 days.
-     * <p>
-     * </p>
-     * <b>Note: </b>The trial must be started by calling ActivateTrial() or
-     * InitializeTrial() at least once in the past before calling this function.
-     *
-     * @param trialType depending upon whether your application uses verified
-     * trial or not, this parameter can have one of the following values:
-     * LA_V_TRIAL, LA_UV_TRIAL
-     * @return Returns number of trial days left.
+     * Gets the local trial expiry date timestamp.
+     * 
+     * @return Returns trial expiry date timestamp.
      * @throws LexActivatorException
      */
     public static int GetLocalTrialExpiryDate() throws LexActivatorException {
@@ -408,8 +387,8 @@ public class LexActivator {
 
     /**
      * Activates your application by contacting the Cryptlex servers. It
-     * validates the key and returns with encrypted and digitally signed
-     * response which it stores and uses to activate your application.
+     * validates the key and returns with encrypted and digitally signed token
+     * which it stores and uses to activate your application.
      * <p>
      * </p>
      * This function should be executed at the time of registration, ideally on
@@ -526,24 +505,22 @@ public class LexActivator {
     }
 
     /**
-     * It verifies whether your app is genuinely activated or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of activation.
+     * It verifies whether your app is genuinely activated or not. The verification is
+     * done locally by verifying the cryptographic digital signature fetched at the time of
+     * activation.
      * <p>
      * </p>
-     * After verifying locally, it schedules a server check in a separate thread
-     * on due dates. The default interval for server check is 100 days and this
-     * can be changed if required.
+     * After verifying locally, it schedules a server check in a separate thread. After the
+     * first server sync it periodically does further syncs at a frequency set for the product
+     * key.
      * <p>
      * </p>
-     * In case server validation fails due to network error, it retries every 15
-     * minutes. If it continues to fail for fixed number of days (grace period),
-     * the function returns LA_GP_OVER instead of LA_OK. The default length of
-     * grace period is 30 days and this can be changed if required.
+     * In case server sync fails due to network error, and it continues to fail for fixed
+     * number of days (grace period), the function returns LA_GP_OVER instead of LA_OK.
      * <p>
      * </p>
-     * This function must be called on every start of your program to verify the
-     * activation of your app.
+     * This function must be called on every start of your program to verify the activation
+     * of your app.
      * <p>
      * </p>
      * <b>Note: </b>If application was activated offline using
@@ -573,13 +550,16 @@ public class LexActivator {
     }
 
     /**
-     * It verifies whether your app is genuinely activated or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of activation.
+     * It verifies whether your app is genuinely activated or not. The verification is
+     * done locally by verifying the cryptographic digital signature fetched at the time of
+     * activation.
      * <p>
      * </p>
      * This is just an auxiliary function which you may use in some specific
      * cases.
+     * <p>
+     * </p>
+     * <b>Note: </b>You may want to set grace period to 0 to ignore grace period.
      *
      * @return LA_OK, LA_EXPIRED, LA_REVOKED, LA_GP_OVER, LA_FAIL
      * @throws LexActivatorException
@@ -604,8 +584,8 @@ public class LexActivator {
     }
 
     /**
-     * Starts the verified trial in your application by contacting the Cryptlex
-     * servers.
+     * Starts the verified trial in your application by contacting the
+     * Cryptlex servers.
      * <p>
      * </p>
      * This function should be executed when your application starts first time
@@ -691,17 +671,16 @@ public class LexActivator {
     }
 
     /**
-     * Starts the unverified trial if trial has not started yet and if trial has
-     * already started, it verifies the validity of trial.
+     * Starts the local(unverified) trial.
      * <p>
      * </p>
-     * This function must be called on every start of your program during the
-     * trial period.
+     * This function should be executed when your application starts first time on
+     * the user's computer, ideally on a button click.
      * <p>
      * </p>
      * <b>Note: </b>This function is only meant for unverified trials.
      *
-     * @param trialLength trial length as set in the dashboard for the product
+     * @param trialLength trial length in days
      * version
      * @return LA_OK, LA_T_EXPIRED, LA_FAIL
      * @throws LexActivatorException
@@ -723,8 +702,7 @@ public class LexActivator {
 
     /**
      * It verifies whether trial has started and is genuine or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of trial activation.
+     * verification is done locally.
      * <p>
      * </p>
      * This function must be called on every start of your program during the
