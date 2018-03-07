@@ -3,6 +3,7 @@ package sample;
 import com.cryptlex.lexactivator.LexActivator;
 import com.cryptlex.lexactivator.LexActivatorException;
 import java.io.File;
+import java.time.Instant;
 import java.io.UnsupportedEncodingException;
 
 public class Sample
@@ -10,11 +11,12 @@ public class Sample
     public static void main(String[] args)
     {
         int status;
-        String path = System.getProperty("user.dir") + File.separator +"Product.dat";
         try
         {
-            LexActivator.SetProductFile(path);
-            LexActivator.SetVersionGUID("59A44CE9-5415-8CF3-BD54-EA73A64E9A1B", LexActivator.LA_USER);
+            // String path = System.getProperty("user.dir") + File.separator +"Product.dat";
+            // LexActivator.SetProductFile(path);
+            LexActivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE");
+            LexActivator.SetProductVersionGuid("PASTE_PRODUCT_VERSION_GUID", LexActivator.LA_USER);
 
             status = LexActivator.IsProductGenuine();
             if (LexActivator.LA_OK == status)
@@ -26,26 +28,29 @@ public class Sample
             } else if (LexActivator.LA_GP_OVER == status)
             {
                 System.out.println("Product is genuinely activated, but grace period is over!");
+            } else if (LexActivator.LA_REVOKED == status)
+            {
+                System.out.println("Product is genuinely activated, but product key has been revoked!");
             } else
             {
                 int trialStatus;
-                LexActivator.SetTrialKey("CCEAF69B-144EDE48-B763AE2F-A0957C93-98827434");
                 trialStatus = LexActivator.IsTrialGenuine();
                 if (LexActivator.LA_OK == trialStatus)
                 {
-                    System.out.println("Trial days left: "+ LexActivator.GetTrialDaysLeft(LexActivator.LA_V_TRIAL));
+                    int trialExpiryDate = LexActivator.GetTrialExpiryDate();
+		    long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86500;
+                    System.out.println("Trial days left: "+ daysLeft);
                 } 
                 else if (LexActivator.LA_T_EXPIRED == trialStatus)
                 {
                     System.out.println("Trial has expired!");
                     // Time to buy the product key and activate the app
-                    LexActivator.SetProductKey("986D8-DE8AF-C2B37-50BF5-03EA1");
-                    LexActivator.SetExtraActivationData("sample data");
+                    LexActivator.SetProductKey("PASTE_PRODUCT_KEY");
+                    LexActivator.SetActivationExtraData("sample data");
                     // Activating the product
                     status = LexActivator.ActivateProduct();    // Ideally on a button click inside a dialog
                     if (LexActivator.LA_OK == status){
                         System.out.println("Product activated successfully!");
-                        //System.out.println("Custom field 301: "+ LexActivator.GetCustomLicenseField("301"));
                     }
                     else {
                         System.out.println("Product activation failed: " + status);
@@ -57,8 +62,9 @@ public class Sample
                     // Activating the trial
                     trialStatus = LexActivator.ActivateTrial();   // Ideally on a button click inside a dialog
                     if (LexActivator.LA_OK == trialStatus){
-                        System.out.println("Trial started, days left: "+ LexActivator.GetTrialDaysLeft(LexActivator.LA_V_TRIAL));
-                    }
+                        int trialExpiryDate = LexActivator.GetTrialExpiryDate();
+                        long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86500;
+                        System.out.println("Trial days left: "+ daysLeft);                    }
                     else {
                         //Trial was tampered or has expired
                         System.out.println("Trial activation failed: " + trialStatus);
@@ -71,7 +77,6 @@ public class Sample
         {
             System.out.println(ex.getCode() + ": " + ex.getMessage());
         }
-
     }
 
 }
