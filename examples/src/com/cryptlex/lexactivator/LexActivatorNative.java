@@ -87,7 +87,7 @@ public class LexActivatorNative implements Library
 
     public static native int GetLicenseKey(CharBuffer licenseKey, int length);
 
-    public static native int GetProductKeyExpiryDate(IntByReference expiryDate);
+    public static native int GetLicenseExpiryDate(IntByReference expiryDate);
 
     public static native int GetLicenseUsageCount(IntByReference totalUses);
 
@@ -106,7 +106,7 @@ public class LexActivatorNative implements Library
     public static native int GetTrialActivationMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetTrialActivationMetadata(WString key, CharBuffer value, int length);
-    
+
     public static native int GetTrialExpiryDate(IntByReference trialExpiryDate);
 
     public static native int GetTrialId(ByteBuffer trialId, int length);
@@ -144,7 +144,7 @@ public class LexActivatorNative implements Library
     public static native int ActivateLocalTrial(int trialLength);
 
     public static native int IsLocalTrialGenuine();
-    
+
     public static native int ExtendLocalTrial(int trialExtensionLength);
 
     public static native int Reset();
