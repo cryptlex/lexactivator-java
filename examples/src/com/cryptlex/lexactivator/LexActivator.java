@@ -53,7 +53,7 @@ public class LexActivator {
     }
 
     /**
-     * Sets the version GUID of your application.
+     * Sets the product id of your application.
      * <p>
      * </p>
      * This function must be called on every start of your program before
@@ -99,8 +99,6 @@ public class LexActivator {
      * in dashboard.
      * <p>
      * </p>
-     * <b>Note: </b>If the length of the string is more than 256, it throws
-     * an exception.
      *
      * @param key string of maximum length 256 characters with utf-8 encoding.
      * encoding.
@@ -125,8 +123,6 @@ public class LexActivator {
      * in dashboard.
      * <p>
      * </p>
-     * <b>Note: </b>If the length of the string is more than 256, it throws
-     * an exception.
      *
      * @param key string of maximum length 256 characters with utf-8 encoding.
      * encoding.
@@ -817,7 +813,7 @@ public class LexActivator {
     }
     
     /**
-     * Extends the local trial
+     * Extends the local trial.
      * <p>
      * </p>
      * <b>Note: </b>This function is only meant for unverified trials.
