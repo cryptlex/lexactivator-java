@@ -22,16 +22,19 @@ public class Sample
             status = LexActivator.IsLicenseGenuine();
             if (LexActivator.LA_OK == status)
             {
-                System.out.println("Product is genuinely activated!");
+                System.out.println("License is genuinely activated!");
             } else if (LexActivator.LA_EXPIRED == status)
             {
-                System.out.println("Product is genuinely activated, but license validity has expired!");
+                System.out.println("License is genuinely activated but has expired!");
             } else if (LexActivator.LA_GRACE_PERIOD_OVER == status)
             {
-                System.out.println("Product is genuinely activated, but grace period is over!");
+                System.out.println("License is genuinely activated but grace period is over!");
             } else if (LexActivator.LA_SUSPENDED == status)
             {
-                System.out.println("Product is genuinely activated, but product key has been revoked!");
+                System.out.println("License is genuinely activated but has been suspended!");
+            } else if (LexActivator.LA_USAGE_LIMIT_REACHED == status)
+            {
+                System.out.println("License is genuinely activated but has reached it's usage limit!");
             } else
             {
                 int trialStatus;
@@ -45,16 +48,16 @@ public class Sample
                 {
                     System.out.println("Trial has expired!");
                     // Time to buy the product key and activate the app
-                    LexActivator.SetLicenseKey("PASTE_PRODUCT_KEY");
+                    LexActivator.SetLicenseKey("PASTE_LICENSE_KEY");
                     LexActivator.SetActivationMetadata("key1", "value1");
                     // Activating the product
                     status = LexActivator.ActivateLicense();    // Ideally on a button click inside a dialog
-                    if (LexActivator.LA_OK == status)
+                    if (LexActivator.LA_OK == status || LexActivator.LA_EXPIRED == status || LexActivator.LA_SUSPENDED == status || LexActivator.LA_USAGE_LIMIT_REACHED == status)
                     {
-                        System.out.println("Product activated successfully!");
+                        System.out.println("License activated successfully: " + status);
                     } else
                     {
-                        System.out.println("Product activation failed: " + status);
+                        System.out.println("License activation failed: " + status);
                     }
                 } else
                 {
