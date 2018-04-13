@@ -20,109 +20,121 @@ public class LexActivatorException extends Exception {
     public static String getErrorMessage(int errorCode) {
         String message;
         switch (errorCode) {
-        case LA_E_INET:
-
-            message = "Failed to connect to the server due to network error.";
+            
+        case LA_E_FILE_PATH:
+            message = "Invalid file path.";
             break;
 
-        case LA_E_PKEY:
-
-            message = "Invalid product key.";
-            break;
-
-        case LA_E_PFILE:
-
+        case LA_E_PRODUCT_FILE:
             message = "Invalid or corrupted product file.";
             break;
 
-        case LA_E_FPATH:
-
-            message = "Invalid product file path.";
+        case LA_E_PRODUCT_DATA:
+            message = "Invalid product data.";
             break;
 
-        case LA_E_GUID:
-
-            message = "The version GUID doesn't match that of the product file.";
+        case LA_E_PRODUCT_ID:
+            message = "The product id is incorrect.";
             break;
 
-        case LA_E_OFILE:
-
-            message = "Invalid offline activation response file.";
+        case LA_E_SYSTEM_PERMISSION:
+            message = "Insufficent system permissions.";
             break;
 
-        case LA_E_PERMISSION:
-
-            message = "Insufficent system permissions. Occurs when LA_SYSTEM flag is used but application is not run with admin privileges.";
-            break;
-
-        case LA_E_EDATA_LEN:
-
-            message = "Extra activation data length is more than 256 characters.";
-            break;
-
-        case LA_E_PKEY_TYPE:
-
-            message = "Invalid product key type.";
-            break;
-
-        case LA_E_TIME:
-
-            message = "The system time has been tampered with. Ensure your date and time settings are correct.";
-            break;
-
-        case LA_E_VM:
-
-            message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
-
+        case LA_E_FILE_PERMISSION:
+            message = "No permission to write to file.";
             break;
 
         case LA_E_WMIC:
-
-            message = "Windows Management Instrumentation (WMI) service has been disabled.";
+            message = "Fingerprint couldn't be generated because Windows Management Instrumentation (WMI) service has been disabled.";
             break;
 
-        case LA_E_TEXT_KEY:
-
-            message = "Invalid trial extension key.";
+        case LA_E_TIME:
+            message = "The system time has been tampered with. Ensure your date and time settings are correct.";
             break;
 
-        case LA_E_OFILE_EXPIRED:
-
-            message = "The offline activation response has expired.";
-            break;
-
-        case LA_E_BUFFER_SIZE:
-
-            message = "The buffer size was smaller than required.";
-            break;
-
-        case LA_E_CUSTOM_FIELD_ID:
-
-            message = "Invalid custom field id.";
+        case LA_E_INET:
+            message = "Failed to connect to the server due to network error.";
             break;
 
         case LA_E_NET_PROXY:
-
             message = "Invalid network proxy.";
             break;
 
         case LA_E_HOST_URL:
-
             message = "Invalid Cryptlex host url.";
             break;
 
-        case LA_E_DEACT_LIMIT:
-
-            message = "Deactivation limit for key has reached.";
+        case LA_E_BUFFER_SIZE:
+            message = "The buffer size was smaller than required.";
             break;
 
-        case LA_E_PDATA:
-
-            message = "Invalid product data.";
+        case LA_E_APP_VERSION_LENGTH:
+            message = "App version length is more than 256 characters.";
             break;
-        case LA_E_TRIAL_NOT_EXPIRED:
 
-            message = "Trial has not expired.";
+        case LA_E_REVOKED:
+            message = "The license has been revoked.";
+            break;
+
+        case LA_E_LICENSE_KEY:
+            message = "Invalid license key.";
+            break;
+
+        case LA_E_LICENSE_TYPE:
+            message = "Invalid license type. Make sure floating license is not being used.";
+            break;
+
+        case LA_E_OFFLINE_RESPONSE_FILE:
+            message = "Invalid offline activation response file.";
+            break;
+
+        case LA_E_OFFLINE_RESPONSE_FILE_EXPIRED:
+            message = "The offline activation response has expired.";
+            break;
+
+        case LA_E_ACTIVATION_LIMIT:
+            message = "The license has reached it's allowed activations limit.";
+            break;
+
+        case LA_E_DEACTIVATION_LIMIT:
+            message = "The license has reached it's allowed deactivations limit.";
+            break;
+
+        case LA_E_TRAIL_NOT_ALLOWED:
+            message = "Trial not allowed for the product.";
+            break;
+
+        case LA_E_TRIAL_ACTIVATION_LIMIT:
+            message = "Your account has reached it's trial activations limit.";
+            break;
+
+        case LA_E_MACHINE_FINGERPRINT:
+            message = "Machine fingerprint has changed since activation.";
+            break;
+
+        case LA_E_METADATA_KEY_LENGTH:
+            message = "Metadata key length is more than 256 characters.";
+            break;
+            
+        case LA_E_METADATA_VALUE_LENGTH:
+            message = "Metadata value length is more than 256 characters.";
+            break;
+
+        case LA_E_ACTIVATION_METADATA_LIMIT:
+            message = "The license has reached it's metadata fields limit.";
+            break;
+
+        case LA_E_TRIAL_ACTIVATION_METADATA_LIMIT:
+            message = "The trial has reached it's metadata fields limit.";
+            break;
+
+        case LA_E_METADATA_KEY_NOT_FOUND:
+            message = "The metadata key does not exist.";
+            break;
+
+        case LA_E_VM:
+            message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
             break;
 
         case LA_E_COUNTRY:
@@ -133,12 +145,8 @@ public class LexActivatorException extends Exception {
             message = "IP address is not allowed.";
             break;
 
-        case LA_E_FILE_PERMISSION:
-            message = "No permission to write to file.";
-            break;
-            
-        case LA_E_LOCAL_TRIAL_NOT_EXPIRED:
-            message = "Trial has not expired";
+        case LA_E_RATE_LIMIT:
+            message = "Rate limit for API has reached, try again later.";
             break;
 
         case LA_E_SERVER:
@@ -156,281 +164,250 @@ public class LexActivatorException extends Exception {
         return message;
     }
 
-    /**
-     * * Error Codes **
-     */
+    /*** Error Codes ***/
 
     /*
-    CODE: LA_EXPIRED
-    
-    MESSAGE: The product key has expired or system time has been tampered
-    with. Ensure your date and time settings are correct.
-    */
+        CODE: LA_E_FILE_PATH
 
-    public static final int LA_EXPIRED = 2;
+        MESSAGE: Invalid file path.
+    */
+    public static final int LA_E_FILE_PATH = 40;
 
     /*
-    CODE: LA_REVOKED
-    
-    MESSAGE: The product key has been revoked.
-    */
+        CODE: LA_E_PRODUCT_FILE
 
-    public static final int LA_REVOKED = 3;
+        MESSAGE: Invalid or corrupted product file.
+    */
+    public static final int LA_E_PRODUCT_FILE = 41;
 
     /*
-    CODE: LA_GP_OVER
-    
-    MESSAGE: The grace period is over.
-    */
+        CODE: LA_E_PRODUCT_DATA
 
-    public static final int LA_GP_OVER = 4;
+        MESSAGE: Invalid product data.
+    */
+    public static final int LA_E_PRODUCT_DATA = 42;
 
     /*
-    CODE: LA_T_EXPIRED
-    
-    MESSAGE: The trial has expired or system time has been tampered
-    with. Ensure your date and time settings are correct.
-    */
+        CODE: LA_E_PRODUCT_ID
 
-    public static final int LA_T_EXPIRED = 5;
+        MESSAGE: The product id is incorrect.
+    */
+    public static final int LA_E_PRODUCT_ID = 43;
 
     /*
-    CODE: LA_LT_EXPIRED
-    
-    MESSAGE: The local trial has expired or system time has been tampered
-    with. Ensure your date and time settings are correct.
-    */
+        CODE: LA_E_SYSTEM_PERMISSION
 
-    public static final int LA_LT_EXPIRED = 6;
+        MESSAGE: Insufficent system permissions. Occurs when LA_SYSTEM flag is used
+        but application is not run with admin privileges.
+    */
+    public static final int LA_E_SYSTEM_PERMISSION = 44;
 
     /*
-    CODE: LA_E_PFILE
-    
-    MESSAGE: Invalid or corrupted product file.
-    */
+        CODE: LA_E_FILE_PERMISSION
 
-    public static final int LA_E_PFILE = 7;
+        MESSAGE: No permission to write to file.
+    */
+    public static final int LA_E_FILE_PERMISSION = 45;
 
     /*
-    CODE: LA_E_FPATH
-    
-    MESSAGE: Invalid product file path.
-    */
+        CODE: LA_E_WMIC
 
-    public static final int LA_E_FPATH = 8;
+        MESSAGE: Fingerprint couldn't be generated because Windows Management
+        Instrumentation (WMI) service has been disabled. This error is specific
+        to Windows only.
+    */
+    public static final int LA_E_WMIC = 46;
 
     /*
-    CODE: LA_E_GUID
-    
-    MESSAGE: The version GUID doesn't match that of the product file.
-    */
+        CODE: LA_E_TIME
 
-    public static final int LA_E_GUID = 9;
+        MESSAGE: The system time has been tampered with. Ensure your date
+        and time settings are correct.
+    */
+    public static final int LA_E_TIME = 47;
 
     /*
-    CODE: LA_E_OFILE
-    
-    MESSAGE: Invalid offline activation response file.
-    */
+        CODE: LA_E_INET
 
-    public static final int LA_E_OFILE = 10;
+        MESSAGE: Failed to connect to the server due to network error.
+    */
+    public static final int LA_E_INET = 48;
 
     /*
-    CODE: LA_E_PERMISSION
-    
-    MESSAGE: Insufficent system permissions. Occurs when LA_SYSTEM flag is used
-    but application is not run with admin privileges.
-    */
+        CODE: LA_E_NET_PROXY
 
-    public static final int LA_E_PERMISSION = 11;
+        MESSAGE: Invalid network proxy.
+    */
+    public static final int LA_E_NET_PROXY = 49;
 
     /*
-    CODE: LA_E_EDATA_LEN
-    
-    MESSAGE: Extra activation data length is more than 256 characters.
-    */
+        CODE: LA_E_HOST_URL
 
-    public static final int LA_E_EDATA_LEN = 12;
+        MESSAGE: Invalid Cryptlex host url.
+    */
+    public static final int LA_E_HOST_URL = 50;
 
     /*
-    CODE: LA_E_PKEY_TYPE
-    
-    MESSAGE: Invalid product key type.
-    */
+        CODE: LA_E_BUFFER_SIZE
 
-    public static final int LA_E_PKEY_TYPE = 13;
+        MESSAGE: The buffer size was smaller than required.
+    */
+    public static final int LA_E_BUFFER_SIZE = 51;
 
     /*
-    CODE: LA_E_TIME
-    
-    MESSAGE: The system time has been tampered with. Ensure your date
-    and time settings are correct.
-    */
+        CODE: LA_E_APP_VERSION_LENGTH
 
-    public static final int LA_E_TIME = 14;
+        MESSAGE: App version length is more than 256 characters.
+    */
+    public static final int LA_E_APP_VERSION_LENGTH = 52;
 
     /*
-    CODE: LA_E_VM
-    
-    MESSAGE: Application is being run inside a virtual machine / hypervisor,
-    and activation has been disallowed in the VM.
-    but
-    */
+        CODE: LA_E_REVOKED
 
-    public static final int LA_E_VM = 15;
+        MESSAGE: The license has been revoked.
+    */
+    public static final int LA_E_REVOKED = 53;
 
     /*
-    CODE: LA_E_WMIC
-    
-    MESSAGE: Fingerprint couldn't be generated because Windows Management 
-    Instrumentation (WMI; service has been disabled. This error is specific
-    to Windows only.
-    */
+        CODE: LA_E_LICENSE_KEY
 
-    public static final int LA_E_WMIC = 16;
+        MESSAGE: Invalid license key.
+    */
+    public static final int LA_E_LICENSE_KEY = 54;
 
     /*
-    CODE: LA_E_TEXT_KEY
-    
-    MESSAGE: Invalid trial extension key.
-    */
+        CODE: LA_E_LICENSE_TYPE
 
-    public static final int LA_E_TEXT_KEY = 17;
+        MESSAGE: Invalid license type. Make sure floating license
+        is not being used.
+    */
+    public static final int LA_E_LICENSE_TYPE = 55;
 
     /*
-    CODE: LA_E_OFILE_EXPIRED
-    
-    MESSAGE: The offline activation response has expired.
-    */
+        CODE: LA_E_OFFLINE_RESPONSE_FILE
 
-    public static final int LA_E_OFILE_EXPIRED = 18;
-    
-    /*
-    CODE: LA_E_INET
-    
-    MESSAGE: Failed to connect to the server due to network error.
+        MESSAGE: Invalid offline activation response file.
     */
-
-    public static final int LA_E_INET = 19;
+    public static final int LA_E_OFFLINE_RESPONSE_FILE = 56;
 
     /*
-    CODE: LA_E_PKEY
-    
-    MESSAGE: Invalid product key.
-    */
+        CODE: LA_E_OFFLINE_RESPONSE_FILE_EXPIRED
 
-    public static final int LA_E_PKEY = 20;
+        MESSAGE: The offline activation response has expired.
+    */
+    public static final int LA_E_OFFLINE_RESPONSE_FILE_EXPIRED = 57;
 
     /*
-    CODE: LA_E_BUFFER_SIZE
-    
-    MESSAGE: The buffer size was smaller than required.
-    */
+        CODE: LA_E_ACTIVATION_LIMIT
 
-    public static final int LA_E_BUFFER_SIZE = 21;
+        MESSAGE: The license has reached it's allowed activations limit.
+    */
+    public static final int LA_E_ACTIVATION_LIMIT = 58;
 
     /*
-    CODE: LA_E_CUSTOM_FIELD_ID
-    
-    MESSAGE: Invalid custom field id.
-    */
+        CODE: LA_E_DEACTIVATION_LIMIT
 
-    public static final int LA_E_CUSTOM_FIELD_ID = 22;
+        MESSAGE: The license has reached it's allowed deactivations limit.
+    */
+    public static final int LA_E_DEACTIVATION_LIMIT = 59;
 
     /*
-    CODE: LA_E_NET_PROXY
-    
-    MESSAGE: Invalid network proxy.
-    */
+        CODE: LA_E_TRAIL_NOT_ALLOWED
 
-    public static final int LA_E_NET_PROXY = 23;
+        MESSAGE: Trial not allowed for the product.
+    */
+    public static final int LA_E_TRAIL_NOT_ALLOWED = 60;
 
     /*
-    CODE: LA_E_HOST_URL
-    
-    MESSAGE: Invalid Cryptlex host url.
-    */
+        CODE: LA_E_TRIAL_ACTIVATION_LIMIT
 
-    public static final int LA_E_HOST_URL = 24;
+        MESSAGE: Your account has reached it's trial activations limit.
+    */
+    public static final int LA_E_TRIAL_ACTIVATION_LIMIT = 61;
 
     /*
-    CODE: LA_E_DEACT_LIMIT
-    
-    MESSAGE: Deactivation limit for key has reached
-    */
+        CODE: LA_E_MACHINE_FINGERPRINT
 
-    public static final int LA_E_DEACT_LIMIT = 25;
+        MESSAGE: Machine fingerprint has changed since activation.
+    */
+    public static final int LA_E_MACHINE_FINGERPRINT = 62;
 
     /*
-    CODE: LA_E_ACT_LIMIT
-    
-    MESSAGE: Activation limit for key has reached
-    */
+        CODE: LA_E_METADATA_KEY_LENGTH
 
-    public static final int LA_E_ACT_LIMIT = 26;
+        MESSAGE: Metadata key length is more than 256 characters.
+    */
+    public static final int LA_E_METADATA_KEY_LENGTH = 63;
 
     /*
-    CODE: LA_E_PDATA
-    
-    MESSAGE: Invalid product data
-    */
+        CODE: LA_E_METADATA_VALUE_LENGTH
 
-    public static final int LA_E_PDATA = 27;
+        MESSAGE: Metadata value length is more than 256 characters.
+    */
+    public static final int LA_E_METADATA_VALUE_LENGTH = 64;
 
     /*
-    CODE: LA_E_TRIAL_NOT_EXPIRED
-    
-    MESSAGE: Trial has not expired.
-    */
+        CODE: LA_E_ACTIVATION_METADATA_LIMIT
 
-    public static final int LA_E_TRIAL_NOT_EXPIRED = 28;
+        MESSAGE: The license has reached it's metadata fields limit.
+    */
+    public static final int LA_E_ACTIVATION_METADATA_LIMIT = 65;
 
     /*
-    CODE: LA_E_COUNTRY
-    
-    MESSAGE: Country is not allowed
-    */
+        CODE: LA_E_TRIAL_ACTIVATION_METADATA_LIMIT
 
-    public static final int LA_E_COUNTRY = 29;
+        MESSAGE: The trial has reached it's metadata fields limit.
+    */
+    public static final int LA_E_TRIAL_ACTIVATION_METADATA_LIMIT = 66;
 
     /*
-    CODE: LA_E_IP
-    
-    MESSAGE: IP address is not allowed
-    */
+        CODE: LA_E_METADATA_KEY_NOT_FOUND
 
-    public static final int LA_E_IP = 30;
+        MESSAGE: The metadata key does not exist.
+    */
+    public static final int LA_E_METADATA_KEY_NOT_FOUND = 67;
 
     /*
-    CODE: LA_E_FILE_PERMISSION
-    
-    MESSAGE: No permission to write to file
+        CODE: LA_E_VM
+
+        MESSAGE: Application is being run inside a virtual machine / hypervisor,
+        and activation has been disallowed in the VM.
     */
-
-    public static final int LA_E_FILE_PERMISSION = 31;
-    
-    /*
-    CODE: LA_E_LOCAL_TRIAL_NOT_EXPIRED
-
-    MESSAGE: Trial has not expired.
-    */
-
-    public static final int LA_E_LOCAL_TRIAL_NOT_EXPIRED = 32;
+    public static final int LA_E_VM = 68;
 
     /*
-    CODE: LA_E_SERVER
-    
-    MESSAGE: Server error
-    */
+        CODE: LA_E_COUNTRY
 
-    public static final int LA_E_SERVER = 33;
+        MESSAGE: Country is not allowed.
+    */
+    public static final int LA_E_COUNTRY = 69;
 
     /*
-    CODE: LA_E_CLIENT
-    
-    MESSAGE: Client error
-    */
+        CODE: LA_E_IP
 
-    public static final int LA_E_CLIENT = 34;
+        MESSAGE: IP address is not allowed.
+    */
+    public static final int LA_E_IP = 70;
+
+    /*
+        CODE: LA_E_RATE_LIMIT
+
+        MESSAGE: Rate limit for API has reached; try again later.
+    */
+    public static final int LA_E_RATE_LIMIT = 71;
+
+    /*
+        CODE: LA_E_SERVER
+
+        MESSAGE: Server error.
+    */
+    public static final int LA_E_SERVER = 72;
+
+    /*
+        CODE: LA_E_CLIENT
+
+        MESSAGE: Client error.
+    */
+    public static final int LA_E_CLIENT = 73;
 
 }

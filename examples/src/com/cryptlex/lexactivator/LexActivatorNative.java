@@ -51,87 +51,101 @@ public class LexActivatorNative implements Library
 
     public static native int SetProductData(WString productData);
 
-    public static native int SetProductVersionGuid(String versionGuid, int flags);
+    public static native int SetProductId(String productId, int flags);
 
-    public static native int SetProductVersionGuid(WString versionGuid, int flags);
+    public static native int SetProductId(WString productId, int flags);
 
-    public static native int SetProductKey(String productKey);
+    public static native int SetLicenseKey(String licenseKey);
 
-    public static native int SetProductKey(WString productKey);
+    public static native int SetLicenseKey(WString licenseKey);
 
-    public static native int SetActivationExtraData(String extraData);
+    public static native int SetActivationMetadata(String key, String value);
 
-    public static native int SetActivationExtraData(WString extraData);
+    public static native int SetActivationMetadata(WString key, WString value);
 
-    public static native int SetTrialActivationExtraData(String extraData);
+    public static native int SetTrialActivationMetadata(String key, String value);
 
-    public static native int SetTrialActivationExtraData(WString extraData);
+    public static native int SetTrialActivationMetadata(WString key, WString value);
+
+    public static native int SetAppVersion(String appVersion);
+
+    public static native int SetAppVersion(WString appVersion);
 
     public static native int SetNetworkProxy(String proxy);
 
     public static native int SetNetworkProxy(WString proxy);
 
-    public static native int GetAppVersion(ByteBuffer appVersion, int length);
+    public static native int GetProductMetadata(String key, ByteBuffer value, int length);
 
-    public static native int GetAppVersion(CharBuffer appVersion, int length);
+    public static native int GetProductMetadata(WString key, CharBuffer value, int length);
 
-    public static native int GetProductKey(ByteBuffer productKey, int length);
+    public static native int GetLicenseMetadata(String key, ByteBuffer value, int length);
 
-    public static native int GetProductKey(CharBuffer productKey, int length);
+    public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
 
-    public static native int GetProductKeyEmail(ByteBuffer productKeyEmail, int length);
+    public static native int GetLicenseKey(ByteBuffer licenseKey, int length);
 
-    public static native int GetProductKeyEmail(CharBuffer productKeyEmail, int length);
+    public static native int GetLicenseKey(CharBuffer licenseKey, int length);
 
     public static native int GetProductKeyExpiryDate(IntByReference expiryDate);
 
-    public static native int GetProductKeyCustomField(String fieldId, ByteBuffer fieldValue, int length);
+    public static native int GetLicenseUsageCount(IntByReference totalUses);
 
-    public static native int GetProductKeyCustomField(WString fieldId, CharBuffer fieldValue, int length);
+    public static native int GetLicenseUserEmail(ByteBuffer email, int length);
 
-    public static native int GetActivationExtraData(ByteBuffer extraData, int length);
+    public static native int GetLicenseUserEmail(CharBuffer email, int length);
 
-    public static native int GetActivationExtraData(CharBuffer extraData, int length);
+    public static native int GetLicenseUserName(ByteBuffer name, int length);
 
-    public static native int GetTrialActivationExtraData(ByteBuffer extraData, int length);
+    public static native int GetLicenseUserName(CharBuffer name, int length);
 
-    public static native int GetTrialActivationExtraData(CharBuffer extraData, int length);
+    public static native int GetActivationMetadata(String key, ByteBuffer value, int length);
+
+    public static native int GetActivationMetadata(WString key, CharBuffer value, int length);
+
+    public static native int GetTrialActivationMetadata(String key, ByteBuffer value, int length);
+
+    public static native int GetTrialActivationMetadata(WString key, CharBuffer value, int length);
     
     public static native int GetTrialExpiryDate(IntByReference trialExpiryDate);
 
+    public static native int GetTrialId(ByteBuffer trialId, int length);
+
+    public static native int GetTrialId(CharBuffer trialId, int length);
+
     public static native int GetLocalTrialExpiryDate(IntByReference trialExpiryDate);
 
-    public static native int ActivateProduct();
+    public static native int ActivateLicense();
 
-    public static native int ActivateProductOffline(String filePath);
+    public static native int ActivateLicenseOffline(String filePath);
 
-    public static native int ActivateProductOffline(WString filePath);
+    public static native int ActivateLicenseOffline(WString filePath);
 
     public static native int GenerateOfflineActivationRequest(String filePath);
 
     public static native int GenerateOfflineActivationRequest(WString filePath);
 
-    public static native int DeactivateProduct();
+    public static native int DeactivateLicense();
 
     public static native int GenerateOfflineDeactivationRequest(String filePath);
 
     public static native int GenerateOfflineDeactivationRequest(WString filePath);
 
-    public static native int IsProductGenuine();
+    public static native int IsLicenseGenuine();
 
-    public static native int IsProductActivated();
+    public static native int IsLicenseValid();
+
+    public static native int IncrementLicenseUsage(int increment);
 
     public static native int ActivateTrial();
 
     public static native int IsTrialGenuine();
-
-    public static native int ExtendTrial(String trialExtensionKey);
-
-    public static native int ExtendTrial(WString trialExtensionKey);
 
     public static native int ActivateLocalTrial(int trialLength);
 
     public static native int IsLocalTrialGenuine();
     
     public static native int ExtendLocalTrial(int trialExtensionLength);
+
+    public static native int Reset();
 }
