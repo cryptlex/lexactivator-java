@@ -32,9 +32,6 @@ public class Sample
             } else if (LexActivator.LA_SUSPENDED == status)
             {
                 System.out.println("License is genuinely activated but has been suspended!");
-            } else if (LexActivator.LA_USAGE_LIMIT_REACHED == status)
-            {
-                System.out.println("License is genuinely activated but has reached it's usage limit!");
             } else
             {
                 int trialStatus;
@@ -52,7 +49,7 @@ public class Sample
                     LexActivator.SetActivationMetadata("key1", "value1");
                     // Activating the product
                     status = LexActivator.ActivateLicense();    // Ideally on a button click inside a dialog
-                    if (LexActivator.LA_OK == status || LexActivator.LA_EXPIRED == status || LexActivator.LA_SUSPENDED == status || LexActivator.LA_USAGE_LIMIT_REACHED == status)
+                    if (LexActivator.LA_OK == status || LexActivator.LA_EXPIRED == status || LexActivator.LA_SUSPENDED == status)
                     {
                         System.out.println("License activated successfully: " + status);
                     } else

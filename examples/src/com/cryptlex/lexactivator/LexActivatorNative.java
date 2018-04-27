@@ -89,8 +89,6 @@ public class LexActivatorNative implements Library
 
     public static native int GetLicenseExpiryDate(IntByReference expiryDate);
 
-    public static native int GetLicenseUsageCount(IntByReference totalUses);
-
     public static native int GetLicenseUserEmail(ByteBuffer email, int length);
 
     public static native int GetLicenseUserEmail(CharBuffer email, int length);
@@ -134,8 +132,6 @@ public class LexActivatorNative implements Library
     public static native int IsLicenseGenuine();
 
     public static native int IsLicenseValid();
-
-    public static native int IncrementLicenseUsage(int increment);
 
     public static native int ActivateTrial();
 

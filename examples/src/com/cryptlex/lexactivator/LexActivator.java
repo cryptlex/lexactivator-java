@@ -318,28 +318,6 @@ public class LexActivator
     }
 
     /**
-     * Gets the license usage count.
-     *
-     * @return Returns the timestamp
-     * @throws LexActivatorException
-     */
-    public static int GetLicenseUsageCount() throws LexActivatorException
-    {
-        int status;
-        IntByReference expiryDate = new IntByReference(0);
-        status = LexActivatorNative.GetLicenseUsageCount(expiryDate);
-        switch (status)
-        {
-            case LA_OK:
-                return expiryDate.getValue();
-            case LA_FAIL:
-                return 0;
-            default:
-                throw new LexActivatorException(status);
-        }
-    }
-
-    /**
      * Gets the email associated with license user.
      *
      * @return Returns the license user email.
@@ -544,7 +522,7 @@ public class LexActivator
      * This function should be executed at the time of registration, ideally on
      * a button click.
      *
-     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_USAGE_LIMIT_REACHED, LA_FAIL
+     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
      * @throws LexActivatorException
      */
     public static int ActivateLicense() throws LexActivatorException
@@ -559,8 +537,6 @@ public class LexActivator
                 return LA_EXPIRED;
             case LA_SUSPENDED:
                 return LA_SUSPENDED;
-            case LA_USAGE_LIMIT_REACHED:
-                return LA_USAGE_LIMIT_REACHED;
             case LA_FAIL:
                 return LA_FAIL;
             default:
@@ -572,7 +548,7 @@ public class LexActivator
      * Activates your application using the offline activation response file.
      *
      * @param filePath path of the offline activation response file.
-     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_USAGE_LIMIT_REACHED, LA_FAIL
+     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
      * @throws LexActivatorException
      */
     public static int ActivateLicenseOffline(String filePath) throws LexActivatorException
@@ -588,8 +564,6 @@ public class LexActivator
                 return LA_EXPIRED;
             case LA_SUSPENDED:
                 return LA_SUSPENDED;
-            case LA_USAGE_LIMIT_REACHED:
-                return LA_USAGE_LIMIT_REACHED;
             case LA_FAIL:
                 return LA_FAIL;
             default:
@@ -695,7 +669,7 @@ public class LexActivator
      * to ignore grace period.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER,
-     * LA_USAGE_LIMIT_REACHED, LA_FAIL
+     * LA_FAIL
      * @throws LexActivatorException
      */
     public static int IsLicenseGenuine() throws LexActivatorException
@@ -710,8 +684,6 @@ public class LexActivator
                 return LA_EXPIRED;
             case LA_SUSPENDED:
                 return LA_SUSPENDED;
-            case LA_USAGE_LIMIT_REACHED:
-                return LA_USAGE_LIMIT_REACHED;
             case LA_GRACE_PERIOD_OVER:
                 return LA_GRACE_PERIOD_OVER;
             case LA_FAIL:
@@ -735,7 +707,7 @@ public class LexActivator
      * period.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER,
-     * LA_USAGE_LIMIT_REACHED, LA_FAIL
+     * LA_FAIL
      * @throws LexActivatorException
      */
     public static int IsLicenseValid() throws LexActivatorException
@@ -750,33 +722,12 @@ public class LexActivator
                 return LA_EXPIRED;
             case LA_SUSPENDED:
                 return LA_SUSPENDED;
-            case LA_USAGE_LIMIT_REACHED:
-                return LA_USAGE_LIMIT_REACHED;
             case LA_GRACE_PERIOD_OVER:
                 return LA_GRACE_PERIOD_OVER;
             case LA_FAIL:
                 return LA_FAIL;
             default:
                 throw new LexActivatorException(status);
-        }
-    }
-
-    /**
-     * Increments the usage count of the license.
-     * <p>
-     * </p>
-     * If increment is more than allowed uses it has no effect.
-     *
-     * @param increment - the positive increment to add to the usage count
-     * @throws LexActivatorException
-     */
-    public static void IncrementLicenseUsage(int increment) throws LexActivatorException
-    {
-        int status;
-        status = LexActivatorNative.IncrementLicenseUsage(increment);
-        if (LA_OK != status)
-        {
-            throw new LexActivatorException(status);
         }
     }
 
@@ -981,20 +932,15 @@ public class LexActivator
     public static final int LA_GRACE_PERIOD_OVER = 22;
 
     /**
-     * The license has reached it's allowed usage limit.
-     */
-    public static final int LA_USAGE_LIMIT_REACHED = 23;
-
-    /**
      * The trial has expired or system time has been tampered with. Ensure your
      * date and time settings are correct.
      */
-    public static final int LA_TRIAL_EXPIRED = 24;
+    public static final int LA_TRIAL_EXPIRED = 25;
 
     /**
      * The local trial has expired or system time has been tampered with. Ensure
      * your date and time settings are correct.
      */
-    public static final int LA_LOCAL_TRIAL_EXPIRED = 25;
+    public static final int LA_LOCAL_TRIAL_EXPIRED = 26;
 
 }
