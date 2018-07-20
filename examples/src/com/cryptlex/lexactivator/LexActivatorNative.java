@@ -8,6 +8,7 @@ import com.sun.jna.WString;
 import java.nio.CharBuffer;
 import java.nio.ByteBuffer;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.Callback;
 import java.io.File;
 
 public class LexActivatorNative implements Library
@@ -43,6 +44,12 @@ public class LexActivatorNative implements Library
         Native.register(GetNativeLibrary());
     }
 
+    public interface CallbackType extends Callback
+    {
+
+        void invoke(int status);
+    }
+
     public static native int SetProductFile(String filePath);
 
     public static native int SetProductFile(WString filePath);
@@ -58,6 +65,8 @@ public class LexActivatorNative implements Library
     public static native int SetLicenseKey(String licenseKey);
 
     public static native int SetLicenseKey(WString licenseKey);
+
+    public static native int SetLicenseCallback(CallbackType callback);
 
     public static native int SetActivationMetadata(String key, String value);
 

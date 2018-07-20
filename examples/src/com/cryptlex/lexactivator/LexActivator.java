@@ -6,9 +6,13 @@ import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.io.UnsupportedEncodingException;
 import com.sun.jna.ptr.IntByReference;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LexActivator
 {
+    private static LexActivatorNative.CallbackType privateCallback = null;
+    private static List<LicenseCallbackEvent> listeners = null;
 
     /* Permission Flags */
     public static final int LA_USER = 1;
@@ -98,6 +102,51 @@ public class LexActivator
         {
             throw new LexActivatorException(status);
         }
+    }
+
+    /**
+     * Sets server sync callback function.
+     * <p>
+     * </p>
+     * Whenever the server sync occurs in a separate thread, and server returns the response,
+     * event listener function gets invoked with the following status codes:
+     * LA_OK, LA_EXPIRED, LA_SUSPENDED,
+     * LA_E_REVOKED, LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT
+     * LA_E_COUNTRY, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_IP
+     * <p>
+     * </p>
+     *
+     * @param listener
+     * @throws LexActivatorException
+     */
+    public static void SetLicenseCallbackListener(LicenseCallbackEvent listener) throws LexActivatorException
+    {
+        if (listeners == null)
+        {
+            listeners = new ArrayList<>();
+            listeners.add(listener);
+        }
+        if (privateCallback == null)
+        {
+            privateCallback = new LexActivatorNative.CallbackType()
+            {
+                public void invoke(int status)
+                {
+                    // Notify everybody that may be interested.
+                    for (LicenseCallbackEvent event : listeners)
+                    {
+                        event.LicenseCallback(status);
+                    }
+                }
+            };
+            int status;
+            status = LexActivatorNative.SetLicenseCallback(privateCallback);
+            if (LA_OK != status)
+            {
+                throw new LexActivatorException(status);
+            }
+        }
+
     }
 
     /**
