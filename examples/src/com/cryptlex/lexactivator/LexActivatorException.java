@@ -56,7 +56,7 @@ public class LexActivatorException extends Exception
                 break;
 
             case LA_E_TIME:
-                message = "The system time has been tampered with. Ensure your date and time settings are correct.";
+                message = "The difference between the network time and the system time is more than allowed clock offset.";
                 break;
 
             case LA_E_INET:
@@ -111,7 +111,7 @@ public class LexActivatorException extends Exception
                 message = "The license has reached it's allowed deactivations limit.";
                 break;
 
-            case LA_E_TRAIL_NOT_ALLOWED:
+            case LA_E_TRIAL_NOT_ALLOWED:
                 message = "Trial not allowed for the product.";
                 break;
 
@@ -141,6 +141,10 @@ public class LexActivatorException extends Exception
 
             case LA_E_METADATA_KEY_NOT_FOUND:
                 message = "The metadata key does not exist.";
+                break;
+                
+            case LA_E_TIME_MODIFIED:
+                message = "The system time has been tampered (backdated).";
                 break;
 
             case LA_E_VM:
@@ -233,8 +237,8 @@ public class LexActivatorException extends Exception
     /*
      CODE: LA_E_TIME
 
-     MESSAGE: The system time has been tampered with. Ensure your date
-     and time settings are correct.
+     MESSAGE: The difference between the network time and the system time is
+     more than allowed clock offset.
      */
     public static final int LA_E_TIME = 47;
 
@@ -331,11 +335,11 @@ public class LexActivatorException extends Exception
     public static final int LA_E_DEACTIVATION_LIMIT = 60;
 
     /*
-     CODE: LA_E_TRAIL_NOT_ALLOWED
+     CODE: LA_E_TRIAL_NOT_ALLOWED
 
      MESSAGE: Trial not allowed for the product.
      */
-    public static final int LA_E_TRAIL_NOT_ALLOWED = 61;
+    public static final int LA_E_TRIAL_NOT_ALLOWED = 61;
 
     /*
      CODE: LA_E_TRIAL_ACTIVATION_LIMIT
@@ -385,6 +389,13 @@ public class LexActivatorException extends Exception
      MESSAGE: The metadata key does not exist.
      */
     public static final int LA_E_METADATA_KEY_NOT_FOUND = 68;
+    
+    /*
+     CODE: LA_E_TIME_MODIFIED
+
+     MESSAGE: The system time has been tampered (backdated).
+     */
+    public static final int LA_E_TIME_MODIFIED = 69;
 
     /*
      CODE: LA_E_VM
