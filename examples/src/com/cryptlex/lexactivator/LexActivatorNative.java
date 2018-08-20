@@ -106,6 +106,10 @@ public class LexActivatorNative implements Library
 
     public static native int GetLicenseUserName(CharBuffer name, int length);
 
+    public static native int GetLicenseType(ByteBuffer name, int length);
+
+    public static native int GetLicenseType(CharBuffer name, int length);
+
     public static native int GetActivationMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetActivationMetadata(WString key, CharBuffer value, int length);

@@ -427,6 +427,36 @@ public class LexActivator
     }
 
     /**
+     * Gets the license type (node-locked or hosted-floating).
+     *
+     * @return Returns the license type.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLicenseType() throws LexActivatorException, UnsupportedEncodingException
+    {
+        int status;
+        if (Platform.isWindows())
+        {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseType(buffer, 256);
+            if (LA_OK == status)
+            {
+                return buffer.toString().trim();
+            }
+        } else
+        {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseType(buffer, 256);
+            if (LA_OK == status)
+            {
+                return new String(buffer.array(), "UTF-8");
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
      * Gets the activation metadata.
      *
      * @param key key to retrieve the value
