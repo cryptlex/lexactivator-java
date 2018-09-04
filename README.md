@@ -1,5 +1,5 @@
 # lexactivator-java
-LexActivator API wrapper for Java
+LexActivator - Java licensing library
 
 Refer to following for documentation:
 
