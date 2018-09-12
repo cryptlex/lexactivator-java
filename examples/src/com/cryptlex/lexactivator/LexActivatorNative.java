@@ -148,6 +148,14 @@ public class LexActivatorNative implements Library
 
     public static native int ActivateTrial();
 
+    public static native int ActivateTrialOffline(String filePath);
+
+    public static native int ActivateTrialOffline(WString filePath);
+
+    public static native int GenerateOfflineTrialActivationRequest(String filePath);
+
+    public static native int GenerateOfflineTrialActivationRequest(WString filePath);
+
     public static native int IsTrialGenuine();
 
     public static native int ActivateLocalTrial(int trialLength);

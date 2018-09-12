@@ -842,6 +842,50 @@ public class LexActivator
     }
 
     /**
+     * Activates the trial using the offline activation response file.
+     *
+     * @param filePath path of the offline activation response file.
+     * @return LA_OK, LA_TRIAL_EXPIRED, LA_FAIL
+     * @throws LexActivatorException
+     */
+    public static int ActivateTrialOffline(String filePath) throws LexActivatorException
+    {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.ActivateTrialOffline(new WString(filePath))
+                : LexActivatorNative.ActivateTrialOffline(filePath);
+        switch (status)
+        {
+            case LA_OK:
+                return LA_OK;
+            case LA_TRIAL_EXPIRED:
+                return LA_TRIAL_EXPIRED;
+            case LA_FAIL:
+                return LA_FAIL;
+            default:
+                throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Generates the offline trial activation request needed for generating offline
+     * trial activation response in the dashboard.
+     *
+     * @param filePath path of the file, needed to be created, for the offline
+     * request.
+     * @throws LexActivatorException
+     */
+    public static void GenerateOfflineTrialActivationRequest(String filePath) throws LexActivatorException
+    {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineTrialActivationRequest(new WString(filePath))
+                : LexActivatorNative.GenerateOfflineTrialActivationRequest(filePath);
+        if (LA_OK != status)
+        {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * It verifies whether trial has started and is genuine or not. The
      * verification is done locally by verifying the cryptographic digital
      * signature fetched at the time of trial activation.
