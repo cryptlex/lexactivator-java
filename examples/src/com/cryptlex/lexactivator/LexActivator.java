@@ -250,6 +250,24 @@ public class LexActivator
     }
 
     /**
+     * In case you are running Cryptlex on-premise, you can set the
+     * host for your on-premise server.
+     *
+     * @param host the address of the Cryptlex on-premise server
+     * @throws LexActivatorException
+     */
+    public static void SetCryptlexHost(String host) throws LexActivatorException
+    {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetCryptlexHost(new WString(host))
+                : LexActivatorNative.SetCryptlexHost(host);
+        if (LA_OK != status)
+        {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Gets the product metadata as set in the dashboard.
      * <p>
      * </p>

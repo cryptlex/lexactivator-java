@@ -84,6 +84,10 @@ public class LexActivatorNative implements Library
 
     public static native int SetNetworkProxy(WString proxy);
 
+    public static native int SetCryptlexHost(String host);
+
+    public static native int SetCryptlexHost(WString host);
+
     public static native int GetProductMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetProductMetadata(WString key, CharBuffer value, int length);
