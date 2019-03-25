@@ -17,6 +17,7 @@ public class LexActivator
     /* Permission Flags */
     public static final int LA_USER = 1;
     public static final int LA_SYSTEM = 2;
+    public static final int LA_IN_MEMORY = 4;
 
     /**
      * Sets the absolute path of the Product.dat file.<p>
@@ -73,7 +74,7 @@ public class LexActivator
      * on the product page in the dashboard.
      * @param flags depending upon whether your application requires admin/root
      * permissions to run or not, this parameter can have one of the following
-     * values: LA_SYSTEM, LA_USER
+     * values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
      * @throws LexActivatorException
      */
     public static void SetProductId(String versionGuid, int flags) throws LexActivatorException
