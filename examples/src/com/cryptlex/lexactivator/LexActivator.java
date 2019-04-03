@@ -9,10 +9,11 @@ import com.sun.jna.ptr.IntByReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LexActivator
-{
-    private static LexActivatorNative.CallbackType privateCallback = null;
-    private static List<LicenseCallbackEvent> listeners = null;
+public class LexActivator {
+    private static LexActivatorNative.CallbackType privateLicenseCallback = null;
+    private static LexActivatorNative.CallbackType privateReleaseCallback = null;
+    private static List<LicenseCallbackEvent> licenseCallbackEventListeners = null;
+    private static List<ReleaseCallbackEvent> releaseCallbackEventListeners = null;
 
     /* Permission Flags */
     public static final int LA_USER = 1;
@@ -20,44 +21,43 @@ public class LexActivator
     public static final int LA_IN_MEMORY = 4;
 
     /**
-     * Sets the absolute path of the Product.dat file.<p>
+     * Sets the absolute path of the Product.dat file.
+     * <p>
      * </p>
-     * This function must be called on every start of your program before any
-     * other functions are called.
+     * This function must be called on every start of your program before any other
+     * functions are called.
      *
      * @param filePath absolute path of the product file (Product.dat)
      * @throws LexActivatorException
      */
-    public static void SetProductFile(String filePath) throws LexActivatorException
-    {
+    public static void SetProductFile(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetProductFile(new WString(filePath))
                 : LexActivatorNative.SetProductFile(filePath);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
 
     /**
-     * Embeds the Product.dat file in the application.<p>
+     * Embeds the Product.dat file in the application.
+     * <p>
      * </p>
      * It can be used instead of SetProductFile() in case you want to embed the
-     * Product.dat file in your application.<p>
+     * Product.dat file in your application.
+     * <p>
      * </p>
-     * This function must be called on every start of your program before any
-     * other functions are called.
+     * This function must be called on every start of your program before any other
+     * functions are called.
      *
      * @param productData content of the Product.dat file
      * @throws LexActivatorException
      */
-    public static void SetProductData(String productData) throws LexActivatorException
-    {
+    public static void SetProductData(String productData) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetProductData(new WString(productData))
                 : LexActivatorNative.SetProductData(productData);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -66,24 +66,22 @@ public class LexActivator
      * Sets the product id of your application.
      * <p>
      * </p>
-     * This function must be called on every start of your program before any
-     * other functions are called, with the exception of SetProductFile() or
+     * This function must be called on every start of your program before any other
+     * functions are called, with the exception of SetProductFile() or
      * SetProductData() function.
      *
-     * @param productId the unique product id of your application as mentioned
-     * on the product page in the dashboard.
-     * @param flags depending upon whether your application requires admin/root
-     * permissions to run or not, this parameter can have one of the following
-     * values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
+     * @param productId the unique product id of your application as mentioned on
+     *                  the product page in the dashboard.
+     * @param flags     depending upon whether your application requires admin/root
+     *                  permissions to run or not, this parameter can have one of
+     *                  the following values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
      * @throws LexActivatorException
      */
-    public static void SetProductId(String versionGuid, int flags) throws LexActivatorException
-    {
+    public static void SetProductId(String versionGuid, int flags) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetProductId(new WString(versionGuid), flags)
                 : LexActivatorNative.SetProductId(versionGuid, flags);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -94,13 +92,11 @@ public class LexActivator
      * @param licenseKey a valid license key.
      * @throws LexActivatorException
      */
-    public static void SetLicenseKey(String licenseKey) throws LexActivatorException
-    {
+    public static void SetLicenseKey(String licenseKey) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetLicenseKey(new WString(licenseKey))
                 : LexActivatorNative.SetLicenseKey(licenseKey);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -109,41 +105,34 @@ public class LexActivator
      * Sets server sync callback function.
      * <p>
      * </p>
-     * Whenever the server sync occurs in a separate thread, and server returns the response,
-     * event listener function gets invoked with the following status codes:
-     * LA_OK, LA_EXPIRED, LA_SUSPENDED,
-     * LA_E_REVOKED, LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT
-     * LA_E_COUNTRY, LA_E_INET, LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_IP
+     * Whenever the server sync occurs in a separate thread, and server returns the
+     * response, event listener function gets invoked with the following status
+     * codes: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED,
+     * LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT LA_E_COUNTRY, LA_E_INET,
+     * LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_IP
      * <p>
      * </p>
      *
      * @param listener
      * @throws LexActivatorException
      */
-    public static void SetLicenseCallbackListener(LicenseCallbackEvent listener) throws LexActivatorException
-    {
-        if (listeners == null)
-        {
-            listeners = new ArrayList<>();
-            listeners.add(listener);
+    public static void SetLicenseCallbackListener(LicenseCallbackEvent listener) throws LexActivatorException {
+        if (licenseCallbackEventListeners == null) {
+            licenseCallbackEventListeners = new ArrayList<>();
+            licenseCallbackEventListeners.add(listener);
         }
-        if (privateCallback == null)
-        {
-            privateCallback = new LexActivatorNative.CallbackType()
-            {
-                public void invoke(int status)
-                {
+        if (privateLicenseCallback == null) {
+            privateLicenseCallback = new LexActivatorNative.CallbackType() {
+                public void invoke(int status) {
                     // Notify everybody that may be interested.
-                    for (LicenseCallbackEvent event : listeners)
-                    {
+                    for (LicenseCallbackEvent event : licenseCallbackEventListeners) {
                         event.LicenseCallback(status);
                     }
                 }
             };
             int status;
-            status = LexActivatorNative.SetLicenseCallback(privateCallback);
-            if (LA_OK != status)
-            {
+            status = LexActivatorNative.SetLicenseCallback(privateLicenseCallback);
+            if (LA_OK != status) {
                 throw new LexActivatorException(status);
             }
         }
@@ -159,19 +148,17 @@ public class LexActivator
      * <p>
      * </p>
      *
-     * @param key string of maximum length 256 characters with utf-8 encoding.
-     * encoding.
+     * @param key   string of maximum length 256 characters with utf-8 encoding.
+     *              encoding.
      * @param value string of maximum length 256 characters with utf-8 encoding.
-     * encoding.
+     *              encoding.
      * @throws LexActivatorException
      */
-    public static void SetActivationMetadata(String key, String value) throws LexActivatorException
-    {
+    public static void SetActivationMetadata(String key, String value) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetActivationMetadata(new WString(key), new WString(value))
                 : LexActivatorNative.SetActivationMetadata(key, value);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -180,24 +167,23 @@ public class LexActivator
      * Sets the trial activation metadata.
      * <p>
      * </p>
-     * The metadata appears along with the trial activation details of the
-     * product in dashboard.
+     * The metadata appears along with the trial activation details of the product
+     * in dashboard.
      * <p>
      * </p>
      *
-     * @param key string of maximum length 256 characters with utf-8 encoding.
-     * encoding.
+     * @param key   string of maximum length 256 characters with utf-8 encoding.
+     *              encoding.
      * @param value string of maximum length 256 characters with utf-8 encoding.
-     * encoding.
+     *              encoding.
      * @throws LexActivatorException
      */
-    public static void SetTrialActivationMetadata(String key, String value) throws LexActivatorException
-    {
+    public static void SetTrialActivationMetadata(String key, String value) throws LexActivatorException {
         int status;
-        status = Platform.isWindows() ? LexActivatorNative.SetTrialActivationMetadata(new WString(key), new WString(value))
+        status = Platform.isWindows()
+                ? LexActivatorNative.SetTrialActivationMetadata(new WString(key), new WString(value))
                 : LexActivatorNative.SetTrialActivationMetadata(key, value);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -206,20 +192,18 @@ public class LexActivator
      * Sets the current app version of your application.
      * <p>
      * </p>
-     * The app version appears along with the activation details in dashboard.
-     * It is also used to generate app analytics.
+     * The app version appears along with the activation details in dashboard. It is
+     * also used to generate app analytics.
      *
      * @param appVersion string of maximum length 256 characters with utf-8
-     * encoding.
+     *                   encoding.
      * @throws LexActivatorException
      */
-    public static void SetAppVersion(String appVersion) throws LexActivatorException
-    {
+    public static void SetAppVersion(String appVersion) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetNetworkProxy(new WString(appVersion))
                 : LexActivatorNative.SetNetworkProxy(appVersion);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -228,42 +212,37 @@ public class LexActivator
      * Sets the network proxy to be used when contacting CryptLex servers.
      * <p>
      * </p>
-     * The proxy format should be:
-     * [protocol://][username:password@]machine[:port]
+     * The proxy format should be: [protocol://][username:password@]machine[:port]
      * <p>
      * </p>
-     * <b>Note: </b> Proxy settings of the computer are automatically detected.
-     * So, in most of the cases you don't need to care whether your user is
-     * behind a proxy server or not.
+     * <b>Note: </b> Proxy settings of the computer are automatically detected. So,
+     * in most of the cases you don't need to care whether your user is behind a
+     * proxy server or not.
      *
      * @param proxy proxy string having correct proxy format
      * @throws LexActivatorException
      */
-    public static void SetNetworkProxy(String proxy) throws LexActivatorException
-    {
+    public static void SetNetworkProxy(String proxy) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetNetworkProxy(new WString(proxy))
                 : LexActivatorNative.SetNetworkProxy(proxy);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
 
     /**
-     * In case you are running Cryptlex on-premise, you can set the
-     * host for your on-premise server.
+     * In case you are running Cryptlex on-premise, you can set the host for your
+     * on-premise server.
      *
      * @param host the address of the Cryptlex on-premise server
      * @throws LexActivatorException
      */
-    public static void SetCryptlexHost(String host) throws LexActivatorException
-    {
+    public static void SetCryptlexHost(String host) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetCryptlexHost(new WString(host))
                 : LexActivatorNative.SetCryptlexHost(host);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -279,23 +258,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetProductMetadata(String key) throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetProductMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetProductMetadata(new WString(key), buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetProductMetadata(key, buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -310,23 +284,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetLicenseMetadata(String key) throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetLicenseMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseMetadata(new WString(key), buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseMetadata(key, buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -340,23 +309,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetLicenseKey() throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetLicenseKey() throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseKey(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseKey(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -369,19 +333,17 @@ public class LexActivator
      * @return Returns the timestamp
      * @throws LexActivatorException
      */
-    public static int GetLicenseExpiryDate() throws LexActivatorException
-    {
+    public static int GetLicenseExpiryDate() throws LexActivatorException {
         int status;
         IntByReference expiryDate = new IntByReference(0);
         status = LexActivatorNative.GetLicenseExpiryDate(expiryDate);
-        switch (status)
-        {
-            case LA_OK:
-                return expiryDate.getValue();
-            case LA_FAIL:
-                return 0;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return expiryDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -392,23 +354,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetLicenseUserEmail() throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetLicenseUserEmail() throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserEmail(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserEmail(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -416,29 +373,75 @@ public class LexActivator
     }
 
     /**
-     * Gets the name associated with license user.
+     * Gets the name associated with the license user.
      *
      * @return Returns the license user name.
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetLicenseUserName() throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetLicenseUserName() throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserName(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserName(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8");
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the company associated with the license user.
+     *
+     * @return Returns the license user company.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLicenseUserCompany() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseUserCompany(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseUserCompany(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8");
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the metadata associated with the license user.
+     *
+     * @param key key to retrieve the value
+     * @return Returns the value of metadata for the key.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLicenseUserMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseUserMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseUserMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -452,23 +455,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetLicenseType() throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetLicenseType() throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseType(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseType(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -483,27 +481,42 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetActivationMetadata(String key) throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetActivationMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetActivationMetadata(new WString(key), buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetActivationMetadata(key, buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
         throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the server sync grace period expiry date timestamp.
+     *
+     * @return Returns server sync grace period expiry date timestamp.
+     * @throws LexActivatorException
+     */
+    public static int GetServerSyncGracePeriodExpiryDate() throws LexActivatorException {
+        int status;
+        IntByReference expiryDate = new IntByReference(0);
+        status = LexActivatorNative.GetServerSyncGracePeriodExpiryDate(expiryDate);
+        switch (status) {
+        case LA_OK:
+            return expiryDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
     }
 
     /**
@@ -514,23 +527,19 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetTrialActivationMetadata(String key) throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetTrialActivationMetadata(String key)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetTrialActivationMetadata(new WString(key), buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetTrialActivationMetadata(key, buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -543,19 +552,17 @@ public class LexActivator
      * @return Returns trial expiry date timestamp.
      * @throws LexActivatorException
      */
-    public static int GetTrialExpiryDate() throws LexActivatorException
-    {
+    public static int GetTrialExpiryDate() throws LexActivatorException {
         int status;
         IntByReference trialExpiryDate = new IntByReference(0);
         status = LexActivatorNative.GetTrialExpiryDate(trialExpiryDate);
-        switch (status)
-        {
-            case LA_OK:
-                return trialExpiryDate.getValue();
-            case LA_FAIL:
-                return 0;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return trialExpiryDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -566,23 +573,18 @@ public class LexActivator
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetTrialId() throws LexActivatorException, UnsupportedEncodingException
-    {
+    public static String GetTrialId() throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        if (Platform.isWindows())
-        {
+        if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetTrialId(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
-        } else
-        {
+        } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetTrialId(buffer, 256);
-            if (LA_OK == status)
-            {
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
             }
         }
@@ -595,50 +597,87 @@ public class LexActivator
      * @return Returns trial expiry date timestamp.
      * @throws LexActivatorException
      */
-    public static int GetLocalTrialExpiryDate() throws LexActivatorException
-    {
+    public static int GetLocalTrialExpiryDate() throws LexActivatorException {
         int status;
         IntByReference trialExpiryDate = new IntByReference(0);
         status = LexActivatorNative.GetLocalTrialExpiryDate(trialExpiryDate);
-        switch (status)
-        {
-            case LA_OK:
-                return trialExpiryDate.getValue();
-            case LA_FAIL:
-                return 0;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return trialExpiryDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
     /**
-     * Activates the license by contacting the Cryptlex servers. It validates
-     * the key and returns with encrypted and digitally signed token which it
-     * stores and uses to activate your application.
+     * Checks whether a new release is available for the product.
      * <p>
      * </p>
-     * This function should be executed at the time of registration, ideally on
-     * a button click.
+     * This function should only be used if you manage your releases through
+     * Cryptlex release management API.
+     *
+     * @param platform release platform e.g. windows, macos, linux
+     * @param version current release version
+     * @param channel release channel e.g. stable
+     * @param listener listener to listen to the release update event
+     * @return LA_OK
+     * @throws LexActivatorException
+     */
+    public static void CheckForReleaseUpdate(String platform, String version, String channel,
+            ReleaseCallbackEvent listener) throws LexActivatorException {
+        if (releaseCallbackEventListeners == null) {
+            releaseCallbackEventListeners = new ArrayList<>();
+            releaseCallbackEventListeners.add(listener);
+        }
+        if (privateReleaseCallback == null) {
+            privateReleaseCallback = new LexActivatorNative.CallbackType() {
+                public void invoke(int status) {
+                    // Notify everybody that may be interested.
+                    for (ReleaseCallbackEvent event : releaseCallbackEventListeners) {
+                        event.ReleaseCallback(status);
+                    }
+                }
+            };
+            int status;
+            status = Platform.isWindows()
+                    ? LexActivatorNative.CheckForReleaseUpdate(new WString(platform), new WString(version),
+                            new WString(channel), privateReleaseCallback)
+                    : LexActivatorNative.CheckForReleaseUpdate(platform, version, channel, privateReleaseCallback);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+
+        }
+    }
+
+    /**
+     * Activates the license by contacting the Cryptlex servers. It validates the
+     * key and returns with encrypted and digitally signed token which it stores and
+     * uses to activate your application.
+     * <p>
+     * </p>
+     * This function should be executed at the time of registration, ideally on a
+     * button click.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int ActivateLicense() throws LexActivatorException
-    {
+    public static int ActivateLicense() throws LexActivatorException {
         int status;
         status = LexActivatorNative.ActivateLicense();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_EXPIRED:
-                return LA_EXPIRED;
-            case LA_SUSPENDED:
-                return LA_SUSPENDED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_EXPIRED:
+            return LA_EXPIRED;
+        case LA_SUSPENDED:
+            return LA_SUSPENDED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -649,23 +688,21 @@ public class LexActivator
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int ActivateLicenseOffline(String filePath) throws LexActivatorException
-    {
+    public static int ActivateLicenseOffline(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.ActivateLicenseOffline(new WString(filePath))
                 : LexActivatorNative.ActivateLicenseOffline(filePath);
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_EXPIRED:
-                return LA_EXPIRED;
-            case LA_SUSPENDED:
-                return LA_SUSPENDED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_EXPIRED:
+            return LA_EXPIRED;
+        case LA_SUSPENDED:
+            return LA_SUSPENDED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -674,43 +711,39 @@ public class LexActivator
      * activation response in the dashboard.
      *
      * @param filePath path of the file, needed to be created, for the offline
-     * request.
+     *                 request.
      * @throws LexActivatorException
      */
-    public static void GenerateOfflineActivationRequest(String filePath) throws LexActivatorException
-    {
+    public static void GenerateOfflineActivationRequest(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineActivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineActivationRequest(filePath);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
 
     /**
-     * Deactivates the license activation and frees up the correponding
-     * activation slot by contacting the Cryptlex servers.
+     * Deactivates the license activation and frees up the correponding activation
+     * slot by contacting the Cryptlex servers.
      * <p>
      * </p>
-     * This function should be executed at the time of deregistration, ideally
-     * on a button click.
+     * This function should be executed at the time of deregistration, ideally on a
+     * button click.
      *
      * @return LA_OK, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int DeactivateLicense() throws LexActivatorException
-    {
+    public static int DeactivateLicense() throws LexActivatorException {
         int status;
         status = LexActivatorNative.DeactivateLicense();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -726,35 +759,33 @@ public class LexActivator
      * @return LA_OK, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int GenerateOfflineDeactivationRequest(String filePath) throws LexActivatorException
-    {
+    public static int GenerateOfflineDeactivationRequest(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineDeactivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineDeactivationRequest(filePath);
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
     /**
-     * It verifies whether your app is genuinely activated or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of activation.
+     * It verifies whether your app is genuinely activated or not. The verification
+     * is done locally by verifying the cryptographic digital signature fetched at
+     * the time of activation.
      * <p>
      * </p>
-     * After verifying locally, it schedules a server check in a separate
-     * thread. After the first server sync it periodically does further syncs at
-     * a frequency set for the license.
+     * After verifying locally, it schedules a server check in a separate thread.
+     * After the first server sync it periodically does further syncs at a frequency
+     * set for the license.
      * <p>
      * </p>
-     * In case server sync fails due to network error, and it continues to fail
-     * for fixed number of days (grace period), the function returns
+     * In case server sync fails due to network error, and it continues to fail for
+     * fixed number of days (grace period), the function returns
      * LA_GRACE_PERIOD_OVER instead of LA_OK.
      * <p>
      * </p>
@@ -763,69 +794,62 @@ public class LexActivator
      * <p>
      * </p>
      * <b>Note: </b>If application was activated offline using
-     * ActivateLicenseOffline() function, you may want to set grace period to 0
-     * to ignore grace period.
+     * ActivateLicenseOffline() function, you may want to set grace period to 0 to
+     * ignore grace period.
      *
-     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER,
-     * LA_FAIL
+     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int IsLicenseGenuine() throws LexActivatorException
-    {
+    public static int IsLicenseGenuine() throws LexActivatorException {
         int status;
         status = LexActivatorNative.IsLicenseGenuine();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_EXPIRED:
-                return LA_EXPIRED;
-            case LA_SUSPENDED:
-                return LA_SUSPENDED;
-            case LA_GRACE_PERIOD_OVER:
-                return LA_GRACE_PERIOD_OVER;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_EXPIRED:
+            return LA_EXPIRED;
+        case LA_SUSPENDED:
+            return LA_SUSPENDED;
+        case LA_GRACE_PERIOD_OVER:
+            return LA_GRACE_PERIOD_OVER;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
     /**
-     * It verifies whether your app is genuinely activated or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of activation.
+     * It verifies whether your app is genuinely activated or not. The verification
+     * is done locally by verifying the cryptographic digital signature fetched at
+     * the time of activation.
      * <p>
      * </p>
-     * This is just an auxiliary function which you may use in some specific
-     * cases, when you want to skip the server sync.
+     * This is just an auxiliary function which you may use in some specific cases,
+     * when you want to skip the server sync.
      * <p>
      * </p>
-     * <b>Note: </b>You may want to set grace period to 0 to ignore grace
-     * period.
+     * <b>Note: </b>You may want to set grace period to 0 to ignore grace period.
      *
-     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER,
-     * LA_FAIL
+     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int IsLicenseValid() throws LexActivatorException
-    {
+    public static int IsLicenseValid() throws LexActivatorException {
         int status;
         status = LexActivatorNative.IsLicenseValid();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_EXPIRED:
-                return LA_EXPIRED;
-            case LA_SUSPENDED:
-                return LA_SUSPENDED;
-            case LA_GRACE_PERIOD_OVER:
-                return LA_GRACE_PERIOD_OVER;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_EXPIRED:
+            return LA_EXPIRED;
+        case LA_SUSPENDED:
+            return LA_SUSPENDED;
+        case LA_GRACE_PERIOD_OVER:
+            return LA_GRACE_PERIOD_OVER;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -834,8 +858,8 @@ public class LexActivator
      * servers.
      * <p>
      * </p>
-     * This function should be executed when your application starts first time
-     * on the user's computer, ideally on a button click.
+     * This function should be executed when your application starts first time on
+     * the user's computer, ideally on a button click.
      * <p>
      * </p>
      * <b>Note: </b>This function is only meant for verified trials.
@@ -843,20 +867,18 @@ public class LexActivator
      * @return LA_OK, LA_TRIAL_EXPIRED
      * @throws LexActivatorException
      */
-    public static int ActivateTrial() throws LexActivatorException
-    {
+    public static int ActivateTrial() throws LexActivatorException {
         int status;
         status = LexActivatorNative.ActivateTrial();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_TRIAL_EXPIRED:
-                return LA_TRIAL_EXPIRED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_TRIAL_EXPIRED:
+            return LA_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -867,21 +889,19 @@ public class LexActivator
      * @return LA_OK, LA_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int ActivateTrialOffline(String filePath) throws LexActivatorException
-    {
+    public static int ActivateTrialOffline(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.ActivateTrialOffline(new WString(filePath))
                 : LexActivatorNative.ActivateTrialOffline(filePath);
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_TRIAL_EXPIRED:
-                return LA_TRIAL_EXPIRED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_TRIAL_EXPIRED:
+            return LA_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -890,28 +910,26 @@ public class LexActivator
      * trial activation response in the dashboard.
      *
      * @param filePath path of the file, needed to be created, for the offline
-     * request.
+     *                 request.
      * @throws LexActivatorException
      */
-    public static void GenerateOfflineTrialActivationRequest(String filePath) throws LexActivatorException
-    {
+    public static void GenerateOfflineTrialActivationRequest(String filePath) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineTrialActivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineTrialActivationRequest(filePath);
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
 
     /**
-     * It verifies whether trial has started and is genuine or not. The
-     * verification is done locally by verifying the cryptographic digital
-     * signature fetched at the time of trial activation.
+     * It verifies whether trial has started and is genuine or not. The verification
+     * is done locally by verifying the cryptographic digital signature fetched at
+     * the time of trial activation.
      * <p>
      * </p>
-     * This function must be called on every start of your program during the
-     * trial period.
+     * This function must be called on every start of your program during the trial
+     * period.
      * <p>
      * </p>
      * <b>Note: </b>This function is only meant for verified trials.
@@ -919,20 +937,18 @@ public class LexActivator
      * @return LA_OK, LA_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int IsTrialGenuine() throws LexActivatorException
-    {
+    public static int IsTrialGenuine() throws LexActivatorException {
         int status;
         status = LexActivatorNative.IsTrialGenuine();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_TRIAL_EXPIRED:
-                return LA_TRIAL_EXPIRED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_TRIAL_EXPIRED:
+            return LA_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -940,8 +956,8 @@ public class LexActivator
      * Starts the local(unverified) trial.
      * <p>
      * </p>
-     * This function should be executed when your application starts first time
-     * on the user's computer, ideally on a button click.
+     * This function should be executed when your application starts first time on
+     * the user's computer, ideally on a button click.
      * <p>
      * </p>
      * <b>Note: </b>The function is only meant for local(unverified) trials.
@@ -950,30 +966,28 @@ public class LexActivator
      * @return LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int ActivateLocalTrial(int trialLength) throws LexActivatorException
-    {
+    public static int ActivateLocalTrial(int trialLength) throws LexActivatorException {
         int status;
         status = LexActivatorNative.ActivateLocalTrial(trialLength);
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_LOCAL_TRIAL_EXPIRED:
-                return LA_LOCAL_TRIAL_EXPIRED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_LOCAL_TRIAL_EXPIRED:
+            return LA_LOCAL_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
     /**
-     * It verifies whether trial has started and is genuine or not. The
-     * verification is done locally.
+     * It verifies whether trial has started and is genuine or not. The verification
+     * is done locally.
      * <p>
      * </p>
-     * This function must be called on every start of your program during the
-     * trial period.
+     * This function must be called on every start of your program during the trial
+     * period.
      * <p>
      * </p>
      * <b>Note: </b>The function is only meant for local(unverified) trials.
@@ -981,20 +995,18 @@ public class LexActivator
      * @return LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int IsLocalTrialGenuine() throws LexActivatorException
-    {
+    public static int IsLocalTrialGenuine() throws LexActivatorException {
         int status;
         status = LexActivatorNative.IsLocalTrialGenuine();
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_LOCAL_TRIAL_EXPIRED:
-                return LA_LOCAL_TRIAL_EXPIRED;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_LOCAL_TRIAL_EXPIRED:
+            return LA_LOCAL_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1008,18 +1020,16 @@ public class LexActivator
      * @return LA_OK, LA_FAIL
      * @throws LexActivatorException
      */
-    public static int ExtendLocalTrial(int trialExtensionLength) throws LexActivatorException
-    {
+    public static int ExtendLocalTrial(int trialExtensionLength) throws LexActivatorException {
         int status;
         status = LexActivatorNative.ExtendLocalTrial(trialExtensionLength);
-        switch (status)
-        {
-            case LA_OK:
-                return LA_OK;
-            case LA_FAIL:
-                return LA_FAIL;
-            default:
-                throw new LexActivatorException(status);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1034,12 +1044,10 @@ public class LexActivator
      *
      * @throws LexActivatorException
      */
-    public static void Reset() throws LexActivatorException
-    {
+    public static void Reset() throws LexActivatorException {
         int status;
         status = LexActivatorNative.Reset();
-        if (LA_OK != status)
-        {
+        if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
     }
@@ -1058,8 +1066,8 @@ public class LexActivator
     public static final int LA_FAIL = 1;
 
     /**
-     * The license has expired or system time has been tampered with. Ensure
-     * your date and time settings are correct.
+     * The license has expired or system time has been tampered with. Ensure your
+     * date and time settings are correct.
      */
     public static final int LA_EXPIRED = 20;
 
@@ -1074,8 +1082,8 @@ public class LexActivator
     public static final int LA_GRACE_PERIOD_OVER = 22;
 
     /**
-     * The trial has expired or system time has been tampered with. Ensure your
-     * date and time settings are correct.
+     * The trial has expired or system time has been tampered with. Ensure your date
+     * and time settings are correct.
      */
     public static final int LA_TRIAL_EXPIRED = 25;
 
@@ -1084,5 +1092,21 @@ public class LexActivator
      * your date and time settings are correct.
      */
     public static final int LA_LOCAL_TRIAL_EXPIRED = 26;
+
+    /*
+     * CODE: LA_RELEASE_UPDATE_AVAILABLE
+     * 
+     * MESSAGE: A new update is available for the product. This means a new release
+     * has been published for the product.
+     */
+    public static final int LA_RELEASE_UPDATE_AVAILABLE = 30;
+
+    /*
+     * CODE: LA_RELEASE_NO_UPDATE_AVAILABLE
+     * 
+     * MESSAGE: No new update is available for the product. The current version is
+     * latest.
+     */
+    public static final int LA_RELEASE_NO_UPDATE_AVAILABLE = 31;
 
 }

@@ -11,41 +11,36 @@ import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.Callback;
 import java.io.File;
 
-public class LexActivatorNative implements Library
-{
+public class LexActivatorNative implements Library {
 
-    public static NativeLibrary GetNativeLibrary()
-    {
+    public static NativeLibrary GetNativeLibrary() {
         String libraryPath, libraryName, arch;
         libraryPath = System.getProperty("user.dir") + File.separator + "lexactivator";
         libraryName = null;
         arch = Platform.is64Bit() ? "-64" : "";
-        switch (Platform.getOSType())
-        {
-            case Platform.WINDOWS:
-                libraryPath = libraryPath + File.separator + "win32-x86" + arch;
-                libraryName = "LexActivator.dll";
-                break;
-            case Platform.MAC:
-                libraryPath = libraryPath + File.separator + "mac";
-                libraryName = "libLexActivator.dylib";
-                break;
-            case Platform.LINUX:
-                libraryPath = libraryPath + File.separator + "linux-x86" + arch;
-                libraryName = "libLexActivator.so";
-                break;
+        switch (Platform.getOSType()) {
+        case Platform.WINDOWS:
+            libraryPath = libraryPath + File.separator + "win32-x86" + arch;
+            libraryName = "LexActivator.dll";
+            break;
+        case Platform.MAC:
+            libraryPath = libraryPath + File.separator + "mac";
+            libraryName = "libLexActivator.dylib";
+            break;
+        case Platform.LINUX:
+            libraryPath = libraryPath + File.separator + "linux-x86" + arch;
+            libraryName = "libLexActivator.so";
+            break;
         }
         return NativeLibrary.getInstance(libraryPath + File.separator + libraryName);
 
     }
 
-    static
-    {
+    static {
         Native.register(GetNativeLibrary());
     }
 
-    public interface CallbackType extends Callback
-    {
+    public interface CallbackType extends Callback {
 
         void invoke(int status);
     }
@@ -110,6 +105,14 @@ public class LexActivatorNative implements Library
 
     public static native int GetLicenseUserName(CharBuffer name, int length);
 
+    public static native int GetLicenseUserCompany(ByteBuffer company, int length);
+
+    public static native int GetLicenseUserCompany(CharBuffer company, int length);
+
+    public static native int GetLicenseUserMetadata(String key, ByteBuffer value, int length);
+
+    public static native int GetLicenseUserMetadata(WString key, CharBuffer value, int length);
+
     public static native int GetLicenseType(ByteBuffer licenseType, int length);
 
     public static native int GetLicenseType(CharBuffer licenseType, int length);
@@ -117,6 +120,8 @@ public class LexActivatorNative implements Library
     public static native int GetActivationMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetActivationMetadata(WString key, CharBuffer value, int length);
+
+    public static native int GetServerSyncGracePeriodExpiryDate(IntByReference expiryDate);
 
     public static native int GetTrialActivationMetadata(String key, ByteBuffer value, int length);
 
@@ -129,6 +134,10 @@ public class LexActivatorNative implements Library
     public static native int GetTrialId(CharBuffer trialId, int length);
 
     public static native int GetLocalTrialExpiryDate(IntByReference trialExpiryDate);
+
+    public static native int CheckForReleaseUpdate(String platform, String version, String channel, CallbackType callback);
+
+    public static native int CheckForReleaseUpdate(WString platform, WString version, WString channel, CallbackType callback);
 
     public static native int ActivateLicense();
 
