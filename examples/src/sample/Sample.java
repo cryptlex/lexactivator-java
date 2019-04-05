@@ -2,6 +2,7 @@ package sample;
 
 import com.cryptlex.lexactivator.LexActivator;
 import com.cryptlex.lexactivator.LicenseCallbackEvent;
+import com.cryptlex.lexactivator.ReleaseCallbackEvent;
 import com.cryptlex.lexactivator.LexActivatorException;
 import java.io.File;
 import java.time.Instant;
@@ -18,12 +19,15 @@ public class Sample {
             LexActivator.SetProductId("PASTE_PRODUCT_ID", LexActivator.LA_USER);
 
             // Setting license callback is recommended for floating licenses
-            // CallbackEventListener eventListener = new CallbackEventListener();
-            // LexActivator.SetLicenseCallbackListener(eventListener);
-
+            // LicenseCallbackEventListener licenseEventListener = new LicenseCallbackEventListener();
+            // LexActivator.SetLicenseCallbackListener(licenseEventListener);
             status = LexActivator.IsLicenseGenuine();
             if (LexActivator.LA_OK == status) {
                 System.out.println("License is genuinely activated!");
+
+                // Checking for software release update
+                // ReleaseCallbackEventListener releaseEventListener = new ReleaseCallbackEventListener();
+                // LexActivator.CheckForReleaseUpdate("windows", "1.0.0", "stable", releaseEventListener);
             } else if (LexActivator.LA_EXPIRED == status) {
                 System.out.println("License is genuinely activated but has expired!");
             } else if (LexActivator.LA_GRACE_PERIOD_OVER == status) {
@@ -72,7 +76,7 @@ public class Sample {
 
 }
 
-class CallbackEventListener implements LicenseCallbackEvent {
+class LicenseCallbackEventListener implements LicenseCallbackEvent {
 
     // License callback is invoked when IsLicenseGenuine() completes a server sync
     @Override
@@ -87,6 +91,26 @@ class CallbackEventListener implements LicenseCallbackEvent {
             default:
                 System.out.println("License status: " + status);
                 break;
+        }
+    }
+}
+
+class ReleaseCallbackEventListener implements ReleaseCallbackEvent {
+
+    // Software release update callback is invoked when CheckForReleaseUpdate() gets a response from the server
+    @Override
+    public void ReleaseCallback(int status) {
+        switch (status) {
+            case LexActivator.LA_RELEASE_UPDATE_AVAILABLE:
+                System.out.println("A new update is available for the app.\n");
+                break;
+
+            case LexActivator.LA_RELEASE_NO_UPDATE_AVAILABLE:
+                System.out.println("Current version is already latest.\n");
+                break;
+
+            default:
+                System.out.println("Error code: " + status);
         }
     }
 }
