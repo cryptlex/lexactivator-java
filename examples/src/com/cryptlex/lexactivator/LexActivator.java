@@ -100,6 +100,28 @@ public class LexActivator {
             throw new LexActivatorException(status);
         }
     }
+    
+    /**
+     * Sets the license user email and password for authentication.
+     * <p>
+     * </p>
+     * This function must be called before ActivateLicense() or IsLicenseGenuine()
+     * function if <b>requireAuthentication</b> property of the license is set to true.
+     * <p>
+     * </p>
+     *
+     * @param email user email address.
+     * @param password user password.
+     * @throws LexActivatorException
+     */
+    public static void SetLicenseUserCredential(String email, String password) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetLicenseUserCredential(new WString(email), new WString(password))
+                : LexActivatorNative.SetLicenseUserCredential(email, password);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
 
     /**
      * Sets server sync callback function.

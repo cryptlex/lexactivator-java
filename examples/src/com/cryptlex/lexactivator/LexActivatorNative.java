@@ -60,6 +60,10 @@ public class LexActivatorNative implements Library {
     public static native int SetLicenseKey(String licenseKey);
 
     public static native int SetLicenseKey(WString licenseKey);
+    
+    public static native int SetLicenseUserCredential(String email, String password);
+
+    public static native int SetLicenseUserCredential(WString email, WString password);
 
     public static native int SetLicenseCallback(CallbackType callback);
 

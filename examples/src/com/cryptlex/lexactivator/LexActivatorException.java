@@ -144,6 +144,10 @@ public class LexActivatorException extends Exception {
         case LA_E_RELEASE_VERSION_FORMAT:
             message = "Invalid version format.";
             break;
+        
+        case LA_E_AUTHENTICATION_FAILED:
+            message = "Incorrect email or password.";
+            break;
 
         case LA_E_VM:
             message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
@@ -400,6 +404,13 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Invalid version format.
      */
     public static final int LA_E_RELEASE_VERSION_FORMAT = 70;
+    
+    /*
+     * CODE: LA_E_AUTHENTICATION_FAILED
+     * 
+     * MESSAGE: Incorrect email or password.
+     */
+    public static final int LA_E_AUTHENTICATION_FAILED = 71;
 
     /*
      * CODE: LA_E_VM
