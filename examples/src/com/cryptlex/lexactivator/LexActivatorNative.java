@@ -94,6 +94,10 @@ public class LexActivatorNative implements Library {
     public static native int GetLicenseMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
+    
+    public static native int GetLicenseMeterAttribute(String name, IntByReference allowedUses, IntByReference totalUses);
+    
+    public static native int GetLicenseMeterAttribute(WString name, IntByReference allowedUses, IntByReference totalUses);
 
     public static native int GetLicenseKey(ByteBuffer licenseKey, int length);
 
@@ -122,6 +126,10 @@ public class LexActivatorNative implements Library {
     public static native int GetLicenseType(CharBuffer licenseType, int length);
 
     public static native int GetActivationMetadata(String key, ByteBuffer value, int length);
+    
+    public static native int GetActivationMeterAttributeUses(String name, IntByReference uses);
+    
+    public static native int GetActivationMeterAttributeUses(WString name, IntByReference uses);
 
     public static native int GetActivationMetadata(WString key, CharBuffer value, int length);
 
@@ -180,6 +188,18 @@ public class LexActivatorNative implements Library {
     public static native int IsLocalTrialGenuine();
 
     public static native int ExtendLocalTrial(int trialExtensionLength);
+    
+    public static native int IncrementActivationMeterAttributeUses(String name, int increment);
+    
+    public static native int IncrementActivationMeterAttributeUses(WString name, int increment);
+    
+    public static native int DecrementActivationMeterAttributeUses(String name, int decrement);
+    
+    public static native int DecrementActivationMeterAttributeUses(WString name, int decrement);
+    
+    public static native int ResetActivationMeterAttributeUses(String name);
+    
+    public static native int ResetActivationMeterAttributeUses(WString name);
 
     public static native int Reset();
 }

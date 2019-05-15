@@ -148,6 +148,14 @@ public class LexActivatorException extends Exception {
         case LA_E_AUTHENTICATION_FAILED:
             message = "Incorrect email or password.";
             break;
+            
+        case LA_E_METER_ATTRIBUTE_NOT_FOUND:
+            message = "The meter attribute does not exist.";
+            break;
+            
+        case LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED:
+            message = "The meter attribute has reached it's usage limit.";
+            break;
 
         case LA_E_VM:
             message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
@@ -411,6 +419,20 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Incorrect email or password.
      */
     public static final int LA_E_AUTHENTICATION_FAILED = 71;
+    
+    /*
+     * CODE: LA_E_METER_ATTRIBUTE_NOT_FOUND
+     * 
+     * MESSAGE: The meter attribute does not exist.
+     */
+    public static final int LA_E_METER_ATTRIBUTE_NOT_FOUND = 72;
+    
+    /*
+     * CODE: LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
+     * 
+     * MESSAGE: The meter attribute has reached it's usage limit.
+     */
+    public static final int LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED = 73;
 
     /*
      * CODE: LA_E_VM

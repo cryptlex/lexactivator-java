@@ -323,6 +323,33 @@ public class LexActivator {
         }
         throw new LexActivatorException(status);
     }
+    
+    /**
+     * Gets the license meter attribute allowed uses and total uses.
+     *
+     * @param name name of the meter attribute
+     * @return Returns the values of meter attribute allowed and total uses.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static LicenseMeterAttribute GetLicenseMeterAttribute(String name) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        IntByReference allowedUses = new IntByReference(0);
+        IntByReference totalUses = new IntByReference(0);
+
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses);
+            if (LA_OK == status) {
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue());
+            }
+        } else {
+            status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses);
+            if (LA_OK == status) {
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue());
+            }
+        }
+        throw new LexActivatorException(status);
+    }
 
     /**
      * Gets the license key used for activation.
@@ -516,6 +543,31 @@ public class LexActivator {
             status = LexActivatorNative.GetActivationMetadata(key, buffer, 256);
             if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8");
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+    
+    /**
+     * Gets the meter attribute uses consumed by the activation.
+     *
+     * @param name name of the meter attribute
+     * @return Returns the value of meter attribute uses by the activation.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static int GetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        IntByReference uses = new IntByReference(0);
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.GetActivationMeterAttributeUses(new WString(name), uses);
+            if (LA_OK == status) {
+                return uses.getValue();
+            }
+        } else {
+            status = LexActivatorNative.GetActivationMeterAttributeUses(name, uses);
+            if (LA_OK == status) {
+                return uses.getValue();
             }
         }
         throw new LexActivatorException(status);
@@ -1052,6 +1104,74 @@ public class LexActivator {
             return LA_FAIL;
         default:
             throw new LexActivatorException(status);
+        }
+    }
+    
+    /**
+     * Increments the meter attribute uses of the activation.
+     *
+     * @param name name of the meter attribute
+     * @param increment the increment value
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static void IncrementActivationMeterAttributeUses(String name, int increment) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.IncrementActivationMeterAttributeUses(new WString(name), increment);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        } else {
+            status = LexActivatorNative.IncrementActivationMeterAttributeUses(name, increment);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        }
+    }
+    
+    /**
+     * Decrements the meter attribute uses of the activation.
+     *
+     * @param name name of the meter attribute
+     * @param decrement the decrement value
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static void DecrementActivationMeterAttributeUses(String name, int decrement) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.DecrementActivationMeterAttributeUses(new WString(name), decrement);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        } else {
+            status = LexActivatorNative.DecrementActivationMeterAttributeUses(name, decrement);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        }
+    }
+    
+    /**
+     * Resets the meter attribute uses of the activation.
+     *
+     * @param name name of the meter attribute
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static void ResetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.ResetActivationMeterAttributeUses(new WString(name));
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        } else {
+            status = LexActivatorNative.ResetActivationMeterAttributeUses(name);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
         }
     }
 
