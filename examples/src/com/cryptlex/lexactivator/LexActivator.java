@@ -77,10 +77,10 @@ public class LexActivator {
      *                  the following values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
      * @throws LexActivatorException
      */
-    public static void SetProductId(String versionGuid, int flags) throws LexActivatorException {
+    public static void SetProductId(String productId, int flags) throws LexActivatorException {
         int status;
-        status = Platform.isWindows() ? LexActivatorNative.SetProductId(new WString(versionGuid), flags)
-                : LexActivatorNative.SetProductId(versionGuid, flags);
+        status = Platform.isWindows() ? LexActivatorNative.SetProductId(new WString(productId), flags)
+                : LexActivatorNative.SetProductId(productId, flags);
         if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
@@ -696,7 +696,6 @@ public class LexActivator {
      * @param version current release version
      * @param channel release channel e.g. stable
      * @param listener listener to listen to the release update event
-     * @return LA_OK
      * @throws LexActivatorException
      */
     public static void CheckForReleaseUpdate(String platform, String version, String channel,
@@ -1036,7 +1035,7 @@ public class LexActivator {
      * </p>
      * <b>Note: </b>The function is only meant for local(unverified) trials.
      *
-     * @param trialLength trial length in days version
+     * @param trialLength trial length in days
      * @return LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
      */
@@ -1090,7 +1089,7 @@ public class LexActivator {
      * </p>
      * <b>Note: </b>This function is only meant for unverified trials.
      *
-     * @param trialExtensionLength number of days to extend the trial version
+     * @param trialExtensionLength number of days to extend the trial
      * @return LA_OK, LA_FAIL
      * @throws LexActivatorException
      */
