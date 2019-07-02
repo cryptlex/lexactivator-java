@@ -39,7 +39,7 @@ public class Sample {
                 trialStatus = LexActivator.IsTrialGenuine();
                 if (LexActivator.LA_OK == trialStatus) {
                     int trialExpiryDate = LexActivator.GetTrialExpiryDate();
-                    long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86500;
+                    long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86400;
                     System.out.println("Trial days left: " + daysLeft);
                 } else if (LexActivator.LA_TRIAL_EXPIRED == trialStatus) {
                     System.out.println("Trial has expired!");
@@ -60,7 +60,7 @@ public class Sample {
                     trialStatus = LexActivator.ActivateTrial(); // Ideally on a button click inside a dialog
                     if (LexActivator.LA_OK == trialStatus) {
                         int trialExpiryDate = LexActivator.GetTrialExpiryDate();
-                        long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86500;
+                        long daysLeft = (trialExpiryDate - Instant.now().getEpochSecond()) / 86400;
                         System.out.println("Trial days left: " + daysLeft);
                     } else {
                         // Trial was tampered or has expired
