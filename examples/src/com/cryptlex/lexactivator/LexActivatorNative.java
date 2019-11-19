@@ -79,6 +79,10 @@ public class LexActivatorNative implements Library {
 
     public static native int SetAppVersion(WString appVersion);
 
+    public static native int SetOfflineActivationRequestMeterAttributeUses(String name, int uses);
+    
+    public static native int SetOfflineActivationRequestMeterAttributeUses(WString name, int uses);
+
     public static native int SetNetworkProxy(String proxy);
 
     public static native int SetNetworkProxy(WString proxy);

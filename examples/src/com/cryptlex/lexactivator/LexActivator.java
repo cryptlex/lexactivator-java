@@ -231,6 +231,33 @@ public class LexActivator {
     }
 
     /**
+     * Sets the meter attribute uses for the offline activation request.
+     * <p>
+     * </p>
+     * This function should only be called before GenerateOfflineActivationRequest()
+     * function to set the meter attributes in case of offline activation.
+     * 
+     * @param name name of the meter attribute
+     * @param uses the uses value
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static void SetOfflineActivationRequestMeterAttributeUses(String name, int uses) throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(new WString(name), uses);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        } else {
+            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(name, uses);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
+            }
+        }
+    }
+
+    /**
      * Sets the network proxy to be used when contacting CryptLex servers.
      * <p>
      * </p>
