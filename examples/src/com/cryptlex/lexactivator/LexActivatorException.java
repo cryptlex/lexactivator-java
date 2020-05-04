@@ -38,7 +38,7 @@ public class LexActivatorException extends Exception {
             break;
 
         case LA_E_SYSTEM_PERMISSION:
-            message = "Insufficent system permissions.";
+            message = "Insufficient system permissions.";
             break;
 
         case LA_E_FILE_PERMISSION:
@@ -223,7 +223,7 @@ public class LexActivatorException extends Exception {
     /*
      * CODE: LA_E_SYSTEM_PERMISSION
      * 
-     * MESSAGE: Insufficent system permissions. Occurs when LA_SYSTEM flag is used
+     * MESSAGE: Insufficient system permissions. Occurs when LA_SYSTEM flag is used
      * but application is not run with admin privileges.
      */
     public static final int LA_E_SYSTEM_PERMISSION = 44;
