@@ -8,9 +8,12 @@ public class LicenseMeterAttribute {
 
     public int totalUses;
 
-    public LicenseMeterAttribute(String name, int allowedUses, int totalUses) {
+    public int grossUses;
+
+    public LicenseMeterAttribute(String name, int allowedUses, int totalUses, int grossUses) {
         this.name = name;
         this.allowedUses = allowedUses;
         this.totalUses = totalUses;
+        this.grossUses = grossUses;
     }
 }
