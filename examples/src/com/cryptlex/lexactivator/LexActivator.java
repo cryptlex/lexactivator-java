@@ -87,6 +87,31 @@ public class LexActivator {
     }
 
     /**
+     * In case you don't want to use the LexActivator's advanced
+     * device fingerprinting algorithm, this function can be used to set a custom
+     * device fingerprint.
+     * <p>
+     * </p>
+     * If you decide to use your own custom device fingerprint then this function must be
+     * called on every start of your program immediately after calling SetProductFile()
+     * or SetProductData() function.
+     * <p>
+     * </p>
+     * The license fingerprint matching strategy is ignored if this function is used.
+     *
+     * @param fingerprint string of minimum length 64 characters and maximum length 256 characters.
+     * @throws LexActivatorException
+     */
+    public static void SetCustomDeviceFingerprint(String fingerprint) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetCustomDeviceFingerprint(new WString(fingerprint))
+                : LexActivatorNative.SetCustomDeviceFingerprint(fingerprint);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Sets the license key required to activate the license.
      *
      * @param licenseKey a valid license key.
@@ -319,7 +344,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetProductMetadata(key, buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -345,17 +370,17 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseMetadata(key, buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
     }
     
     /**
-     * Gets the license meter attribute allowed uses and total uses.
+     * Gets the license meter attribute allowed, total and gross uses.
      *
      * @param name name of the meter attribute
-     * @return Returns the values of meter attribute allowed and total uses.
+     * @return Returns the values of meter attribute allowed, total and gross uses.
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
@@ -363,16 +388,17 @@ public class LexActivator {
         int status;
         IntByReference allowedUses = new IntByReference(0);
         IntByReference totalUses = new IntByReference(0);
+        IntByReference grossUses = new IntByReference(0);
 
         if (Platform.isWindows()) {
-            status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses);
+            status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
             }
         } else {
-            status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses);
+            status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
             }
         }
         throw new LexActivatorException(status);
@@ -397,10 +423,50 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseKey(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the allowed activations of the license.
+     *
+     * @return Returns the allowed activations
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseAllowedActivations() throws LexActivatorException {
+        int status;
+        IntByReference allowedActivations = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseAllowedActivations(allowedActivations);
+        switch (status) {
+        case LA_OK:
+            return allowedActivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the total activations of the license.
+     *
+     * @return Returns the total activations
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseTotalActivations() throws LexActivatorException {
+        int status;
+        IntByReference totalActivations = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseTotalActivations(totalActivations);
+        switch (status) {
+        case LA_OK:
+            return totalActivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
     }
 
     /**
@@ -442,7 +508,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserEmail(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -467,7 +533,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserName(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -492,7 +558,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserCompany(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -518,7 +584,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseUserMetadata(key, buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -543,7 +609,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseType(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -569,7 +635,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetActivationMetadata(key, buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -641,7 +707,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetTrialActivationMetadata(key, buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -686,7 +752,7 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetTrialId(buffer, 256);
             if (LA_OK == status) {
-                return new String(buffer.array(), "UTF-8");
+                return new String(buffer.array(), "UTF-8").trim();
             }
         }
         throw new LexActivatorException(status);
@@ -710,6 +776,31 @@ public class LexActivator {
         default:
             throw new LexActivatorException(status);
         }
+    }
+
+    /**
+     * Gets the version of this library.
+     *
+     * @return Returns the library version.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLibraryVersion() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLibraryVersion(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLibraryVersion(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
     }
 
     /**

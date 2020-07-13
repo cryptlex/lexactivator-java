@@ -57,6 +57,10 @@ public class LexActivatorNative implements Library {
 
     public static native int SetProductId(WString productId, int flags);
 
+    public static native int SetCustomDeviceFingerprint(String fingerprint);
+
+    public static native int SetCustomDeviceFingerprint(WString fingerprint);
+
     public static native int SetLicenseKey(String licenseKey);
 
     public static native int SetLicenseKey(WString licenseKey);
@@ -99,15 +103,19 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
     
-    public static native int GetLicenseMeterAttribute(String name, IntByReference allowedUses, IntByReference totalUses);
+    public static native int GetLicenseMeterAttribute(String name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
     
-    public static native int GetLicenseMeterAttribute(WString name, IntByReference allowedUses, IntByReference totalUses);
+    public static native int GetLicenseMeterAttribute(WString name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
 
     public static native int GetLicenseKey(ByteBuffer licenseKey, int length);
 
     public static native int GetLicenseKey(CharBuffer licenseKey, int length);
 
     public static native int GetLicenseExpiryDate(IntByReference expiryDate);
+
+    public static native int GetLicenseAllowedActivations(IntByReference allowedActivations);
+
+    public static native int GetLicenseTotalActivations(IntByReference totalActivations);
 
     public static native int GetLicenseUserEmail(ByteBuffer email, int length);
 
@@ -150,6 +158,10 @@ public class LexActivatorNative implements Library {
     public static native int GetTrialId(CharBuffer trialId, int length);
 
     public static native int GetLocalTrialExpiryDate(IntByReference trialExpiryDate);
+
+    public static native int GetLibraryVersion(ByteBuffer libraryVersion, int length);
+
+    public static native int GetLibraryVersion(CharBuffer libraryVersion, int length);
 
     public static native int CheckForReleaseUpdate(String platform, String version, String channel, CallbackType callback);
 
