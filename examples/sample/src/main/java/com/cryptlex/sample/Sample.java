@@ -1,4 +1,4 @@
-package sample;
+package com.cryptlex.sample;
 
 import com.cryptlex.lexactivator.LexActivator;
 import com.cryptlex.lexactivator.LicenseCallbackEvent;
@@ -114,3 +114,4 @@ class ReleaseCallbackEventListener implements ReleaseCallbackEvent {
         }
     }
 }
+
