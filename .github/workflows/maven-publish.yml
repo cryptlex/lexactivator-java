@@ -13,15 +13,34 @@ on:
         default: ''
 
 jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Update Version
+        run: |
+          sed -i '/VERSION=/!b;VERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
+      - name: Commit, Tag and Push
+        run: |
+          git add ./download-libs.sh
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git commit -m "updated version" | exit 0
+          git tag ${{ github.event.inputs.libraryVersion }}
+          git push & git push --tags
+
   publish:
+    needs: update-version
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    
+
+    - run: git pull origin master --ff-only
+
     - name: Assemble Resources
-      run: ./download-libs.sh   
-      env:
-        VERSION: "v${{ github.event.inputs.libraryVersion }}"
+      run: ./download-libs.sh
       
     - name: Set up JDK 11
       uses: actions/setup-java@v2
