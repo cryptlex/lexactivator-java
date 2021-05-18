@@ -1,3 +1,5 @@
+[![Maven Publish](https://github.com/cryptlex/lexactivator-java/actions/workflows/maven-publish.yml/badge.svg)](https://github.com/cryptlex/lexactivator-java/actions/workflows/maven-publish.yml)
+
 # lexactivator-java
 LexActivator - Java licensing library
 
