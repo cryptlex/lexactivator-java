@@ -21,7 +21,7 @@ jobs:
       
       - name: Update Version
         run: |
-          sed -i '/VERSION=/!b;VERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
+          sed -i '/VERSION=/!b;cVERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
       - name: Commit, Tag and Push
         run: |
           git add ./download-libs.sh
