@@ -17,29 +17,6 @@ import java.util.Date;
 
 public class LexActivatorNative implements Library {
 
-//     public static NativeLibrary GetNativeLibrary() {
-//         String libraryPath, libraryName, arch;
-//         libraryPath = System.getProperty("user.dir") + File.separator + "lexactivator";
-//         libraryName = null;
-//         arch = Platform.is64Bit() ? "-64" : "";
-//         switch (Platform.getOSType()) {
-//             case Platform.WINDOWS:
-//                 libraryPath = libraryPath + File.separator + "win32-x86" + arch;
-//                 libraryName = "LexActivator.dll";
-//                 break;
-//             case Platform.MAC:
-//                 libraryPath = libraryPath + File.separator + "mac";
-//                 libraryName = "libLexActivator.dylib";
-//                 break;
-//             case Platform.LINUX:
-//                 libraryPath = libraryPath + File.separator + "linux-x86" + arch;
-//                 libraryName = "libLexActivator.so";
-//                 break;
-//         }
-//         return NativeLibrary.getInstance(libraryPath + File.separator + libraryName);
-//
-//     }
-
     static{
             Native.register("LexActivator");
     }
