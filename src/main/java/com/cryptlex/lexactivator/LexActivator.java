@@ -1,13 +1,11 @@
 package com.cryptlex.lexactivator;
 
-import com.sun.jna.NativeLong;
 import com.sun.jna.Platform;
 import com.sun.jna.WString;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.io.UnsupportedEncodingException;
-import com.sun.jna.ptr.NativeLongByReference;
-import com.sun.jna.ptr.NativeLongByReference;
+import com.sun.jna.ptr.IntByReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,11 +29,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetProductFile(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetProductFile(new WString(filePath))
                 : LexActivatorNative.SetProductFile(filePath);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -50,11 +48,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetProductData(String productData) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetProductData(new WString(productData))
                 : LexActivatorNative.SetProductData(productData);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -72,34 +70,13 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetProductId(String productId, int flags) throws LexActivatorException {
-        NativeLong status;
-        status = Platform.isWindows() ? LexActivatorNative.SetProductId(new WString(productId), new NativeLong(flags))
-                : LexActivatorNative.SetProductId(productId, new NativeLong(flags));
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetProductId(new WString(productId), flags)
+                : LexActivatorNative.SetProductId(productId, flags);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
-
-    /**
-     * In case you want to change the default directory used by LexActivator to
-     * store the activation data on Linux and macOS, this function can be used to
-     * set a different directory.
-     * If you decide to use this function, then it must be called on every start of
-     * your program before calling SetProductFile() or SetProductData() function.
-     * Please ensure that the directory exists and your app has read and write
-     * permissions in the directory.
-     *
-     * @param directoryPath absolute path of the directory.
-     * @throws LexActivatorException
-     */
-//    public static void SetDataDirectory(String directoryPath) throws LexActivatorException {
-//        NativeLong status;
-//        status = Platform.isWindows() ? LexActivatorNative.SetDataDirectory(new WString(directoryPath))
-//                : LexActivatorNative.SetDataDirectory(directoryPath);
-//        if (LA_OK != status.intValue()) {
-//            throw new LexActivatorException(status.intValue());
-//        }
-//    }
 
     /**
      * In case you don't want to use the LexActivator's advanced
@@ -114,11 +91,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetCustomDeviceFingerprint(String fingerprint) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetCustomDeviceFingerprint(new WString(fingerprint))
                 : LexActivatorNative.SetCustomDeviceFingerprint(fingerprint);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -129,11 +106,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetLicenseKey(String licenseKey) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetLicenseKey(new WString(licenseKey))
                 : LexActivatorNative.SetLicenseKey(licenseKey);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
     
@@ -147,11 +124,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetLicenseUserCredential(String email, String password) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetLicenseUserCredential(new WString(email), new WString(password))
                 : LexActivatorNative.SetLicenseUserCredential(email, password);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -173,17 +150,17 @@ public class LexActivator {
         }
         if (privateLicenseCallback == null) {
             privateLicenseCallback = new LexActivatorNative.CallbackType() {
-                public void invoke(NativeLong status) {
+                public void invoke(int status) {
                     // Notify everybody that may be interested.
                     for (LicenseCallbackEvent event : licenseCallbackEventListeners) {
-                        event.LicenseCallback(status.intValue());
+                        event.LicenseCallback(status);
                     }
                 }
             };
-            NativeLong status;
+            int status;
             status = LexActivatorNative.SetLicenseCallback(privateLicenseCallback);
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         }
 
@@ -201,11 +178,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetActivationMetadata(String key, String value) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetActivationMetadata(new WString(key), new WString(value))
                 : LexActivatorNative.SetActivationMetadata(key, value);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -221,12 +198,12 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetTrialActivationMetadata(String key, String value) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows()
                 ? LexActivatorNative.SetTrialActivationMetadata(new WString(key), new WString(value))
                 : LexActivatorNative.SetTrialActivationMetadata(key, value);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -240,11 +217,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetAppVersion(String appVersion) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetNetworkProxy(new WString(appVersion))
                 : LexActivatorNative.SetNetworkProxy(appVersion);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -259,16 +236,16 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static void SetOfflineActivationRequestMeterAttributeUses(String name, int uses) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
-            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(new WString(name), new NativeLong(uses));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(new WString(name), uses);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         } else {
-            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(name, new NativeLong(uses));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(name, uses);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         }
     }
@@ -284,11 +261,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetNetworkProxy(String proxy) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetNetworkProxy(new WString(proxy))
                 : LexActivatorNative.SetNetworkProxy(proxy);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -300,11 +277,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void SetCryptlexHost(String host) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.SetCryptlexHost(new WString(host))
                 : LexActivatorNative.SetCryptlexHost(host);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -318,21 +295,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetProductMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetProductMetadata(new WString(key), buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetProductMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetProductMetadata(key, buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetProductMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -344,21 +321,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseMetadata(new WString(key), buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseMetadata(key, buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
     
     /**
@@ -370,23 +347,23 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static LicenseMeterAttribute GetLicenseMeterAttribute(String name) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
-        NativeLongByReference allowedUses = new NativeLongByReference();
-        NativeLongByReference totalUses = new NativeLongByReference();
-        NativeLongByReference grossUses = new NativeLongByReference();
+        int status;
+        IntByReference allowedUses = new IntByReference(0);
+        IntByReference totalUses = new IntByReference(0);
+        IntByReference grossUses = new IntByReference(0);
 
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
-            if (LA_OK == status.intValue()) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue().intValue(), totalUses.getValue().intValue(), grossUses.getValue().intValue());
+            if (LA_OK == status) {
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
             }
         } else {
             status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
-            if (LA_OK == status.intValue()) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue().intValue(), totalUses.getValue().intValue(), grossUses.getValue().intValue());
+            if (LA_OK == status) {
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -397,21 +374,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseKey() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseKey(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseKey(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseKey(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseKey(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -421,16 +398,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetLicenseAllowedActivations() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference allowedActivations = new NativeLongByReference();
+        int status;
+        IntByReference allowedActivations = new IntByReference(0);
         status = LexActivatorNative.GetLicenseAllowedActivations(allowedActivations);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return allowedActivations.getValue().intValue();
+            return allowedActivations.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -441,16 +418,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetLicenseTotalActivations() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference totalActivations = new NativeLongByReference();
+        int status;
+        IntByReference totalActivations = new IntByReference(0);
         status = LexActivatorNative.GetLicenseTotalActivations(totalActivations);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return totalActivations.getValue().intValue();
+            return totalActivations.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -461,16 +438,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetLicenseExpiryDate() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference expiryDate = new NativeLongByReference();
+        int status;
+        IntByReference expiryDate = new IntByReference(0);
         status = LexActivatorNative.GetLicenseExpiryDate(expiryDate);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return expiryDate.getValue().intValue();
+            return expiryDate.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -482,21 +459,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseUserEmail() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserEmail(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserEmail(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserEmail(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserEmail(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -507,21 +484,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseUserName() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserName(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserName(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserName(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserName(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -532,21 +509,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseUserCompany() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserCompany(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserCompany(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserCompany(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserCompany(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -558,21 +535,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseUserMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserMetadata(new WString(key), buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseUserMetadata(key, buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseUserMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -583,21 +560,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLicenseType() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseType(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseType(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseType(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLicenseType(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -609,21 +586,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetActivationMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetActivationMetadata(new WString(key), buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetActivationMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetActivationMetadata(key, buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetActivationMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
     
     /**
@@ -635,20 +612,20 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static int GetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
-        NativeLongByReference uses = new NativeLongByReference();
+        int status;
+        IntByReference uses = new IntByReference(0);
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetActivationMeterAttributeUses(new WString(name), uses);
-            if (LA_OK == status.intValue()) {
-                return uses.getValue().intValue();
+            if (LA_OK == status) {
+                return uses.getValue();
             }
         } else {
             status = LexActivatorNative.GetActivationMeterAttributeUses(name, uses);
-            if (LA_OK == status.intValue()) {
-                return uses.getValue().intValue();
+            if (LA_OK == status) {
+                return uses.getValue();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -658,16 +635,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetServerSyncGracePeriodExpiryDate() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference expiryDate = new NativeLongByReference();
+        int status;
+        IntByReference expiryDate = new IntByReference(0);
         status = LexActivatorNative.GetServerSyncGracePeriodExpiryDate(expiryDate);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return expiryDate.getValue().intValue();
+            return expiryDate.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -681,21 +658,21 @@ public class LexActivator {
      */
     public static String GetTrialActivationMetadata(String key)
             throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetTrialActivationMetadata(new WString(key), buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetTrialActivationMetadata(new WString(key), buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetTrialActivationMetadata(key, buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetTrialActivationMetadata(key, buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -705,16 +682,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetTrialExpiryDate() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference trialExpiryDate = new NativeLongByReference();
+        int status;
+        IntByReference trialExpiryDate = new IntByReference(0);
         status = LexActivatorNative.GetTrialExpiryDate(trialExpiryDate);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return trialExpiryDate.getValue().intValue();
+            return trialExpiryDate.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -726,21 +703,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetTrialId() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetTrialId(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetTrialId(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetTrialId(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetTrialId(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -750,16 +727,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GetLocalTrialExpiryDate() throws LexActivatorException {
-        NativeLong status;
-        NativeLongByReference trialExpiryDate = new NativeLongByReference();
+        int status;
+        IntByReference trialExpiryDate = new IntByReference(0);
         status = LexActivatorNative.GetLocalTrialExpiryDate(trialExpiryDate);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
-            return trialExpiryDate.getValue().intValue();
+            return trialExpiryDate.getValue();
         case LA_FAIL:
             return 0;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -771,21 +748,21 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static String GetLibraryVersion() throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLibraryVersion(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLibraryVersion(buffer, 256);
+            if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLibraryVersion(buffer, new NativeLong(256));
-            if (LA_OK == status.intValue()) {
+            status = LexActivatorNative.GetLibraryVersion(buffer, 256);
+            if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
-        throw new LexActivatorException(status.intValue());
+        throw new LexActivatorException(status);
     }
 
     /**
@@ -807,20 +784,20 @@ public class LexActivator {
         }
         if (privateReleaseCallback == null) {
             privateReleaseCallback = new LexActivatorNative.CallbackType() {
-                public void invoke(NativeLong status) {
+                public void invoke(int status) {
                     // Notify everybody that may be interested.
                     for (ReleaseCallbackEvent event : releaseCallbackEventListeners) {
-                        event.ReleaseCallback(status.intValue());
+                        event.ReleaseCallback(status);
                     }
                 }
             };
-            NativeLong status;
+            int status;
             status = Platform.isWindows()
                     ? LexActivatorNative.CheckForReleaseUpdate(new WString(platform), new WString(version),
                             new WString(channel), privateReleaseCallback)
                     : LexActivatorNative.CheckForReleaseUpdate(platform, version, channel, privateReleaseCallback);
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
 
         }
@@ -837,9 +814,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ActivateLicense() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.ActivateLicense();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_EXPIRED:
@@ -849,7 +826,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -861,10 +838,10 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ActivateLicenseOffline(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.ActivateLicenseOffline(new WString(filePath))
                 : LexActivatorNative.ActivateLicenseOffline(filePath);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_EXPIRED:
@@ -874,7 +851,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -887,11 +864,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void GenerateOfflineActivationRequest(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineActivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineActivationRequest(filePath);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -905,15 +882,15 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int DeactivateLicense() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.DeactivateLicense();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -928,16 +905,16 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int GenerateOfflineDeactivationRequest(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineDeactivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineDeactivationRequest(filePath);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -961,9 +938,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int IsLicenseGenuine() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.IsLicenseGenuine();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_EXPIRED:
@@ -975,7 +952,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -991,9 +968,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int IsLicenseValid() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.IsLicenseValid();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_EXPIRED:
@@ -1005,7 +982,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1020,9 +997,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ActivateTrial() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.ActivateTrial();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_TRIAL_EXPIRED:
@@ -1030,7 +1007,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1042,10 +1019,10 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ActivateTrialOffline(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.ActivateTrialOffline(new WString(filePath))
                 : LexActivatorNative.ActivateTrialOffline(filePath);
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_TRIAL_EXPIRED:
@@ -1053,7 +1030,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1066,11 +1043,11 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void GenerateOfflineTrialActivationRequest(String filePath) throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = Platform.isWindows() ? LexActivatorNative.GenerateOfflineTrialActivationRequest(new WString(filePath))
                 : LexActivatorNative.GenerateOfflineTrialActivationRequest(filePath);
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1086,9 +1063,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int IsTrialGenuine() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.IsTrialGenuine();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_TRIAL_EXPIRED:
@@ -1096,7 +1073,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1111,9 +1088,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ActivateLocalTrial(int trialLength) throws LexActivatorException {
-        NativeLong status;
-        status = LexActivatorNative.ActivateLocalTrial(new NativeLong(trialLength));
-        switch (status.intValue()) {
+        int status;
+        status = LexActivatorNative.ActivateLocalTrial(trialLength);
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_LOCAL_TRIAL_EXPIRED:
@@ -1121,7 +1098,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1136,9 +1113,9 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int IsLocalTrialGenuine() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.IsLocalTrialGenuine();
-        switch (status.intValue()) {
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_LOCAL_TRIAL_EXPIRED:
@@ -1146,7 +1123,7 @@ public class LexActivator {
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
 
@@ -1159,15 +1136,15 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static int ExtendLocalTrial(int trialExtensionLength) throws LexActivatorException {
-        NativeLong status;
-        status = LexActivatorNative.ExtendLocalTrial(new NativeLong(trialExtensionLength));
-        switch (status.intValue()) {
+        int status;
+        status = LexActivatorNative.ExtendLocalTrial(trialExtensionLength);
+        switch (status) {
         case LA_OK:
             return LA_OK;
         case LA_FAIL:
             return LA_FAIL;
         default:
-            throw new LexActivatorException(status.intValue());
+            throw new LexActivatorException(status);
         }
     }
     
@@ -1180,16 +1157,16 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static void IncrementActivationMeterAttributeUses(String name, int increment) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
-            status = LexActivatorNative.IncrementActivationMeterAttributeUses(new WString(name), new NativeLong(increment));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.IncrementActivationMeterAttributeUses(new WString(name), increment);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         } else {
-            status = LexActivatorNative.IncrementActivationMeterAttributeUses(name, new NativeLong(increment));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.IncrementActivationMeterAttributeUses(name, increment);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         }
     }
@@ -1203,16 +1180,16 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static void DecrementActivationMeterAttributeUses(String name, int decrement) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
-            status = LexActivatorNative.DecrementActivationMeterAttributeUses(new WString(name), new NativeLong(decrement));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.DecrementActivationMeterAttributeUses(new WString(name), decrement);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         } else {
-            status = LexActivatorNative.DecrementActivationMeterAttributeUses(name, new NativeLong(decrement));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            status = LexActivatorNative.DecrementActivationMeterAttributeUses(name, decrement);
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         }
     }
@@ -1225,16 +1202,16 @@ public class LexActivator {
      * @throws UnsupportedEncodingException
      */
     public static void ResetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
-        NativeLong status;
+        int status;
         if (Platform.isWindows()) {
             status = LexActivatorNative.ResetActivationMeterAttributeUses(new WString(name));
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         } else {
             status = LexActivatorNative.ResetActivationMeterAttributeUses(name);
-            if (LA_OK != status.intValue()) {
-                throw new LexActivatorException(status.intValue());
+            if (LA_OK != status) {
+                throw new LexActivatorException(status);
             }
         }
     }
@@ -1247,10 +1224,10 @@ public class LexActivator {
      * @throws LexActivatorException
      */
     public static void Reset() throws LexActivatorException {
-        NativeLong status;
+        int status;
         status = LexActivatorNative.Reset();
-        if (LA_OK != status.intValue()) {
-            throw new LexActivatorException(status.intValue());
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
