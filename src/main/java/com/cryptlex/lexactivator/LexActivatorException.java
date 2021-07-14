@@ -172,6 +172,10 @@ public class LexActivatorException extends Exception {
         case LA_E_IP:
             message = "IP address is not allowed.";
             break;
+            
+        case LA_E_CONTAINER:
+            message = "Application is being run inside a container and activation has been disallowed in the container.";
+            break;
 
         case LA_E_RATE_LIMIT:
             message = "Rate limit for API has reached, try again later.";
@@ -467,6 +471,14 @@ public class LexActivatorException extends Exception {
      * MESSAGE: IP address is not allowed.
      */
     public static final int LA_E_IP = 82;
+    
+    /*
+     * CODE: LA_E_CONTAINER
+     *
+     * MESSAGE: Application is being run inside a container and
+     * activation has been disallowed in the container.
+     */
+    public static final int LA_E_CONTAINER = 83;
 
     /*
      * CODE: LA_E_RATE_LIMIT
