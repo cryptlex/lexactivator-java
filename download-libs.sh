@@ -19,6 +19,7 @@ unzip LexActivator-Linux.zip -d ./tmp/linux
 cp ./tmp/linux/libs/gcc/amd64/libLexActivator.so src/main/resources/linux-x86-64/
 cp ./tmp/linux/libs/gcc/i386/libLexActivator.so src/main/resources/linux-x86/
 cp ./tmp/linux/libs/gcc/arm64/libLexActivator.so src/main/resources/linux-aarch64/
+cp ./tmp/linux/libs/gcc/armhf/libLexActivator.so src/main/resources/linux-arm/
 
 rm -f LexActivator-Win.zip
 rm -f LexActivator-Mac.zip
