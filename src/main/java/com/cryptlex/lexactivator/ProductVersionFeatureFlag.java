@@ -8,9 +8,9 @@ public class ProductVersionFeatureFlag {
 
     public String data;
 
-    public ProductVersionFeatureFlag(String name, int enabled, String data) {
+    public ProductVersionFeatureFlag(String name, Boolean enabled, String data) {
         this.name = name;
-        this.enabled = enabled > 0 ? true : false;
+        this.enabled = enabled;
         this.data = data;
     }
 }

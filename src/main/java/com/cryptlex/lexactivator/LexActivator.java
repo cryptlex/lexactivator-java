@@ -399,13 +399,13 @@ public class LexActivator {
             CharBuffer buffer = CharBuffer.allocate(256);
             status = LexActivatorNative.GetProductVersionDisplayName(buffer, 256);
             if (LA_OK == status) {
-                return new ProductVersionFeatureFlag(name, enabled.getValue(), buffer.toString().trim());
+                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, buffer.toString().trim());
             }
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetProductVersionFeatureFlag(name, enabled, buffer, 256);
             if (LA_OK == status) {
-                return new ProductVersionFeatureFlag(name, enabled.getValue(), new String(buffer.array(), "UTF-8").trim());
+                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, new String(buffer.array(), "UTF-8").trim());
             }
         }
 
