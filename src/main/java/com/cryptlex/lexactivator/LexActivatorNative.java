@@ -1,19 +1,13 @@
 package com.cryptlex.lexactivator;
 
 import com.sun.jna.Library;
-import com.sun.jna.NativeLibrary;
 import com.sun.jna.Native;
-import com.sun.jna.Platform;
 import com.sun.jna.WString;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.nio.CharBuffer;
 import java.nio.ByteBuffer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.Callback;
-import java.io.File;
-import java.util.Date;
 
 public class LexActivatorNative implements Library {
 
@@ -83,6 +77,18 @@ public class LexActivatorNative implements Library {
     public static native int GetProductMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetProductMetadata(WString key, CharBuffer value, int length);
+
+    public static native int GetProductVersionName(ByteBuffer name, int length);
+
+    public static native int GetProductVersionName(CharBuffer name, int length);
+    
+    public static native int GetProductVersionDisplayName(ByteBuffer name, int length);
+
+    public static native int GetProductVersionDisplayName(CharBuffer name, int length);
+    
+    public static native int GetProductVersionFeatureFlag(String name, IntByReference enabled, ByteBuffer data, int length);
+    
+    public static native int GetProductVersionFeatureFlag(WString name, IntByReference enabled, CharBuffer data, int length);
 
     public static native int GetLicenseMetadata(String key, ByteBuffer value, int length);
 

@@ -144,15 +144,15 @@ public class LexActivatorException extends Exception {
         case LA_E_RELEASE_VERSION_FORMAT:
             message = "Invalid version format.";
             break;
-        
+
         case LA_E_AUTHENTICATION_FAILED:
             message = "Incorrect email or password.";
             break;
-            
+
         case LA_E_METER_ATTRIBUTE_NOT_FOUND:
             message = "The meter attribute does not exist.";
             break;
-            
+
         case LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED:
             message = "The meter attribute has reached it's usage limit.";
             break;
@@ -160,6 +160,12 @@ public class LexActivatorException extends Exception {
         case LA_E_CUSTOM_FINGERPRINT_LENGTH:
             message = "Custom device fingerprint length is less than 64 characters or more than 256 characters.";
             break;
+
+        case LA_E_PRODUCT_VERSION_NOT_LINKED:
+            return "No product version is linked with the license.";
+
+        case LA_E_FEATURE_FLAG_NOT_FOUND:
+            return "The product version feature flag does not exist.";
 
         case LA_E_VM:
             message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
@@ -172,7 +178,7 @@ public class LexActivatorException extends Exception {
         case LA_E_IP:
             message = "IP address is not allowed.";
             break;
-            
+
         case LA_E_CONTAINER:
             message = "Application is being run inside a container and activation has been disallowed in the container.";
             break;
@@ -420,21 +426,21 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Invalid version format.
      */
     public static final int LA_E_RELEASE_VERSION_FORMAT = 70;
-    
+
     /*
      * CODE: LA_E_AUTHENTICATION_FAILED
      * 
      * MESSAGE: Incorrect email or password.
      */
     public static final int LA_E_AUTHENTICATION_FAILED = 71;
-    
+
     /*
      * CODE: LA_E_METER_ATTRIBUTE_NOT_FOUND
      * 
      * MESSAGE: The meter attribute does not exist.
      */
     public static final int LA_E_METER_ATTRIBUTE_NOT_FOUND = 72;
-    
+
     /*
      * CODE: LA_E_METER_ATTRIBUTE_USES_LIMIT_REACHED
      * 
@@ -445,10 +451,24 @@ public class LexActivatorException extends Exception {
     /*
      * CODE: LA_E_CUSTOM_FINGERPRINT_LENGTH
      * 
-     * MESSAGE: Custom device fingerprint length is less than 64 characters
-     * or more than 256 characters.
+     * MESSAGE: Custom device fingerprint length is less than 64 characters or more
+     * than 256 characters.
      */
     public static final int LA_E_CUSTOM_FINGERPRINT_LENGTH = 74;
+
+    /*
+     * CODE: LA_E_PRODUCT_VERSION_NOT_LINKED
+     * 
+     * MESSAGE: No product version is linked with the license.
+     */
+    public static final int LA_E_PRODUCT_VERSION_NOT_LINKED = 75;
+
+    /*
+     * CODE: LA_E_FEATURE_FLAG_NOT_FOUND
+     * 
+     * MESSAGE: The product version feature flag does not exist.
+     */
+    public static final int LA_E_FEATURE_FLAG_NOT_FOUND = 76;
 
     /*
      * CODE: LA_E_VM
@@ -471,12 +491,12 @@ public class LexActivatorException extends Exception {
      * MESSAGE: IP address is not allowed.
      */
     public static final int LA_E_IP = 82;
-    
+
     /*
      * CODE: LA_E_CONTAINER
      *
-     * MESSAGE: Application is being run inside a container and
-     * activation has been disallowed in the container.
+     * MESSAGE: Application is being run inside a container and activation has been
+     * disallowed in the container.
      */
     public static final int LA_E_CONTAINER = 83;
 

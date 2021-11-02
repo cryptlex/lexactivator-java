@@ -21,9 +21,8 @@ public class LexActivator {
     public static final int LA_IN_MEMORY = 4;
 
     /**
-     * Sets the absolute path of the Product.dat file.
-     * This function must be called on every start of your program before any other
-     * functions are called.
+     * Sets the absolute path of the Product.dat file. This function must be called
+     * on every start of your program before any other functions are called.
      *
      * @param filePath absolute path of the product file (Product.dat)
      * @throws LexActivatorException
@@ -38,11 +37,10 @@ public class LexActivator {
     }
 
     /**
-     * Embeds the Product.dat file in the application.
-     * It can be used instead of SetProductFile() in case you want to embed the
-     * Product.dat file in your application.
-     * This function must be called on every start of your program before any other
-     * functions are called.
+     * Embeds the Product.dat file in the application. It can be used instead of
+     * SetProductFile() in case you want to embed the Product.dat file in your
+     * application. This function must be called on every start of your program
+     * before any other functions are called.
      *
      * @param productData content of the Product.dat file
      * @throws LexActivatorException
@@ -57,10 +55,9 @@ public class LexActivator {
     }
 
     /**
-     * Sets the product id of your application.
-     * This function must be called on every start of your program before any other
-     * functions are called, with the exception of SetProductFile() or
-     * SetProductData() function.
+     * Sets the product id of your application. This function must be called on
+     * every start of your program before any other functions are called, with the
+     * exception of SetProductFile() or SetProductData() function.
      *
      * @param productId the unique product id of your application as mentioned on
      *                  the product page in the dashboard.
@@ -77,15 +74,14 @@ public class LexActivator {
             throw new LexActivatorException(status);
         }
     }
-    
+
     /**
      * In case you want to change the default directory used by LexActivator to
      * store the activation data on Linux and macOS, this function can be used to
-     * set a different directory.
-     * If you decide to use this function, then it must be called on every start of
-     * your program before calling SetProductFile() or SetProductData() function.
-     * Please ensure that the directory exists and your app has read and write
-     * permissions in the directory.
+     * set a different directory. If you decide to use this function, then it must
+     * be called on every start of your program before calling SetProductFile() or
+     * SetProductData() function. Please ensure that the directory exists and your
+     * app has read and write permissions in the directory.
      *
      * @param directoryPath absolute path of the directory.
      * @throws LexActivatorException
@@ -100,15 +96,15 @@ public class LexActivator {
     }
 
     /**
-     * In case you don't want to use the LexActivator's advanced
-     * device fingerprinting algorithm, this function can be used to set a custom
-     * device fingerprint.
-     * If you decide to use your own custom device fingerprint then this function must be
-     * called on every start of your program immediately after calling SetProductFile()
-     * or SetProductData() function.
-     * The license fingerprint matching strategy is ignored if this function is used.
+     * In case you don't want to use the LexActivator's advanced device
+     * fingerprinting algorithm, this function can be used to set a custom device
+     * fingerprint. If you decide to use your own custom device fingerprint then
+     * this function must be called on every start of your program immediately after
+     * calling SetProductFile() or SetProductData() function. The license
+     * fingerprint matching strategy is ignored if this function is used.
      *
-     * @param fingerprint string of minimum length 64 characters and maximum length 256 characters.
+     * @param fingerprint string of minimum length 64 characters and maximum length
+     *                    256 characters.
      * @throws LexActivatorException
      */
     public static void SetCustomDeviceFingerprint(String fingerprint) throws LexActivatorException {
@@ -134,19 +130,20 @@ public class LexActivator {
             throw new LexActivatorException(status);
         }
     }
-    
+
     /**
-     * Sets the license user email and password for authentication.
-     * This function must be called before ActivateLicense() or IsLicenseGenuine()
-     * function if <b>requireAuthentication</b> property of the license is set to true.
+     * Sets the license user email and password for authentication. This function
+     * must be called before ActivateLicense() or IsLicenseGenuine() function if
+     * <b>requireAuthentication</b> property of the license is set to true.
      *
-     * @param email user email address.
+     * @param email    user email address.
      * @param password user password.
      * @throws LexActivatorException
      */
     public static void SetLicenseUserCredential(String email, String password) throws LexActivatorException {
         int status;
-        status = Platform.isWindows() ? LexActivatorNative.SetLicenseUserCredential(new WString(email), new WString(password))
+        status = Platform.isWindows()
+                ? LexActivatorNative.SetLicenseUserCredential(new WString(email), new WString(password))
                 : LexActivatorNative.SetLicenseUserCredential(email, password);
         if (LA_OK != status) {
             throw new LexActivatorException(status);
@@ -154,12 +151,12 @@ public class LexActivator {
     }
 
     /**
-     * Sets server sync callback function.
-     * Whenever the server sync occurs in a separate thread, and server returns the
-     * response, event listener function gets invoked with the following status
-     * codes: LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_E_REVOKED,
-     * LA_E_ACTIVATION_NOT_FOUND, LA_E_MACHINE_FINGERPRINT LA_E_COUNTRY, LA_E_INET,
-     * LA_E_SERVER, LA_E_RATE_LIMIT, LA_E_IP
+     * Sets server sync callback function. Whenever the server sync occurs in a
+     * separate thread, and server returns the response, event listener function
+     * gets invoked with the following status codes: LA_OK, LA_EXPIRED,
+     * LA_SUSPENDED, LA_E_REVOKED, LA_E_ACTIVATION_NOT_FOUND,
+     * LA_E_MACHINE_FINGERPRINT LA_E_COUNTRY, LA_E_INET, LA_E_SERVER,
+     * LA_E_RATE_LIMIT, LA_E_IP
      *
      * @param listener
      * @throws LexActivatorException
@@ -188,9 +185,8 @@ public class LexActivator {
     }
 
     /**
-     * Sets the activation metadata.
-     * The metadata appears along with the activation details of the license in
-     * dashboard.
+     * Sets the activation metadata. The metadata appears along with the activation
+     * details of the license in dashboard.
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
@@ -208,9 +204,8 @@ public class LexActivator {
     }
 
     /**
-     * Sets the trial activation metadata.
-     * The metadata appears along with the trial activation details of the product
-     * in dashboard.
+     * Sets the trial activation metadata. The metadata appears along with the trial
+     * activation details of the product in dashboard.
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
@@ -229,9 +224,9 @@ public class LexActivator {
     }
 
     /**
-     * Sets the current app version of your application.
-     * The app version appears along with the activation details in dashboard. It is
-     * also used to generate app analytics.
+     * Sets the current app version of your application. The app version appears
+     * along with the activation details in dashboard. It is also used to generate
+     * app analytics.
      *
      * @param appVersion string of maximum length 256 characters with utf-8
      *                   encoding.
@@ -247,8 +242,8 @@ public class LexActivator {
     }
 
     /**
-     * Sets the meter attribute uses for the offline activation request.
-     * This function should only be called before GenerateOfflineActivationRequest()
+     * Sets the meter attribute uses for the offline activation request. This
+     * function should only be called before GenerateOfflineActivationRequest()
      * function to set the meter attributes in case of offline activation.
      * 
      * @param name name of the meter attribute
@@ -256,7 +251,8 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static void SetOfflineActivationRequestMeterAttributeUses(String name, int uses) throws LexActivatorException, UnsupportedEncodingException {
+    public static void SetOfflineActivationRequestMeterAttributeUses(String name, int uses)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
             status = LexActivatorNative.SetOfflineActivationRequestMeterAttributeUses(new WString(name), uses);
@@ -272,11 +268,11 @@ public class LexActivator {
     }
 
     /**
-     * Sets the network proxy to be used when contacting CryptLex servers.
-     * The proxy format should be: [protocol://][username:password@]machine[:port]
-     * <b>Note: </b> Proxy settings of the computer are automatically detected. So,
-     * in most of the cases you don't need to care whether your user is behind a
-     * proxy server or not.
+     * Sets the network proxy to be used when contacting CryptLex servers. The proxy
+     * format should be: [protocol://][username:password@]machine[:port] <b>Note:
+     * </b> Proxy settings of the computer are automatically detected. So, in most
+     * of the cases you don't need to care whether your user is behind a proxy
+     * server or not.
      *
      * @param proxy proxy string having correct proxy format
      * @throws LexActivatorException
@@ -307,8 +303,8 @@ public class LexActivator {
     }
 
     /**
-     * Gets the product metadata as set in the dashboard.
-     * This is available for trial as well as license activations.
+     * Gets the product metadata as set in the dashboard. This is available for
+     * trial as well as license activations.
      *
      * @param key key to retrieve the value
      * @return Returns the value of metadata for the key.
@@ -330,6 +326,89 @@ public class LexActivator {
                 return new String(buffer.array(), "UTF-8").trim();
             }
         }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the product version name.
+     * 
+     * @return name - Returns the name of the Product Version being used.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+
+    public static String GetProductVersionName() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionName(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionName(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the product version display name.
+     * 
+     * @return displayName - Returns the display name of the Product Version being
+     *         used.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+
+    public static String GetProductVersionDisplayName() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionDisplayName(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionDisplayName(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the product version feature flag.
+     * 
+     * @param name - The name of the Feature Flag.
+     * @return The properties of the Feature Flag as an object.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+
+    public static ProductVersionFeatureFlag GetProductVersionFeatureFlag(String name)
+            throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        IntByReference enabled = new IntByReference(0);
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionDisplayName(buffer, 256);
+            if (LA_OK == status) {
+                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, buffer.toString().trim());
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetProductVersionFeatureFlag(name, enabled, buffer, 256);
+            if (LA_OK == status) {
+                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, new String(buffer.array(), "UTF-8").trim());
+            }
+        }
+
         throw new LexActivatorException(status);
     }
 
@@ -358,7 +437,7 @@ public class LexActivator {
         }
         throw new LexActivatorException(status);
     }
-    
+
     /**
      * Gets the license meter attribute allowed, total and gross uses.
      *
@@ -367,7 +446,8 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static LicenseMeterAttribute GetLicenseMeterAttribute(String name) throws LexActivatorException, UnsupportedEncodingException {
+    public static LicenseMeterAttribute GetLicenseMeterAttribute(String name)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         IntByReference allowedUses = new IntByReference(0);
         IntByReference totalUses = new IntByReference(0);
@@ -376,12 +456,14 @@ public class LexActivator {
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
+                        grossUses.getValue());
             }
         } else {
             status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(), grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
+                        grossUses.getValue());
             }
         }
         throw new LexActivatorException(status);
@@ -623,7 +705,7 @@ public class LexActivator {
         }
         throw new LexActivatorException(status);
     }
-    
+
     /**
      * Gets the meter attribute uses consumed by the activation.
      *
@@ -632,7 +714,8 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static int GetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
+    public static int GetActivationMeterAttributeUses(String name)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         IntByReference uses = new IntByReference(0);
         if (Platform.isWindows()) {
@@ -787,13 +870,13 @@ public class LexActivator {
     }
 
     /**
-     * Checks whether a new release is available for the product.
-     * This function should only be used if you manage your releases through
-     * Cryptlex release management API.
+     * Checks whether a new release is available for the product. This function
+     * should only be used if you manage your releases through Cryptlex release
+     * management API.
      *
      * @param platform release platform e.g. windows, macos, linux
-     * @param version current release version
-     * @param channel release channel e.g. stable
+     * @param version  current release version
+     * @param channel  release channel e.g. stable
      * @param listener listener to listen to the release update event
      * @throws LexActivatorException
      */
@@ -827,9 +910,8 @@ public class LexActivator {
     /**
      * Activates the license by contacting the Cryptlex servers. It validates the
      * key and returns with encrypted and digitally signed token which it stores and
-     * uses to activate your application.
-     * This function should be executed at the time of registration, ideally on a
-     * button click.
+     * uses to activate your application. This function should be executed at the
+     * time of registration, ideally on a button click.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
      * @throws LexActivatorException
@@ -895,9 +977,8 @@ public class LexActivator {
 
     /**
      * Deactivates the license activation and frees up the correponding activation
-     * slot by contacting the Cryptlex servers.
-     * This function should be executed at the time of deregistration, ideally on a
-     * button click.
+     * slot by contacting the Cryptlex servers. This function should be executed at
+     * the time of deregistration, ideally on a button click.
      *
      * @return LA_OK, LA_FAIL
      * @throws LexActivatorException
@@ -917,9 +998,9 @@ public class LexActivator {
 
     /**
      * Generates the offline deactivation request needed for deactivation of the
-     * license in the dashboard and deactivates the license locally.
-     * A valid offline deactivation file confirms that the license has been
-     * successfully deactivated on the user's machine.
+     * license in the dashboard and deactivates the license locally. A valid offline
+     * deactivation file confirms that the license has been successfully deactivated
+     * on the user's machine.
      *
      * @param filePath
      * @return LA_OK, LA_FAIL
@@ -942,18 +1023,15 @@ public class LexActivator {
     /**
      * It verifies whether your app is genuinely activated or not. The verification
      * is done locally by verifying the cryptographic digital signature fetched at
-     * the time of activation.
-     * After verifying locally, it schedules a server check in a separate thread.
-     * After the first server sync it periodically does further syncs at a frequency
-     * set for the license.
-     * In case server sync fails due to network error, and it continues to fail for
-     * fixed number of days (grace period), the function returns
-     * LA_GRACE_PERIOD_OVER instead of LA_OK.
+     * the time of activation. After verifying locally, it schedules a server check
+     * in a separate thread. After the first server sync it periodically does
+     * further syncs at a frequency set for the license. In case server sync fails
+     * due to network error, and it continues to fail for fixed number of days
+     * (grace period), the function returns LA_GRACE_PERIOD_OVER instead of LA_OK.
      * This function must be called on every start of your program to verify the
-     * activation of your app.
-     * <b>Note: </b>If application was activated offline using
-     * ActivateLicenseOffline() function, you may want to set grace period to 0 to
-     * ignore grace period.
+     * activation of your app. <b>Note: </b>If application was activated offline
+     * using ActivateLicenseOffline() function, you may want to set grace period to
+     * 0 to ignore grace period.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL
      * @throws LexActivatorException
@@ -980,10 +1058,9 @@ public class LexActivator {
     /**
      * It verifies whether your app is genuinely activated or not. The verification
      * is done locally by verifying the cryptographic digital signature fetched at
-     * the time of activation.
-     * This is just an auxiliary function which you may use in some specific cases,
-     * when you want to skip the server sync.
-     * <b>Note: </b>You may want to set grace period to 0 to ignore grace period.
+     * the time of activation. This is just an auxiliary function which you may use
+     * in some specific cases, when you want to skip the server sync. <b>Note:
+     * </b>You may want to set grace period to 0 to ignore grace period.
      *
      * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_GRACE_PERIOD_OVER, LA_FAIL
      * @throws LexActivatorException
@@ -1009,10 +1086,9 @@ public class LexActivator {
 
     /**
      * Starts the verified trial in your application by contacting the Cryptlex
-     * servers.
-     * This function should be executed when your application starts first time on
-     * the user's computer, ideally on a button click.
-     * <b>Note: </b>This function is only meant for verified trials.
+     * servers. This function should be executed when your application starts first
+     * time on the user's computer, ideally on a button click. <b>Note: </b>This
+     * function is only meant for verified trials.
      *
      * @return LA_OK, LA_TRIAL_EXPIRED
      * @throws LexActivatorException
@@ -1075,10 +1151,9 @@ public class LexActivator {
     /**
      * It verifies whether trial has started and is genuine or not. The verification
      * is done locally by verifying the cryptographic digital signature fetched at
-     * the time of trial activation.
-     * This function must be called on every start of your program during the trial
-     * period.
-     * <b>Note: </b>This function is only meant for verified trials.
+     * the time of trial activation. This function must be called on every start of
+     * your program during the trial period. <b>Note: </b>This function is only
+     * meant for verified trials.
      *
      * @return LA_OK, LA_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
@@ -1099,10 +1174,10 @@ public class LexActivator {
     }
 
     /**
-     * Starts the local(unverified) trial.
-     * This function should be executed when your application starts first time on
-     * the user's computer, ideally on a button click.
-     * <b>Note: </b>The function is only meant for local(unverified) trials.
+     * Starts the local(unverified) trial. This function should be executed when
+     * your application starts first time on the user's computer, ideally on a
+     * button click. <b>Note: </b>The function is only meant for local(unverified)
+     * trials.
      *
      * @param trialLength trial length in days
      * @return LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL
@@ -1125,10 +1200,9 @@ public class LexActivator {
 
     /**
      * It verifies whether trial has started and is genuine or not. The verification
-     * is done locally.
-     * This function must be called on every start of your program during the trial
-     * period.
-     * <b>Note: </b>The function is only meant for local(unverified) trials.
+     * is done locally. This function must be called on every start of your program
+     * during the trial period. <b>Note: </b>The function is only meant for
+     * local(unverified) trials.
      *
      * @return LA_OK, LA_LOCAL_TRIAL_EXPIRED, LA_FAIL
      * @throws LexActivatorException
@@ -1149,8 +1223,8 @@ public class LexActivator {
     }
 
     /**
-     * Extends the local trial.
-     * <b>Note: </b>This function is only meant for unverified trials.
+     * Extends the local trial. <b>Note: </b>This function is only meant for
+     * unverified trials.
      *
      * @param trialExtensionLength number of days to extend the trial
      * @return LA_OK, LA_FAIL
@@ -1168,16 +1242,17 @@ public class LexActivator {
             throw new LexActivatorException(status);
         }
     }
-    
+
     /**
      * Increments the meter attribute uses of the activation.
      *
-     * @param name name of the meter attribute
+     * @param name      name of the meter attribute
      * @param increment the increment value
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static void IncrementActivationMeterAttributeUses(String name, int increment) throws LexActivatorException, UnsupportedEncodingException {
+    public static void IncrementActivationMeterAttributeUses(String name, int increment)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
             status = LexActivatorNative.IncrementActivationMeterAttributeUses(new WString(name), increment);
@@ -1191,16 +1266,17 @@ public class LexActivator {
             }
         }
     }
-    
+
     /**
      * Decrements the meter attribute uses of the activation.
      *
-     * @param name name of the meter attribute
+     * @param name      name of the meter attribute
      * @param decrement the decrement value
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static void DecrementActivationMeterAttributeUses(String name, int decrement) throws LexActivatorException, UnsupportedEncodingException {
+    public static void DecrementActivationMeterAttributeUses(String name, int decrement)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
             status = LexActivatorNative.DecrementActivationMeterAttributeUses(new WString(name), decrement);
@@ -1214,7 +1290,7 @@ public class LexActivator {
             }
         }
     }
-    
+
     /**
      * Resets the meter attribute uses of the activation.
      *
@@ -1222,7 +1298,8 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static void ResetActivationMeterAttributeUses(String name) throws LexActivatorException, UnsupportedEncodingException {
+    public static void ResetActivationMeterAttributeUses(String name)
+            throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
             status = LexActivatorNative.ResetActivationMeterAttributeUses(new WString(name));
@@ -1238,9 +1315,9 @@ public class LexActivator {
     }
 
     /**
-     * Resets the activation and trial data stored in the machine.
-     * This function is meant for developer testing only.
-     * <b>Note: </b>The function does not reset local(unverified) trial data.
+     * Resets the activation and trial data stored in the machine. This function is
+     * meant for developer testing only. <b>Note: </b>The function does not reset
+     * local(unverified) trial data.
      *
      * @throws LexActivatorException
      */

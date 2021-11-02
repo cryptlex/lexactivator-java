@@ -1,5 +1,8 @@
-# Compiled class file
+# Compiled class file, preference files
 *.class
+*.prefs
+.project
+.classpath
 
 # Log file
 *.log
