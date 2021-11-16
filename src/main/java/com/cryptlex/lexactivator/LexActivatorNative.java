@@ -31,7 +31,7 @@ public class LexActivatorNative implements Library {
     public static native int SetProductId(String productId, int flags);
 
     public static native int SetProductId(WString productId, int flags);
-    
+            
     public static native int SetDataDirectory(String directoryPath);
 
     public static native int SetDataDirectory(WString directoryPath);
@@ -61,6 +61,8 @@ public class LexActivatorNative implements Library {
     public static native int SetAppVersion(String appVersion);
 
     public static native int SetAppVersion(WString appVersion);
+
+    public static native int SetActivationLeaseDuration(int leaseDuration);
 
     public static native int SetOfflineActivationRequestMeterAttributeUses(String name, int uses);
 
