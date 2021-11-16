@@ -242,6 +242,21 @@ public class LexActivator {
     }
 
     /**
+     * Sets the lease duration for the activation.
+     * 
+     * @param leaseDuration
+     * 
+     * @throws LexActivatorException
+     */
+    public static void SetActivationLeaseDuration(int leaseDuration) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetActivationLeaseDuration(leaseDuration);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Sets the meter attribute uses for the offline activation request. This
      * function should only be called before GenerateOfflineActivationRequest()
      * function to set the meter attributes in case of offline activation.
@@ -405,7 +420,8 @@ public class LexActivator {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetProductVersionFeatureFlag(name, enabled, buffer, 256);
             if (LA_OK == status) {
-                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, new String(buffer.array(), "UTF-8").trim());
+                return new ProductVersionFeatureFlag(name, enabled.getValue() > 0,
+                        new String(buffer.array(), "UTF-8").trim());
             }
         }
 
