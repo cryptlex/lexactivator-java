@@ -412,7 +412,7 @@ public class LexActivator {
         IntByReference enabled = new IntByReference(0);
         if (Platform.isWindows()) {
             CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetProductVersionDisplayName(buffer, 256);
+            status = LexActivatorNative.GetProductVersionFeatureFlag(new WString(name), enabled, buffer, 256);
             if (LA_OK == status) {
                 return new ProductVersionFeatureFlag(name, enabled.getValue() > 0, buffer.toString().trim());
             }
