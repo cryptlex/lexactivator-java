@@ -475,6 +475,13 @@ public class LexActivatorException extends Exception {
     public static final int LA_E_FEATURE_FLAG_NOT_FOUND = 76;
 
     /*
+     * CODE: LA_E_RELEASE_VERSION_NOT_ALLOWED
+     *
+     * MESSAGE: The release version is not allowed.
+     */
+    public static final int LA_E_RELEASE_VERSION_NOT_ALLOWED = 77;
+
+    /*
      * CODE: LA_E_VM
      * 
      * MESSAGE: Application is being run inside a virtual machine / hypervisor, and

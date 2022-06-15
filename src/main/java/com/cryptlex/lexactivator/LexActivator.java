@@ -768,18 +768,18 @@ public class LexActivator {
     public static String GetActivationMode() throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
-            CharBuffer buffer1 = CharBuffer.allocate(256);
-            CharBuffer buffer2 = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetActivationMode(buffer1, 256, buffer2, 256);
+            CharBuffer initialModeBuffer = CharBuffer.allocate(256);
+            CharBuffer currentModeBuffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetActivationMode(initialModeBuffer, 256, currentModeBuffer, 256);
             if (LA_OK == status) {
-                return new ActivationMode(buffer1.toString().trim(), buffer2.toString().trim());
+                return new ActivationMode(initialModeBuffer.toString().trim(), currentModeBuffer.toString().trim());
             }
         } else {
-            ByteBuffer buffer1 = ByteBuffer.allocate(256);
-            ByteBuffer buffer2 = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetActivationMode(buffer1, 256, buffer2, 256);
+            ByteBuffer initialModeBuffer = ByteBuffer.allocate(256);
+            ByteBuffer currentModeBuffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetActivationMode(initialModeBuffer, 256, currentModeBuffer, 256);
             if (LA_OK == status) {
-                return new ActivationMode(new String(buffer1.array(), "UTF-8").trim(), new String(buffer2.array(), "UTF-8").trim());
+                return new ActivationMode(new String(initialModeBuffer.array(), "UTF-8").trim(), new String(currentModeBuffer.array(), "UTF-8").trim());
             }
         }
         throw new LexActivatorException(status);
