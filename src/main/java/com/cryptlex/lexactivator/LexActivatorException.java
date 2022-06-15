@@ -167,6 +167,10 @@ public class LexActivatorException extends Exception {
         case LA_E_FEATURE_FLAG_NOT_FOUND:
             return "The product version feature flag does not exist.";
 
+        case LA_E_RELEASE_VERSION_NOT_ALLOWED:
+            message = "The release version is not allowed.";
+            break;
+
         case LA_E_VM:
             message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
             break;
@@ -469,6 +473,13 @@ public class LexActivatorException extends Exception {
      * MESSAGE: The product version feature flag does not exist.
      */
     public static final int LA_E_FEATURE_FLAG_NOT_FOUND = 76;
+
+    /*
+     * CODE: LA_E_RELEASE_VERSION_NOT_ALLOWED
+     *
+     * MESSAGE: The release version is not allowed.
+     */
+    public static final int LA_E_RELEASE_VERSION_NOT_ALLOWED = 77;
 
     /*
      * CODE: LA_E_VM
