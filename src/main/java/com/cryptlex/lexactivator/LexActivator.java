@@ -765,7 +765,7 @@ public class LexActivator {
      * @throws LexActivatorException
      * @throws UnsupportedEncodingException
      */
-    public static String GetActivationMode() throws LexActivatorException, UnsupportedEncodingException {
+    public static ActivationMode GetActivationMode() throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
             CharBuffer initialModeBuffer = CharBuffer.allocate(256);
