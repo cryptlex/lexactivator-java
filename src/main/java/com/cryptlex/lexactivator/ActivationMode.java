@@ -6,7 +6,7 @@ public class ActivationMode {
 
     public String currentMode;
 
-    public (String initialMode, String currentMode) {
+    public ActivationMode(String initialMode, String currentMode) {
         this.initialMode = initialMode;
         this.currentMode = currentMode;
     }
