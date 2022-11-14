@@ -248,10 +248,56 @@ public class LexActivator {
      * @param releaseVersion string in following allowed formats: x.x, x.x.x, x.x.x.x
      * @throws LexActivatorException
      */
-     public static void SetReleaseVersion(String releaseVersion) throws LexActivatorException {
+    public static void SetReleaseVersion(String releaseVersion) throws LexActivatorException {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetReleaseVersion(new WString(releaseVersion))
                 : LexActivatorNative.SetReleaseVersion(releaseVersion);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Sets the release published date of your application.
+     *
+     * @param releasePublishedDate unix timestamp of release published date.
+     * @throws LexActivatorException
+     */
+    public static void SetReleasePublishedDate(int releasePublishedDate) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetReleasePublishedDate(releasePublishedDate);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Sets the release platform e.g. windows, macos, linux. The release platform 
+     * appears along with the activation details in dashboard.
+     *
+     * @param releasePlatform release platform e.g. windows, macos, linux
+     * @throws LexActivatorException
+     */
+    public static void SetReleasePlatform(String releasePlatform) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetReleasePlatform(new WString(releasePlatform))
+                : LexActivatorNative.SetReleasePlatform(releasePlatform);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    } 
+
+    /**
+     * Sets the release channel e.g. stable, beta. The release channel 
+     * appears along with the activation details in dashboard.
+     *
+     * @param releaseChannel release channel e.g. stable
+     * @throws LexActivatorException
+     */
+    public static void SetReleaseChannel(String releaseChannel) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetReleaseChannel(new WString(releaseChannel))
+                : LexActivatorNative.SetReleaseChannel(releaseChannel);
         if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
@@ -604,6 +650,31 @@ public class LexActivator {
         default:
             throw new LexActivatorException(status);
         }
+    }
+
+    /**
+     * Gets the maximum allowed release version of the license.
+     *
+     * @return Returns the maximum allowed release version.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLicenseMaxAllowedReleaseVersion() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseMaxAllowedReleaseVersion(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseMaxAllowedReleaseVersion(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
     }
 
     /**

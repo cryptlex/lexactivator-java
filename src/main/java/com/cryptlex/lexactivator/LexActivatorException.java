@@ -482,6 +482,20 @@ public class LexActivatorException extends Exception {
     public static final int LA_E_RELEASE_VERSION_NOT_ALLOWED = 77;
 
     /*
+     * CODE: LA_E_RELEASE_PLATFORM_LENGTH
+     *
+     * MESSAGE: Release platform length is more than 256 characters.
+     */
+    public static final int LA_E_RELEASE_PLATFORM_LENGTH = 78;
+
+    /*
+     * CODE: LA_E_RELEASE_CHANNEL_LENGTH
+     *
+     * MESSAGE: Release channel length is more than 256 characters.
+     */
+    public static final int LA_E_RELEASE_CHANNEL_LENGTH = 79;
+
+    /*
      * CODE: LA_E_VM
      * 
      * MESSAGE: Application is being run inside a virtual machine / hypervisor, and
