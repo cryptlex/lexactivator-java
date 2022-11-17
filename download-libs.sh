@@ -1,5 +1,5 @@
 BASE_URL=https://dl.cryptlex.com/downloads
-VERSION="v3.20.4";
+VERSION="v3.20.5";
 
 mkdir -p tmp/windows
 curl -O ${BASE_URL}/${VERSION}/LexActivator-Win.zip
