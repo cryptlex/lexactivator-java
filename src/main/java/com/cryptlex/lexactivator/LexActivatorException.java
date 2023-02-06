@@ -170,6 +170,14 @@ public class LexActivatorException extends Exception {
         case LA_E_RELEASE_VERSION_NOT_ALLOWED:
             message = "The release version is not allowed.";
             break;
+        
+        case LA_E_RELEASE_PLATFORM_LENGTH:
+            message = "Release platform length is more than 256 characters.";
+            break;
+
+        case LA_E_RELEASE_CHANNEL_LENGTH:
+            message = "Release channel length is more than 256 characters.";
+            break;
 
         case LA_E_VM:
             message = "Application is being run inside a virtual machine / hypervisor, and activation has been disallowed in the VM.";
@@ -480,6 +488,20 @@ public class LexActivatorException extends Exception {
      * MESSAGE: The release version is not allowed.
      */
     public static final int LA_E_RELEASE_VERSION_NOT_ALLOWED = 77;
+
+    /*
+     * CODE: LA_E_RELEASE_PLATFORM_LENGTH
+     * 
+     * MESSAGE: Release platform length is more than 256 characters.
+     */
+    public static final int LA_E_RELEASE_PLATFORM_LENGTH = 78;
+
+    /*
+     * CODE: LA_E_RELEASE_CHANNEL_LENGTH
+     * 
+     * MESSAGE: Release channel length is more than 256 characters.
+     */
+    public static final int LA_E_RELEASE_CHANNEL_LENGTH = 79;
 
     /*
      * CODE: LA_E_VM

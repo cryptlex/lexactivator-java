@@ -66,6 +66,16 @@ public class LexActivatorNative implements Library {
 
     public static native int SetReleaseVersion(WString releaseVersion);
 
+    public static native int SetReleasePublishedDate(int releasePublishedDate);
+
+    public static native int SetReleasePlatform(String releasePlatform);
+
+    public static native int SetReleasePlatform(WString releasePlatform);
+
+    public static native int SetReleaseChannel(String releaseChannel);
+
+    public static native int SetReleaseChannel(WString releaseChannel);
+
     public static native int SetActivationLeaseDuration(int leaseDuration);
 
     public static native int SetOfflineActivationRequestMeterAttributeUses(String name, int uses);
