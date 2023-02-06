@@ -195,6 +195,18 @@ public class LexActivatorException extends Exception {
             message = "Application is being run inside a container and activation has been disallowed in the container.";
             break;
 
+        case LA_E_RELEASE_VERSION:
+            message = "Invalid release version. Make sure the release version uses the following formats: x.x, x.x.x, x.x.x.x (where x is a number).";
+            break;
+
+        case LA_E_RELEASE_PLATFORM:
+            message = "Release platform not set.";
+            break;
+
+        case LA_E_RELEASE_CHANNEL:
+            message = "Release channel not set.";
+            break;
+
         case LA_E_RATE_LIMIT:
             message = "Rate limit for API has reached, try again later.";
             break;
@@ -532,6 +544,28 @@ public class LexActivatorException extends Exception {
      * disallowed in the container.
      */
     public static final int LA_E_CONTAINER = 83;
+
+    /*
+     * CODE: LA_E_RELEASE_VERSION
+     *
+     * MESSAGE: Invalid release version. Make sure the release version uses
+     * the following formats: x.x, x.x.x, x.x.x.x (where x is a number).
+     */
+    public static final int LA_E_RELEASE_VERSION = 84;
+
+    /*
+     * CODE: LA_E_RELEASE_PLATFORM
+     *
+     * MESSAGE: Release platform not set.
+     */
+    public static final int LA_E_RELEASE_PLATFORM = 85;
+
+    /*
+     * CODE: LA_E_RELEASE_CHANNEL
+     *
+     * MESSAGE: Release channel not set.
+     */
+    public static final int LA_E_RELEASE_CHANNEL = 86;
 
     /*
      * CODE: LA_E_RATE_LIMIT
