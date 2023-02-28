@@ -17,7 +17,7 @@ public class Sample {
             // LexActivator.SetProductFile(path);
             LexActivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE");
             LexActivator.SetProductId("PASTE_PRODUCT_ID", LexActivator.LA_USER);
-
+            LexActivator.SetReleaseVersion("1.0.0");  // Set this to the release version of your app
             // Setting license callback is recommended for floating licenses
             // LicenseCallbackEventListener licenseEventListener = new LicenseCallbackEventListener();
             // LexActivator.SetLicenseCallbackListener(licenseEventListener);
