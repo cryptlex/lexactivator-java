@@ -8,6 +8,8 @@ import java.io.UnsupportedEncodingException;
 import com.sun.jna.ptr.IntByReference;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class LexActivator {
     private static LexActivatorNative.CallbackType privateLicenseCallback = null;
@@ -702,6 +704,76 @@ public class LexActivator {
             status = LexActivatorNative.GetLicenseUserMetadata(key, buffer, 256);
             if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the name associated with the license organization.
+     *
+     * @return Returns the license organization name.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetLicenseOrganizationName() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseOrganizationName(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseOrganizationName(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the address associated with the license organization.
+     *
+     * @return Returns the license organization address.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static OrganizationAddress GetLicenseOrganizationAddress() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
+            if (LA_OK == status) {
+                String jsonAddress = buffer.toString().trim();
+                if (!jsonAddress.isEmpty()) {
+                    OrganizationAddress organizationAddress = null;
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        organizationAddress = objectMapper.readValue(jsonAddress, OrganizationAddress.class);
+                    } catch (JsonProcessingException e) {}
+                    return organizationAddress;
+                } else {
+                    return null;
+                } 
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(256);
+            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
+            if (LA_OK == status) {
+                String jsonAddress = new String(buffer.array(), "UTF-8").trim();
+                if (!jsonAddress.isEmpty()) {
+                    OrganizationAddress organizationAddress = null;
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        organizationAddress = objectMapper.readValue(jsonAddress, OrganizationAddress.class);
+                    } catch (JsonProcessingException e) {}
+                    return organizationAddress;
+                } else {
+                    return null;
+                } 
             }
         }
         throw new LexActivatorException(status);
