@@ -1183,8 +1183,8 @@ public class LexActivator {
 
             int status;
             status = Platform.isWindows()
-                    ? LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallback, releaseFlags, null)
-                    : LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallbackA, releaseFlags, null);
+                    ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, null)
+                    : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, null);
             if (LA_OK != status) {
                 throw new LexActivatorException(status);
             }
