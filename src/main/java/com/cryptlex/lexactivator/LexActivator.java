@@ -744,7 +744,7 @@ public class LexActivator {
     public static OrganizationAddress GetLicenseOrganizationAddress() throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
-            CharBuffer buffer = CharBuffer.allocate(256);
+            CharBuffer buffer = CharBuffer.allocate(1024);
             status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
             if (LA_OK == status) {
                 String jsonAddress = buffer.toString().trim();
@@ -760,7 +760,7 @@ public class LexActivator {
                 } 
             }
         } else {
-            ByteBuffer buffer = ByteBuffer.allocate(256);
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
             status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
             if (LA_OK == status) {
                 String jsonAddress = new String(buffer.array(), "UTF-8").trim();
