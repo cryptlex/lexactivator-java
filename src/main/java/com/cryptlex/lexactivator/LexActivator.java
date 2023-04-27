@@ -797,9 +797,10 @@ public class LexActivator {
      */
     public static OrganizationAddress GetLicenseOrganizationAddress() throws LexActivatorException, UnsupportedEncodingException {
         int status;
+        int bufferSize = 1024;
         if (Platform.isWindows()) {
-            CharBuffer buffer = CharBuffer.allocate(1024);
-            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
+            CharBuffer buffer = CharBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, bufferSize);
             if (LA_OK == status) {
                 String jsonAddress = buffer.toString().trim();
                 if (!jsonAddress.isEmpty()) {
@@ -814,8 +815,8 @@ public class LexActivator {
                 } 
             }
         } else {
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, 256);
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetLicenseOrganizationAddressInternal(buffer, bufferSize);
             if (LA_OK == status) {
                 String jsonAddress = new String(buffer.array(), "UTF-8").trim();
                 if (!jsonAddress.isEmpty()) {
@@ -1183,8 +1184,8 @@ public class LexActivator {
 
             int status;
             status = Platform.isWindows()
-                    ? LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallback, releaseFlags, null)
-                    : LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallbackA, releaseFlags, null);
+                    ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, null)
+                    : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, null);
             if (LA_OK != status) {
                 throw new LexActivatorException(status);
             }
