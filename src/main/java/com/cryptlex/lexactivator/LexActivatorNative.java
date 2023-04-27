@@ -20,12 +20,11 @@ public class LexActivatorNative implements Library {
         void invoke(int status);
     }
     public interface ReleaseUpdateCallbackType extends Callback {
-
-        void invoke(int status, CharBuffer releaseJson);
+        void invoke(int status, CharBuffer releaseJson, Object unused);
     }
     public interface ReleaseUpdateCallbackTypeA extends Callback {
 
-        void invoke(int status, ByteBuffer releaseJson);
+        void invoke(int status, ByteBuffer releaseJson, Object unused);
     }
 
     public static native int SetProductFile(String filePath);
@@ -188,7 +187,9 @@ public class LexActivatorNative implements Library {
 
     public static native int CheckForReleaseUpdate(WString platform, WString version, WString channel, CallbackType callback);
 
-    public static native int CheckReleaseUpdate(ReleaseUpdateCallbackType releaseCallback, int releaseFlags);
+    public static native int CheckReleaseUpdate(ReleaseUpdateCallbackType releaseCallback, int releaseFlags, Object userData);
+
+    public static native int CheckReleaseUpdate(ReleaseUpdateCallbackTypeA releaseCallback, int releaseFlags, Object userData);
     
     public static native int ActivateLicense();
 

@@ -1044,50 +1044,75 @@ public class LexActivator {
      * Checks whether a new release is available for the product. This function
      * should only be used if you manage your releases through Cryptlex release
      * management API. When this function is called the release update callback 
-     * function gets invoked which returns the following parameters:
+     * function gets invoked which passes the following parameters:
      *
      * status - determines if any update is available or not. It also determines whether 
      * an update is allowed or not. Expected values are LA_RELEASE_UPDATE_AVAILABLE,
      * LA_RELEASE_UPDATE_NOT_AVAILABLE, LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED.
      *
-     * releaseJson- returns json string of the latest available release, depending on the 
+     * release - object of the latest available release, depending on the 
      * flag LA_RELEASES_ALLOWED or LA_RELEASES_ALL passed to the CheckReleaseUpdate().
+     * 
+     * userData - data that is passed to the callback function when it is registered
+	 * using the CheckReleaseUpdate function. This parameter is optional and can be null if no user data
+	 * is passed to the CheckReleaseUpdate function.
      *
      * @param listener     listener to listen to the release update event.
      * @param releaseFlags If an update only related to the allowed release is required, 
      *                     then use LA_RELEASES_ALLOWED. Otherwise, if an update for all the releases is
      *                     required, then use LA_RELEASES_ALL.
+     * @param userData     data that will be passed to the callback function.This parameter 
+	 *                     has to be null if no user data needs to be passed to the callback.
      * @throws LexActivatorException
      */
 
-    public static void CheckReleaseUpdate(ReleaseUpdateCallbackEvent listener, int releaseFlags) throws LexActivatorException {
+    public static void CheckReleaseUpdate(ReleaseUpdateCallbackEvent listener, int releaseFlags, final Object userData) throws LexActivatorException, UnsupportedEncodingException {
         if (releaseUpdateCallbackEventListeners == null) {
             releaseUpdateCallbackEventListeners = new ArrayList<>();
             releaseUpdateCallbackEventListeners.add(listener);
         }
         if (privateReleaseUpdateCallback == null) {
             privateReleaseUpdateCallback = new LexActivatorNative.ReleaseUpdateCallbackType() {
-                public void invoke(int status, CharBuffer releaseJson) {
+                public void invoke(int status, CharBuffer releaseJson, Object unused) {
+                    String releaseJsonStr = releaseJson.toString().trim();
+                    Release release = null;
+                    if (!releaseJsonStr.isEmpty() ) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            release = mapper.readValue(releaseJsonStr, Release.class);
+                        } catch (JsonProcessingException e) {}
+                    }
                     // Notify everybody that may be interested.
                     for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
-                        event.ReleaseUpdateCallback(status, releaseJson);
-                    }
+                        event.ReleaseUpdateCallback(status, release, userData);
+                    }   
                 }
             };
             if (privateReleaseUpdateCallbackA == null) {
             privateReleaseUpdateCallbackA = new LexActivatorNative.ReleaseUpdateCallbackTypeA() {
-                public void invoke(int status, ByteBuffer releaseJson) {
+                public void invoke(int status, ByteBuffer releaseJson, Object unused) {
+                    String releaseJsonStr = "";
+                    try{
+                        releaseJsonStr = new String(releaseJson.array(), "UTF-8").trim();
+                    } catch (UnsupportedEncodingException e) {}
+                    Release release = null;
+                    if (!releaseJsonStr.isEmpty()) {
+                        ObjectMapper mapper = new ObjectMapper();
+                        try {
+                            release = mapper.readValue(releaseJsonStr, Release.class);
+                        } catch (JsonProcessingException e) {}
+                    }
                     // Notify everybody that may be interested.
                     for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
-                        event.ReleaseUpdateCallback(status, releaseJson);
+                        event.ReleaseUpdateCallback(status, release, userData);
                     }
                 }
             };
 
             int status;
             status = Platform.isWindows()
-                    ? LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallback, releaseFlags)
-                    : LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallbackA, releaseFlags);
+                    ? LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallback, releaseFlags, null)
+                    : LexActivatorNative.CheckReleaseUpdate(privateReleaseUpdateCallbackA, releaseFlags, null);
             if (LA_OK != status) {
                 throw new LexActivatorException(status);
             }
