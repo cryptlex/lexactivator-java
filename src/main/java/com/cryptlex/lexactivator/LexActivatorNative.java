@@ -153,9 +153,9 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseOrganizationName(CharBuffer name, int length);
 
-    public static native int GetLicenseOrganizationAddressInternal(ByteBuffer name, int length);
+    public static native int GetLicenseOrganizationAddressInternal(ByteBuffer address, int length);
 
-    public static native int GetLicenseOrganizationAddressInternal(CharBuffer name, int length);
+    public static native int GetLicenseOrganizationAddressInternal(CharBuffer address, int length);
 
     public static native int GetLicenseType(ByteBuffer licenseType, int length);
 
