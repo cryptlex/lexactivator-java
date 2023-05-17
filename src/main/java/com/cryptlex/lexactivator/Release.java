@@ -16,7 +16,7 @@ public class Release {
     public String[] platforms;
     public ReleaseFile[] files;
 
-    public class ReleaseFile {
+    public static class ReleaseFile {
         public int size;
         public int downloads;
         public boolean secured;

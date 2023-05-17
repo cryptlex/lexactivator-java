@@ -2,6 +2,7 @@ package com.cryptlex.lexactivator;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
+import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 
 import java.nio.CharBuffer;
@@ -20,11 +21,11 @@ public class LexActivatorNative implements Library {
         void invoke(int status);
     }
     public interface ReleaseUpdateCallbackType extends Callback {
-        void invoke(int status, CharBuffer releaseJson, Object unused);
+        void invoke(int status, WString releaseJson, Pointer unused);
     }
     public interface ReleaseUpdateCallbackTypeA extends Callback {
 
-        void invoke(int status, ByteBuffer releaseJson, Object unused);
+        void invoke(int status, String releaseJson, Pointer unused);
     }
 
     public static native int SetProductFile(String filePath);
@@ -195,9 +196,9 @@ public class LexActivatorNative implements Library {
 
     public static native int CheckForReleaseUpdate(WString platform, WString version, WString channel, CallbackType callback);
 
-    public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackType releaseCallback, int releaseFlags, Object userData);
+    public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackType releaseCallback, int releaseFlags, Pointer userData);
 
-    public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackTypeA releaseCallback, int releaseFlags, Object userData);
+    public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackTypeA releaseCallback, int releaseFlags, Pointer userData);
     
     public static native int ActivateLicense();
 
