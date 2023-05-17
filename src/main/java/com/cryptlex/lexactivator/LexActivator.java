@@ -1,14 +1,17 @@
 package com.cryptlex.lexactivator;
 
 import com.sun.jna.Platform;
+import com.sun.jna.Pointer;
 import com.sun.jna.WString;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
+import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import com.sun.jna.ptr.IntByReference;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class LexActivator {
@@ -1137,6 +1140,7 @@ public class LexActivator {
      * @param userData     data that will be passed to the callback function.This parameter 
 	 *                     has to be null if no user data needs to be passed to the callback.
      * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
      */
 
     public static void CheckReleaseUpdate(ReleaseUpdateCallbackEvent listener, int releaseFlags, final Object userData) throws LexActivatorException, UnsupportedEncodingException {
@@ -1144,52 +1148,53 @@ public class LexActivator {
             releaseUpdateCallbackEventListeners = new ArrayList<>();
             releaseUpdateCallbackEventListeners.add(listener);
         }
-        if (privateReleaseUpdateCallback == null) {
-            privateReleaseUpdateCallback = new LexActivatorNative.ReleaseUpdateCallbackType() {
-                public void invoke(int status, CharBuffer releaseJson, Object unused) {
-                    String releaseJsonStr = releaseJson.toString().trim();
-                    Release release = null;
-                    if (!releaseJsonStr.isEmpty() ) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        try {
-                            release = mapper.readValue(releaseJsonStr, Release.class);
-                        } catch (JsonProcessingException e) {}
+        if (Platform.isWindows()) {
+            if (privateReleaseUpdateCallback == null) {
+                privateReleaseUpdateCallback = new LexActivatorNative.ReleaseUpdateCallbackType() {
+                    public void invoke(int status, WString releaseJson, Pointer unused) {
+                        byte[] releaseJsonArray = releaseJson.toString().getBytes(StandardCharsets.UTF_8);
+                        String releaseJsonStr = new String(releaseJsonArray, StandardCharsets.UTF_8);
+                        Release release = null;
+                        if (!releaseJsonStr.isEmpty()) {
+                            ObjectMapper mapper = new ObjectMapper();
+                            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                            try {
+                                release = mapper.readValue(releaseJsonStr, Release.class);
+                            } catch (JsonProcessingException e) {}
+                        }
+                        // Notify everybody that may be interested.
+                        for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
+                            event.ReleaseUpdateCallback(status, release, userData);
+                        }   
                     }
-                    // Notify everybody that may be interested.
-                    for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
-                        event.ReleaseUpdateCallback(status, release, userData);
-                    }   
-                }
-            };
+                };
+            }
+        } else {
             if (privateReleaseUpdateCallbackA == null) {
-            privateReleaseUpdateCallbackA = new LexActivatorNative.ReleaseUpdateCallbackTypeA() {
-                public void invoke(int status, ByteBuffer releaseJson, Object unused) {
-                    String releaseJsonStr = "";
-                    try{
-                        releaseJsonStr = new String(releaseJson.array(), "UTF-8").trim();
-                    } catch (UnsupportedEncodingException e) {}
-                    Release release = null;
-                    if (!releaseJsonStr.isEmpty()) {
-                        ObjectMapper mapper = new ObjectMapper();
-                        try {
-                            release = mapper.readValue(releaseJsonStr, Release.class);
-                        } catch (JsonProcessingException e) {}
-                    }
-                    // Notify everybody that may be interested.
-                    for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
-                        event.ReleaseUpdateCallback(status, release, userData);
-                    }
-                }
-            };
-
-            int status;
-            status = Platform.isWindows()
-                    ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, null)
-                    : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, null);
-            if (LA_OK != status) {
-                throw new LexActivatorException(status);
+                privateReleaseUpdateCallbackA = new LexActivatorNative.ReleaseUpdateCallbackTypeA() {
+                    public void invoke(int status, String releaseJson, Pointer unused) {
+                        Release release = null;
+                        if (!releaseJson.isEmpty()) {
+                            ObjectMapper mapper = new ObjectMapper();
+                            mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+                            try {
+                                release = mapper.readValue(releaseJson, Release.class);
+                            } catch (JsonProcessingException e) {}
+                        }
+                        // Notify everybody that may be interested.
+                        for (ReleaseUpdateCallbackEvent event : releaseUpdateCallbackEventListeners) {
+                            event.ReleaseUpdateCallback(status, release, userData);
+                        }
+                    }    
+                };
             }
-            }
+        }
+        int status;
+        status = Platform.isWindows()
+                ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, Pointer.NULL)
+                : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, Pointer.NULL);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
         }
     }
 
