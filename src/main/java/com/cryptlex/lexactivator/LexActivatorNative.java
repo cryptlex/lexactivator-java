@@ -126,6 +126,10 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseKey(CharBuffer licenseKey, int length);
 
+    public static native int GetLicenseCreationDate(IntByReference creationDate);
+
+    public static native int GetLicenseActivationDate(IntByReference activationDate);
+
     public static native int GetLicenseExpiryDate(IntByReference expiryDate);
 
     public static native int GetLicenseMaintenanceExpiryDate(IntByReference maintenanceExpiryDate);
