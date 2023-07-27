@@ -13,6 +13,7 @@ import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class LexActivator {
     private static LexActivatorNative.CallbackType privateLicenseCallback = null;
@@ -792,6 +793,51 @@ public class LexActivator {
     }
 
     /**
+     * Gets the user licenses for the product.
+     *
+     * @return Returns a list of user licenses.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+
+    public static List<UserLicense> GetUserLicenses() throws LexActivatorException, UnsupportedEncodingException{
+        int status;
+        int bufferSize = 4096;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetUserLicensesInternal(buffer, bufferSize);
+            if (LA_OK == status) {
+                String userLicensesJson = buffer.toString().trim();
+                if (!userLicensesJson.isEmpty()) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        List<UserLicense> userLicenses = objectMapper.readValue(userLicensesJson, new TypeReference<List<UserLicense>>() {});
+                        return userLicenses;
+                    } catch (JsonProcessingException e) {}
+                } else {
+                    return new ArrayList<>();
+                } 
+            } 
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetUserLicensesInternal(buffer, bufferSize);
+            if (LA_OK == status) {
+                String userLicensesJson = new String(buffer.array(), "UTF-8").trim();
+                if (!userLicensesJson.isEmpty()) {   
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        List<UserLicense> userLicenses = objectMapper.readValue(userLicensesJson, new TypeReference<List<UserLicense>>() {});
+                        return userLicenses;
+                    } catch (JsonProcessingException e) {}
+                } else {
+                    return new ArrayList<>();
+                } 
+            }
+        } 
+        throw new LexActivatorException(status);
+    }
+
+    /**
      * Gets the address associated with the license organization.
      *
      * @return Returns the license organization address.
@@ -1194,6 +1240,26 @@ public class LexActivator {
                 ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, Pointer.NULL)
                 : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, Pointer.NULL);
         if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * It sends the request to the Cryptlex servers to authenticate the user.
+     *
+     * @param email    user email address.
+     * @param password user password.
+     * @return LA_OK
+     * @throws LexActivatorException
+     */
+    public static int AuthenticateUser(String email, String password) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows()
+                ? LexActivatorNative.AuthenticateUser(new WString(email), new WString(password))
+                : LexActivatorNative.AuthenticateUser(email, password);
+        if (LA_OK == status) {
+            return LA_OK;
+        } else {
             throw new LexActivatorException(status);
         }
     }

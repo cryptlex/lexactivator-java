@@ -207,6 +207,10 @@ public class LexActivatorException extends Exception {
             message = "Release channel not set.";
             break;
 
+        case LA_E_USER_NOT_AUTHENTICATED:
+            message = "Permission denied.";
+            break;
+
         case LA_E_RATE_LIMIT:
             message = "Rate limit for API has reached, try again later.";
             break;
@@ -566,6 +570,13 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Release channel not set.
      */
     public static final int LA_E_RELEASE_CHANNEL = 86;
+    
+    /*
+     * CODE: LA_E_USER_NOT_AUTHENTICATED
+     *
+     * MESSAGE: Permission denied.
+     */
+    public static final int LA_E_USER_NOT_AUTHENTICATED = 87;
 
     /*
      * CODE: LA_E_RATE_LIMIT
