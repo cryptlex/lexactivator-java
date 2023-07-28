@@ -1675,6 +1675,21 @@ public class LexActivator {
      * MESSAGE: No new update is available for the product. The current version is
      * latest.
      */
-    public static final int LA_RELEASE_NO_UPDATE_AVAILABLE = 31;
+    public static final int LA_RELEASE_NO_UPDATE_AVAILABLE = 31; // deprecated
+
+    /*
+     * CODE: LA_RELEASE_UPDATE_NOT_AVAILABLE
+     *
+     * MESSAGE: No new update is available for the product. The current version is
+     * latest.
+     */
+    public static final int LA_RELEASE_UPDATE_NOT_AVAILABLE = 31;
+
+    /*
+     * CODE: LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED
+     *
+     * MESSAGE: The update available is not allowed for this license.
+     */
+    public static final int LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED = 32;
 
 }
