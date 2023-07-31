@@ -162,6 +162,10 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseOrganizationAddressInternal(CharBuffer address, int length);
 
+    public static native int GetUserLicensesInternal(ByteBuffer userLicenses, int length);
+
+    public static native int GetUserLicensesInternal(CharBuffer userLicenses, int length);
+
     public static native int GetLicenseType(ByteBuffer licenseType, int length);
 
     public static native int GetLicenseType(CharBuffer licenseType, int length);
@@ -203,6 +207,10 @@ public class LexActivatorNative implements Library {
     public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackType releaseCallback, int releaseFlags, Pointer userData);
 
     public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackTypeA releaseCallback, int releaseFlags, Pointer userData);
+    
+    public static native int AuthenticateUser(String email, String password);
+
+    public static native int AuthenticateUser(WString email, WString password);
     
     public static native int ActivateLicense();
 
