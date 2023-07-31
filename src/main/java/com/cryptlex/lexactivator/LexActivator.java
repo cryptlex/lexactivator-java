@@ -794,6 +794,10 @@ public class LexActivator {
 
     /**
      * Gets the user licenses for the product.
+     * 
+     * This function sends a network request to Cryptlex servers to get the licenses.
+     * 
+     * Make sure AuthenticateUser() function is called before calling this function.
      *
      * @return Returns a list of user licenses.
      * @throws LexActivatorException
