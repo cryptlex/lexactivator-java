@@ -98,6 +98,10 @@ public class LexActivatorNative implements Library {
 
     public static native int SetCryptlexHost(WString host);
 
+    public static native int SetTwoFactorAuthenticationCode(String twoFactorAuthenticationCode);
+
+    public static native int SetTwoFactorAuthenticationCode(WString twoFactorAuthenticationCode);
+
     public static native int GetProductMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetProductMetadata(WString key, CharBuffer value, int length);

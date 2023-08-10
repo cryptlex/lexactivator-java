@@ -394,6 +394,21 @@ public class LexActivator {
     }
 
     /**
+     * Sets the two-factor authentication code for the user authentication.
+     *
+     * @param twoFactorAuthenticationCode the 2FA code
+     * @throws LexActivatorException
+     */
+    public static void SetTwoFactorAuthenticationCode(String twoFactorAuthenticationCode) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetTwoFactorAuthenticationCode(new WString(twoFactorAuthenticationCode))
+                : LexActivatorNative.SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Gets the product metadata as set in the dashboard. This is available for
      * trial as well as license activations.
      *
