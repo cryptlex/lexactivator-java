@@ -110,6 +110,25 @@ public class LexActivator {
     }
 
     /**
+     * Enables network logs.
+     * This function should be used for network testing only in case of network errors.
+     * By default logging is disabled.
+     * This function generates the lexactivator-logs.log file in the same directory
+     * where the application is running.
+     *
+     * @param enable 0 or 1 to disable or enable logging.
+     * 
+     * @throws LexActivatorException
+     */
+    public static void SetDebugMode(int enable) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetDebugMode(enable);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * In case you don't want to use the LexActivator's advanced device
      * fingerprinting algorithm, this function can be used to set a custom device
      * fingerprint. If you decide to use your own custom device fingerprint then
