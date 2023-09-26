@@ -235,6 +235,18 @@ public class LexActivatorException extends Exception {
             message = "The user account has been temporarily locked for 5 mins due to 5 failed attempts.";
             break;
 
+        case LA_E_AUTHENTICATION_ID_TOKEN:
+            message = "Invalid authentication ID token.";
+            break;
+
+        case LA_E_OIDC_SSO_NOT_ENABLED:
+            message = "OIDC SSO is not enabled.";
+            break;
+
+        case LA_E_USERS_LIMIT_REACHED:
+            message = "The allowed users for this account has reached its limit.";
+            break;
+
         default:
             message = "Unknown error!";
 
@@ -631,5 +643,26 @@ public class LexActivatorException extends Exception {
      * MESSAGE: The user account has been temporarily locked for 5 mins due to 5 failed attempts.
      */
     public static final int LA_E_LOGIN_TEMPORARILY_LOCKED = 100;
+
+    /*
+        CODE: LA_E_AUTHENTICATION_ID_TOKEN
+
+        MESSAGE: Invalid authentication ID token.
+    */
+    public static final int LA_E_AUTHENTICATION_ID_TOKEN = 101;
+
+    /*
+        CODE: LA_E_OIDC_SSO_NOT_ENABLED
+
+        MESSAGE: OIDC SSO is not enabled.
+    */
+    public static final int LA_E_OIDC_SSO_NOT_ENABLED = 102;
+
+    /*
+        CODE: LA_E_USERS_LIMIT_REACHED
+
+        MESSAGE: The allowed users for this account has reached its limit.
+    */
+    public static final int LA_E_USERS_LIMIT_REACHED = 103;
 
 }

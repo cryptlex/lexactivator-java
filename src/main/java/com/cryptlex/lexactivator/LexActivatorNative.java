@@ -215,6 +215,10 @@ public class LexActivatorNative implements Library {
     public static native int AuthenticateUser(String email, String password);
 
     public static native int AuthenticateUser(WString email, WString password);
+
+    public static native int AuthenticateUserWithIdToken(String idToken);
+
+    public static native int AuthenticateUserWithIdToken(WString idToken);
     
     public static native int ActivateLicense();
 
