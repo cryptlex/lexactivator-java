@@ -235,7 +235,7 @@ public class LexActivatorException extends Exception {
             message = "The user account has been temporarily locked for 5 mins due to 5 failed attempts.";
             break;
 
-        case LA_E_AUTHENTICATION_ID_TOKEN:
+        case LA_E_AUTHENTICATION_ID_TOKEN_INVALID:
             message = "Invalid authentication ID token.";
             break;
 
@@ -645,11 +645,11 @@ public class LexActivatorException extends Exception {
     public static final int LA_E_LOGIN_TEMPORARILY_LOCKED = 100;
 
     /*
-        CODE: LA_E_AUTHENTICATION_ID_TOKEN
+        CODE: LA_E_AUTHENTICATION_ID_TOKEN_INVALID
 
         MESSAGE: Invalid authentication ID token.
     */
-    public static final int LA_E_AUTHENTICATION_ID_TOKEN = 101;
+    public static final int LA_E_AUTHENTICATION_ID_TOKEN_INVALID = 101;
 
     /*
         CODE: LA_E_OIDC_SSO_NOT_ENABLED
