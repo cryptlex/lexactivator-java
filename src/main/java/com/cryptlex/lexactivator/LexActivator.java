@@ -987,6 +987,31 @@ public class LexActivator {
     }
 
     /**
+     * Gets the activation id.
+     * 
+     * @return Returns the activation id.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetActivationId() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetActivationId(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            status = LexActivatorNative.GetActivationId(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
      * Gets the activation metadata.
      *
      * @param key key to retrieve the value
