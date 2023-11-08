@@ -649,24 +649,24 @@ public class LexActivatorException extends Exception {
     public static final int LA_E_LOGIN_TEMPORARILY_LOCKED = 100;
 
     /*
-        CODE: LA_E_AUTHENTICATION_ID_TOKEN_INVALID
-
-        MESSAGE: Invalid authentication ID token.
-    */
+     * CODE: LA_E_AUTHENTICATION_ID_TOKEN_INVALID
+     *
+     * MESSAGE: Invalid authentication ID token.
+     */
     public static final int LA_E_AUTHENTICATION_ID_TOKEN_INVALID = 101;
 
     /*
-        CODE: LA_E_OIDC_SSO_NOT_ENABLED
-
-        MESSAGE: OIDC SSO is not enabled.
-    */
+     * CODE: LA_E_OIDC_SSO_NOT_ENABLED
+     *
+     * MESSAGE: OIDC SSO is not enabled.
+     */
     public static final int LA_E_OIDC_SSO_NOT_ENABLED = 102;
 
     /*
-        CODE: LA_E_USERS_LIMIT_REACHED
-
-        MESSAGE: The allowed users for this account has reached its limit.
-    */
+     * CODE: LA_E_USERS_LIMIT_REACHED
+     *
+     * MESSAGE: The allowed users for this account has reached its limit.
+     */
     public static final int LA_E_USERS_LIMIT_REACHED = 103;
 
     /*
