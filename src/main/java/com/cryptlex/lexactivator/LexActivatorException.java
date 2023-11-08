@@ -247,6 +247,10 @@ public class LexActivatorException extends Exception {
             message = "The allowed users for this account has reached its limit.";
             break;
 
+        case LA_E_OS_USER:
+            message = "OS user has changed since activation and the license is user-locked.";
+            break;
+
         default:
             message = "Unknown error!";
 
@@ -664,5 +668,12 @@ public class LexActivatorException extends Exception {
         MESSAGE: The allowed users for this account has reached its limit.
     */
     public static final int LA_E_USERS_LIMIT_REACHED = 103;
+
+    /*
+     * CODE: LA_E_OS_USER
+     *
+     * MESSAGE: OS user has changed since activation and the license is user-locked.
+     */
+    public static final int LA_E_OS_USER = 104;
 
 }
