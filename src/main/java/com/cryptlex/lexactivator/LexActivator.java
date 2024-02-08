@@ -663,7 +663,7 @@ public class LexActivator {
     /**
      * Gets the allowed deactivations of the license.
      * 
-     * @return Returns the allowed deactivation
+     * @return Returns the allowed deactivations
      * @throws LexActivatorException
      */
     public static int GetLicenseAllowedDeactivations() throws LexActivatorException {
