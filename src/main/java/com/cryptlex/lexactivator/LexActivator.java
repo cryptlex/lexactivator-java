@@ -661,6 +661,46 @@ public class LexActivator {
     }
 
     /**
+     * Gets the allowed deactivations of the license.
+     * 
+     * @return Returns the allowed deactivation
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseAllowedDeactivations() throws LexActivatorException {
+        int status;
+        IntByReference allowedDeactivations = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseAllowedDeactivations(allowedDeactivations);
+        switch (status) {
+        case LA_OK:
+            return allowedDeactivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the total deactivations of the license.
+     * 
+     * @return Returns the total deactivations
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseTotalDeactivations() throws LexActivatorException {
+        int status;
+        IntByReference totalDeactivations = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseTotalDeactivations(totalDeactivations);
+        switch (status) {
+        case LA_OK:
+            return totalDeactivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Gets the license creation date timestamp.
      * 
      * @return Returns the timestamp
