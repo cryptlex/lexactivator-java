@@ -223,7 +223,7 @@ public class LexActivator {
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
-     * @param value string of maximum length 256 characters with utf-8 encoding.
+     * @param value string of maximum length 4096 characters with utf-8 encoding.
      *              encoding.
      * @throws LexActivatorException
      */
@@ -242,7 +242,7 @@ public class LexActivator {
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
-     * @param value string of maximum length 256 characters with utf-8 encoding.
+     * @param value string of maximum length 4096 characters with utf-8 encoding.
      *              encoding.
      * @throws LexActivatorException
      */
