@@ -122,7 +122,7 @@ public class LexActivatorException extends Exception {
             break;
 
         case LA_E_METADATA_VALUE_LENGTH:
-            message = "Metadata value length is more than 256 characters.";
+            message = "Metadata value length is more than 4096 characters.";
             break;
 
         case LA_E_ACTIVATION_METADATA_LIMIT:
@@ -444,7 +444,7 @@ public class LexActivatorException extends Exception {
     /*
      * CODE: LA_E_METADATA_VALUE_LENGTH
      * 
-     * MESSAGE: Metadata value length is more than 256 characters.
+     * MESSAGE: Metadata value length is more than 4096 characters.
      */
     public static final int LA_E_METADATA_VALUE_LENGTH = 65;
 
