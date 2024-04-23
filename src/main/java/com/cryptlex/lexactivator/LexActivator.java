@@ -28,6 +28,7 @@ public class LexActivator {
     /* Permission Flags */
     public static final int LA_USER = 1;
     public static final int LA_SYSTEM = 2;
+    public static final int LA_ALL_USERS = 3;
     public static final int LA_IN_MEMORY = 4;
 
     /* Release Flags */
@@ -75,9 +76,15 @@ public class LexActivator {
      *
      * @param productId the unique product id of your application as mentioned on
      *                  the product page in the dashboard.
-     * @param flags     depending upon whether your application requires admin/root
-     *                  permissions to run or not, this parameter can have one of
-     *                  the following values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
+     * @param flags     depending on your application's requirements, choose one of 
+     *                  the following values: LA_USER, LA_SYSTEM, LA_IN_MEMORY, LA_ALL_USERS.
+     * <ul>
+     * <li> LA_USER: This flag indicates that the application does not require admin or root permissions to run.</li>
+     * <li> LA_SYSTEM: This flag indicates that the application must be run with admin or root permissions.</li>
+     * <li> LA_IN_MEMORY: This flag will store activation data in memory. Thus, requires re-activation on every start 
+     *      of the application and should only be used in floating licenses.</li>
+     * <li> LA_ALL_USERS: This flag is specifically designed for Windows and should be used for system-wide activations.</li>
+     * </ul>
      * @throws LexActivatorException
      */
     public static void SetProductId(String productId, int flags) throws LexActivatorException {
