@@ -136,6 +136,25 @@ public class LexActivator {
     }
 
     /**
+     * Enables or disables in-memory caching for LexActivator.
+     * This function is designed to control caching behavior to suit specific application requirements.
+     * Caching is enabled by default to enhance performance.
+     * Disabling caching is recommended in environments where multiple processes access the same license on a 
+     * single machine and require real-time updates to the license state.
+     *
+     * @param enable false or true to disable or enable logging.
+     * 
+     * @throws LexActivatorException
+     */
+    public static void SetCacheMode(boolean enable) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetCacheMode((enable ? 1 : 0));
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * In case you don't want to use the LexActivator's advanced device
      * fingerprinting algorithm, this function can be used to set a custom device
      * fingerprint. If you decide to use your own custom device fingerprint then
