@@ -46,6 +46,8 @@ public class LexActivatorNative implements Library {
 
     public static native int SetDebugMode(int enable);
 
+    public static native int SetCacheMode(int enable);
+
     public static native int SetCustomDeviceFingerprint(String fingerprint);
 
     public static native int SetCustomDeviceFingerprint(WString fingerprint);
