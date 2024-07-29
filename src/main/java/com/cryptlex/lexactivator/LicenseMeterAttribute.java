@@ -4,13 +4,13 @@ public class LicenseMeterAttribute {
 
     public String name;
 
-    public int allowedUses;
+    public long allowedUses;
 
-    public int totalUses;
+    public long totalUses;
 
-    public int grossUses;
+    public long grossUses;
 
-    public LicenseMeterAttribute(String name, int allowedUses, int totalUses, int grossUses) {
+    public LicenseMeterAttribute(String name, long allowedUses, long totalUses, long grossUses) {
         this.name = name;
         this.allowedUses = allowedUses;
         this.totalUses = totalUses;

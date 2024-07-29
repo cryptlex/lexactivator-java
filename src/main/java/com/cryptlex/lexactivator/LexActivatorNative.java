@@ -8,6 +8,7 @@ import com.sun.jna.WString;
 import java.nio.CharBuffer;
 import java.nio.ByteBuffer;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.Callback;
 
 public class LexActivatorNative implements Library {
@@ -126,9 +127,9 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
 
-    public static native int GetLicenseMeterAttribute(String name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
+    public static native int GetLicenseMeterAttribute(String name, LongByReference allowedUses, LongByReference totalUses, LongByReference grossUses);
 
-    public static native int GetLicenseMeterAttribute(WString name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
+    public static native int GetLicenseMeterAttribute(WString name, LongByReference allowedUses, LongByReference totalUses, LongByReference grossUses);
 
     public static native int GetLicenseKey(ByteBuffer licenseKey, int length);
 
@@ -142,11 +143,11 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseMaintenanceExpiryDate(IntByReference maintenanceExpiryDate);
 
-    public static native int GetLicenseAllowedActivations(IntByReference allowedActivations);
+    public static native int GetLicenseAllowedActivations(LongByReference allowedActivations);
 
     public static native int GetLicenseTotalActivations(IntByReference totalActivations);
 
-    public static native int GetLicenseAllowedDeactivations(IntByReference allowedDeactivations);
+    public static native int GetLicenseAllowedDeactivations(LongByReference allowedDeactivations);
 
     public static native int GetLicenseTotalDeactivations(IntByReference totalDeactivations);
 

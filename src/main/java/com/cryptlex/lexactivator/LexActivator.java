@@ -8,6 +8,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +36,10 @@ public class LexActivator {
     /* Release Flags */
     public static final int LA_RELEASES_ALL = 1;
     public static final int LA_RELEASES_ALLOWED = 2;
+
+    private static long toUnsignedLong(long value) {
+        return BigInteger.valueOf(value).and(BigInteger.valueOf(0xFFFFFFFFFFFFFFFFL)).longValue();
+    }
 
     /**
      * Sets the absolute path of the Product.dat file. This function must be called
@@ -601,21 +607,21 @@ public class LexActivator {
     public static LicenseMeterAttribute GetLicenseMeterAttribute(String name)
             throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        IntByReference allowedUses = new IntByReference(0);
-        IntByReference totalUses = new IntByReference(0);
-        IntByReference grossUses = new IntByReference(0);
+        LongByReference allowedUses = new LongByReference(0);
+        LongByReference totalUses = new LongByReference(0);
+        LongByReference grossUses = new LongByReference(0);
 
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
-                        grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedLong(totalUses.getValue()),
+                toUnsignedLong(grossUses.getValue()));
             }
         } else {
             status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
-                        grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedLong(totalUses.getValue()),
+                toUnsignedLong(grossUses.getValue()));
             }
         }
         throw new LexActivatorException(status);
@@ -652,9 +658,9 @@ public class LexActivator {
      * @return Returns the allowed activations
      * @throws LexActivatorException
      */
-    public static int GetLicenseAllowedActivations() throws LexActivatorException {
+    public static long GetLicenseAllowedActivations() throws LexActivatorException {
         int status;
-        IntByReference allowedActivations = new IntByReference(0);
+        LongByReference allowedActivations = new LongByReference(0);
         status = LexActivatorNative.GetLicenseAllowedActivations(allowedActivations);
         switch (status) {
         case LA_OK:
@@ -692,9 +698,9 @@ public class LexActivator {
      * @return Returns the allowed deactivations
      * @throws LexActivatorException
      */
-    public static int GetLicenseAllowedDeactivations() throws LexActivatorException {
+    public static long GetLicenseAllowedDeactivations() throws LexActivatorException {
         int status;
-        IntByReference allowedDeactivations = new IntByReference(0);
+        LongByReference allowedDeactivations = new LongByReference(0);
         status = LexActivatorNative.GetLicenseAllowedDeactivations(allowedDeactivations);
         switch (status) {
         case LA_OK:
