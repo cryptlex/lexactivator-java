@@ -37,8 +37,9 @@ public class LexActivator {
     public static final int LA_RELEASES_ALL = 1;
     public static final int LA_RELEASES_ALLOWED = 2;
 
-    private static long toUnsignedLong(long value) {
-        return BigInteger.valueOf(value).and(BigInteger.valueOf(0xFFFFFFFFFFFFFFFFL)).longValue();
+    // Convert long to BigInteger to correctly handle unsigned 64-bit values
+    private static BigInteger toUnsignedBigInteger(long value) {
+        return BigInteger.valueOf(value).and(BigInteger.valueOf(0xFFFFFFFFFFFFFFFFL));
     }
 
     /**
@@ -608,20 +609,21 @@ public class LexActivator {
             throws LexActivatorException, UnsupportedEncodingException {
         int status;
         LongByReference allowedUses = new LongByReference(0);
+        // These references can still hold the uint64_t values populated by the native function
         LongByReference totalUses = new LongByReference(0);
         LongByReference grossUses = new LongByReference(0);
 
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedLong(totalUses.getValue()),
-                toUnsignedLong(grossUses.getValue()));
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedBigInteger(totalUses.getValue()),
+                toUnsignedBigInteger(grossUses.getValue()));
             }
         } else {
             status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedLong(totalUses.getValue()),
-                toUnsignedLong(grossUses.getValue()));
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedBigInteger(totalUses.getValue()),
+                toUnsignedBigInteger(grossUses.getValue()));
             }
         }
         throw new LexActivatorException(status);

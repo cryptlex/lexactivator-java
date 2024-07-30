@@ -1,4 +1,5 @@
 package com.cryptlex.lexactivator;
+import java.math.BigInteger;
 
 public class LicenseMeterAttribute {
 
@@ -6,11 +7,11 @@ public class LicenseMeterAttribute {
 
     public long allowedUses;
 
-    public long totalUses;
+    public BigInteger totalUses;
 
-    public long grossUses;
+    public BigInteger grossUses;
 
-    public LicenseMeterAttribute(String name, long allowedUses, long totalUses, long grossUses) {
+    public LicenseMeterAttribute(String name, long allowedUses, BigInteger totalUses, BigInteger grossUses) {
         this.name = name;
         this.allowedUses = allowedUses;
         this.totalUses = totalUses;
