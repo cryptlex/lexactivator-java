@@ -8,7 +8,7 @@ public class UserLicense {
     public long allowedActivations;
 
     /**
-     * The allowed deactivations of the license. A value of -1 indicates unlimited number of activations.
+     * The allowed deactivations of the license. A value of -1 indicates unlimited number of deactivations.
      */
     public long allowedDeactivations;
     
