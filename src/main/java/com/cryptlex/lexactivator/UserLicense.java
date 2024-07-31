@@ -2,11 +2,23 @@ package com.cryptlex.lexactivator;
 
 public class UserLicense {
 
-    public int allowedActivations;
+    /**
+     * The allowed activations of the license. A value of -1 indicates unlimited number of activations.
+     */
+    public long allowedActivations;
 
-    public int allowedDeactivations;
+    /**
+     * The allowed deactivations of the license. A value of -1 indicates unlimited number of activations.
+     */
+    public long allowedDeactivations;
     
+    /**
+     * The license key.
+     */
     public String key;
 
+    /**
+     * The license type (node-locked or hosted-floating).
+     */
     public String type;
 }
