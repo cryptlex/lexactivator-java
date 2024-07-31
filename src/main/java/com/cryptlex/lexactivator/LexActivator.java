@@ -370,13 +370,14 @@ public class LexActivator {
     }
 
     /**
-     * Sets the lease duration for the activation.
+     * Sets the lease duration for the activation. The activation lease duration 
+     * is honoured when the allow client lease duration property is enabled.
      * 
-     * @param leaseDuration
+     * @param leaseDuration value of the lease duration. A value of -1 indicates unlimited lease duration.
      * 
      * @throws LexActivatorException
      */
-    public static void SetActivationLeaseDuration(int leaseDuration) throws LexActivatorException {
+    public static void SetActivationLeaseDuration(long leaseDuration) throws LexActivatorException {
         int status;
         status = LexActivatorNative.SetActivationLeaseDuration(leaseDuration);
         if (LA_OK != status) {

@@ -89,7 +89,7 @@ public class LexActivatorNative implements Library {
 
     public static native int SetReleaseChannel(WString releaseChannel);
 
-    public static native int SetActivationLeaseDuration(int leaseDuration);
+    public static native int SetActivationLeaseDuration(long leaseDuration);
 
     public static native int SetOfflineActivationRequestMeterAttributeUses(String name, int uses);
 
