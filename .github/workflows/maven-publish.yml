@@ -58,5 +58,5 @@ jobs:
         server_id: ossrh
         gpg_private_key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg_passphrase: ${{ secrets.GPG_PASSPHRASE }}
-        nexus_username: ${{ secrets.OSSRH_USERNAME }}
-        nexus_password: ${{ secrets.OSSRH_PASSWORD }} 
+        nexus_username: ${{ secrets.MAVEN_USERNAME }}
+        nexus_password: ${{ secrets.MAVEN_PASSWORD }} 
