@@ -21,4 +21,21 @@ public class UserLicense {
      * The license type (node-locked or hosted-floating).
      */
     public String type;
+
+    /**
+     * License metadata with `view_permission` set to `"user"`.
+     */
+    public Metadata[] metadata;
+
+    public static class Metadata {
+        /**
+         * The key of the metadata.
+         */
+        public String key;
+
+        /**
+         * The value of the metadata.
+         */
+        public String value;
+    }
 }
