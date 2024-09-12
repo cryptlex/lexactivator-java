@@ -24,7 +24,7 @@ public class UserLicense {
     public String type;
 
     /**
-     * License metadata with `view_permission` set to `"user"`.
+     * The License metadata.
      */
     public Metadata[] metadata;
 }
