@@ -1,4 +1,5 @@
 package com.cryptlex.lexactivator;
+import com.cryptlex.lexactivator.Metadata;
 
 public class UserLicense {
 
@@ -26,16 +27,4 @@ public class UserLicense {
      * License metadata with `view_permission` set to `"user"`.
      */
     public Metadata[] metadata;
-
-    public static class Metadata {
-        /**
-         * The key of the metadata.
-         */
-        public String key;
-
-        /**
-         * The value of the metadata.
-         */
-        public String value;
-    }
 }
