@@ -24,7 +24,7 @@ public class UserLicense {
     public String type;
 
     /**
-     * The License metadata.
+     * The license metadata.
      */
     public Metadata[] metadata;
 }
