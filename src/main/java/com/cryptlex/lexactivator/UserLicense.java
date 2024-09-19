@@ -1,4 +1,5 @@
 package com.cryptlex.lexactivator;
+import com.cryptlex.lexactivator.Metadata;
 
 public class UserLicense {
 
@@ -21,4 +22,9 @@ public class UserLicense {
      * The license type (node-locked or hosted-floating).
      */
     public String type;
+
+    /**
+     * The license metadata.
+     */
+    public Metadata[] metadata;
 }
