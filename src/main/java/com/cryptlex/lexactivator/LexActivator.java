@@ -776,6 +776,25 @@ public class LexActivator {
     }
 
     /**
+     * Gets the activation creation date timestamp for the current activation.
+     * 
+     * @return Returns the timestamp
+     * @throws LexActivatorException
+     */
+    public static int GetActivationCreationDate() throws LexActivatorException {
+        int status;
+        IntByReference activationDate = new IntByReference(0);
+        status = LexActivatorNative.GetActivationCreationDate(activationCreationDate);
+        switch (status) {
+        case LA_OK:
+            return activationDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+    /**
      * Gets the license expiry date timestamp.
      *
      * @return Returns the timestamp
