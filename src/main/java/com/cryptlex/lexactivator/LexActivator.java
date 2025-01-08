@@ -783,11 +783,11 @@ public class LexActivator {
      */
     public static int GetActivationCreationDate() throws LexActivatorException {
         int status;
-        IntByReference activationDate = new IntByReference(0);
+        IntByReference activationCreationDate = new IntByReference(0);
         status = LexActivatorNative.GetActivationCreationDate(activationCreationDate);
         switch (status) {
         case LA_OK:
-            return activationDate.getValue();
+            return activationCreationDate.getValue();
         case LA_FAIL:
             return 0;
         default:
