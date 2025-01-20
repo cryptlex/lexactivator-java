@@ -251,6 +251,14 @@ public class LexActivatorException extends Exception {
             message = "OS user has changed since activation and the license is user-locked.";
             break;
 
+        case LA_E_INVALID_PERMISSION_FLAG:
+            message = "Invalid permission flag.";
+            break;
+
+        case LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED:
+            message = "The free plan has reached it's activation limit.";
+            break;
+
         default:
             message = "Unknown error!";
 
