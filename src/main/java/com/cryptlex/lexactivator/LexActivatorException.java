@@ -689,7 +689,7 @@ public class LexActivatorException extends Exception {
      *
      * MESSAGE: Invalid permission flag.
      */
-    public static final int LA_E_OS_USER = 105;
+    public static final int LA_E_INVALID_PERMISSION_FLAG = 105;
     
     /*
      * CODE: LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED 
