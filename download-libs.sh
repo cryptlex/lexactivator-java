@@ -1,11 +1,12 @@
 BASE_URL=https://dl.cryptlex.com/downloads
-VERSION="v3.21.3";
+VERSION="v3.31.3";
 
 mkdir -p tmp/windows
 curl -O ${BASE_URL}/${VERSION}/LexActivator-Win.zip
 unzip LexActivator-Win.zip -d ./tmp/windows
 cp ./tmp/windows/libs/vc14/x64/LexActivator.dll src/main/resources/win32-x86-64/
 cp ./tmp/windows/libs/vc14/x86/LexActivator.dll src/main/resources/win32-x86/
+cp ./tmp/windows/libs/vc17/arm64/LexActivator.dll src/main/resources/win32-aarch64/
 
 mkdir -p tmp/macos
 curl -O ${BASE_URL}/${VERSION}/LexActivator-Mac.zip

@@ -122,7 +122,7 @@ public class LexActivatorException extends Exception {
             break;
 
         case LA_E_METADATA_VALUE_LENGTH:
-            message = "Metadata value length is more than 256 characters.";
+            message = "Metadata value length is more than 4096 characters.";
             break;
 
         case LA_E_ACTIVATION_METADATA_LIMIT:
@@ -207,6 +207,18 @@ public class LexActivatorException extends Exception {
             message = "Release channel not set.";
             break;
 
+        case LA_E_USER_NOT_AUTHENTICATED:
+            message = "The user is not authenticated.";
+            break;
+
+        case LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING:
+            message = "The two-factor authentication code for the user authentication is missing.";
+            break;
+
+        case LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID:
+            message = "The two-factor authentication code provided by the user is invalid.";
+            break;
+
         case LA_E_RATE_LIMIT:
             message = "Rate limit for API has reached, try again later.";
             break;
@@ -217,6 +229,34 @@ public class LexActivatorException extends Exception {
 
         case LA_E_CLIENT:
             message = "Client error.";
+            break;
+
+        case LA_E_LOGIN_TEMPORARILY_LOCKED:
+            message = "The user account has been temporarily locked for 5 mins due to 5 failed attempts.";
+            break;
+
+        case LA_E_AUTHENTICATION_ID_TOKEN_INVALID:
+            message = "Invalid authentication ID token.";
+            break;
+
+        case LA_E_OIDC_SSO_NOT_ENABLED:
+            message = "OIDC SSO is not enabled.";
+            break;
+
+        case LA_E_USERS_LIMIT_REACHED:
+            message = "The allowed users for this account has reached its limit.";
+            break;
+
+        case LA_E_OS_USER:
+            message = "OS user has changed since activation and the license is user-locked.";
+            break;
+
+        case LA_E_INVALID_PERMISSION_FLAG:
+            message = "Invalid permission flag.";
+            break;
+
+        case LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED:
+            message = "The free plan has reached it's activation limit.";
             break;
 
         default:
@@ -412,7 +452,7 @@ public class LexActivatorException extends Exception {
     /*
      * CODE: LA_E_METADATA_VALUE_LENGTH
      * 
-     * MESSAGE: Metadata value length is more than 256 characters.
+     * MESSAGE: Metadata value length is more than 4096 characters.
      */
     public static final int LA_E_METADATA_VALUE_LENGTH = 65;
 
@@ -566,6 +606,27 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Release channel not set.
      */
     public static final int LA_E_RELEASE_CHANNEL = 86;
+    
+    /*
+     * CODE: LA_E_USER_NOT_AUTHENTICATED
+     *
+     * MESSAGE: The user is not authenticated.
+     */
+    public static final int LA_E_USER_NOT_AUTHENTICATED = 87;
+
+    /*
+     * CODE: LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING
+     *
+     * MESSAGE: The two-factor authentication code for the user authentication is missing.
+     */
+    public static final int LA_E_TWO_FACTOR_AUTHENTICATION_CODE_MISSING = 88;
+
+    /*
+     * CODE: LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID
+     *
+     * MESSAGE: The two-factor authentication code provided by the user is invalid.
+     */
+    public static final int LA_E_TWO_FACTOR_AUTHENTICATION_CODE_INVALID = 89;
 
     /*
      * CODE: LA_E_RATE_LIMIT
@@ -587,5 +648,54 @@ public class LexActivatorException extends Exception {
      * MESSAGE: Client error.
      */
     public static final int LA_E_CLIENT = 92;
+
+    /*
+     * CODE: LA_E_LOGIN_TEMPORARILY_LOCKED
+     * 
+     * MESSAGE: The user account has been temporarily locked for 5 mins due to 5 failed attempts.
+     */
+    public static final int LA_E_LOGIN_TEMPORARILY_LOCKED = 100;
+
+    /*
+     * CODE: LA_E_AUTHENTICATION_ID_TOKEN_INVALID
+     *
+     * MESSAGE: Invalid authentication ID token.
+     */
+    public static final int LA_E_AUTHENTICATION_ID_TOKEN_INVALID = 101;
+
+    /*
+     * CODE: LA_E_OIDC_SSO_NOT_ENABLED
+     *
+     * MESSAGE: OIDC SSO is not enabled.
+     */
+    public static final int LA_E_OIDC_SSO_NOT_ENABLED = 102;
+
+    /*
+     * CODE: LA_E_USERS_LIMIT_REACHED
+     *
+     * MESSAGE: The allowed users for this account has reached its limit.
+     */
+    public static final int LA_E_USERS_LIMIT_REACHED = 103;
+
+    /*
+     * CODE: LA_E_OS_USER
+     *
+     * MESSAGE: OS user has changed since activation and the license is user-locked.
+     */
+    public static final int LA_E_OS_USER = 104;
+
+    /*
+     * CODE: LA_E_INVALID_PERMISSION_FLAG
+     *
+     * MESSAGE: Invalid permission flag.
+     */
+    public static final int LA_E_INVALID_PERMISSION_FLAG = 105;
+    
+    /*
+     * CODE: LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED 
+     *
+     * MESSAGE: The free plan has reached its activation limit.
+     */
+    public static final int LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED  = 106;
 
 }

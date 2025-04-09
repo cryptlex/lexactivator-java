@@ -3,6 +3,8 @@ package com.cryptlex.sample;
 import com.cryptlex.lexactivator.LexActivator;
 import com.cryptlex.lexactivator.LicenseCallbackEvent;
 import com.cryptlex.lexactivator.ReleaseCallbackEvent;
+import com.cryptlex.lexactivator.ReleaseUpdateCallbackEvent;
+import com.cryptlex.lexactivator.Release;
 import com.cryptlex.lexactivator.LexActivatorException;
 import java.io.File;
 import java.time.Instant;
@@ -26,8 +28,8 @@ public class Sample {
                 System.out.println("License is genuinely activated!");
 
                 // Checking for software release update
-                // ReleaseCallbackEventListener releaseEventListener = new ReleaseCallbackEventListener();
-                // LexActivator.CheckForReleaseUpdate("windows", "1.0.0", "stable", releaseEventListener);
+                // ReleaseUpdateCallbackEventListener releaseUpdateEventListener = new ReleaseUpdateCallbackEventListener();
+                // LexActivator.CheckReleaseUpdate(releaseUpdateEventListener, LexActivator.LA_RELEASES_ALL, null);
             } else if (LexActivator.LA_EXPIRED == status) {
                 System.out.println("License is genuinely activated but has expired!");
             } else if (LexActivator.LA_GRACE_PERIOD_OVER == status) {
@@ -95,20 +97,22 @@ class LicenseCallbackEventListener implements LicenseCallbackEvent {
     }
 }
 
-class ReleaseCallbackEventListener implements ReleaseCallbackEvent {
-
-    // Software release update callback is invoked when CheckForReleaseUpdate() gets a response from the server
+class ReleaseUpdateCallbackEventListener implements ReleaseUpdateCallbackEvent {
+    // Release update callback is invoked when CheckReleaseUpdate() gets a response from the server
     @Override
-    public void ReleaseCallback(int status) {
+    public void ReleaseUpdateCallback(int status, Release release, Object userData) {
         switch (status) {
             case LexActivator.LA_RELEASE_UPDATE_AVAILABLE:
-                System.out.println("A new update is available for the app.\n");
+                System.out.println("A new update is available for the app!\n");
+                System.out.println("Release notes: " + release.notes);
                 break;
-
+            case LexActivator.LA_RELEASE_UPDATE_AVAILABLE_NOT_ALLOWED:
+                System.out.println("A new update is available for the app but it's not allowed!\n");
+                System.out.println("Release notes: " + release.notes);
+                break;
             case LexActivator.LA_RELEASE_NO_UPDATE_AVAILABLE:
-                System.out.println("Current version is already latest.\n");
+                System.out.println("Current version is already latest....!\n");
                 break;
-
             default:
                 System.out.println("Error code: " + status);
         }

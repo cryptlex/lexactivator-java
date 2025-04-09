@@ -8,11 +8,14 @@ import java.nio.CharBuffer;
 import java.nio.charset.StandardCharsets;
 import java.io.UnsupportedEncodingException;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 
 public class LexActivator {
     private static LexActivatorNative.CallbackType privateLicenseCallback = null;
@@ -27,11 +30,17 @@ public class LexActivator {
     /* Permission Flags */
     public static final int LA_USER = 1;
     public static final int LA_SYSTEM = 2;
+    public static final int LA_ALL_USERS = 3;
     public static final int LA_IN_MEMORY = 4;
 
     /* Release Flags */
     public static final int LA_RELEASES_ALL = 1;
     public static final int LA_RELEASES_ALLOWED = 2;
+
+    // Convert long to BigInteger to correctly handle unsigned 64-bit values
+    private static BigInteger toUnsignedBigInteger(long value) {
+        return BigInteger.valueOf(value).and(BigInteger.valueOf(0xFFFFFFFFFFFFFFFFL));
+    }
 
     /**
      * Sets the absolute path of the Product.dat file. This function must be called
@@ -74,9 +83,15 @@ public class LexActivator {
      *
      * @param productId the unique product id of your application as mentioned on
      *                  the product page in the dashboard.
-     * @param flags     depending upon whether your application requires admin/root
-     *                  permissions to run or not, this parameter can have one of
-     *                  the following values: LA_SYSTEM, LA_USER, LA_IN_MEMORY
+     * @param flags     depending on your application's requirements, choose one of 
+     *                  the following values: LA_USER, LA_SYSTEM, LA_IN_MEMORY, LA_ALL_USERS.
+     * <ul>
+     * <li> LA_USER: This flag indicates that the application does not require admin or root permissions to run.</li>
+     * <li> LA_SYSTEM: This flag indicates that the application must be run with admin or root permissions.</li>
+     * <li> LA_IN_MEMORY: This flag will store activation data in memory. Thus, requires re-activation on every start 
+     *      of the application and should only be used in floating licenses.</li>
+     * <li> LA_ALL_USERS: This flag is specifically designed for Windows and should be used for system-wide activations.</li>
+     * </ul>
      * @throws LexActivatorException
      */
     public static void SetProductId(String productId, int flags) throws LexActivatorException {
@@ -103,6 +118,44 @@ public class LexActivator {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetDataDirectory(new WString(directoryPath))
                 : LexActivatorNative.SetDataDirectory(directoryPath);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Enables network logs.
+     * This function should be used for network testing only in case of network errors.
+     * By default logging is disabled.
+     * This function generates the lexactivator-logs.log file in the same directory
+     * where the application is running.
+     *
+     * @param enable 0 or 1 to disable or enable logging.
+     * 
+     * @throws LexActivatorException
+     */
+    public static void SetDebugMode(int enable) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetDebugMode(enable);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Enables or disables in-memory caching for LexActivator.
+     * This function is designed to control caching behavior to suit specific application requirements.
+     * Caching is enabled by default to enhance performance.
+     * Disabling caching is recommended in environments where multiple processes access the same license on a 
+     * single machine and require real-time updates to the license state.
+     *
+     * @param enable false or true to disable or enable logging.
+     * 
+     * @throws LexActivatorException
+     */
+    public static void SetCacheMode(boolean enable) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SetCacheMode((enable ? 1 : 0));
         if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
@@ -203,7 +256,7 @@ public class LexActivator {
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
-     * @param value string of maximum length 256 characters with utf-8 encoding.
+     * @param value string of maximum length 4096 characters with utf-8 encoding.
      *              encoding.
      * @throws LexActivatorException
      */
@@ -222,7 +275,7 @@ public class LexActivator {
      *
      * @param key   string of maximum length 256 characters with utf-8 encoding.
      *              encoding.
-     * @param value string of maximum length 256 characters with utf-8 encoding.
+     * @param value string of maximum length 4096 characters with utf-8 encoding.
      *              encoding.
      * @throws LexActivatorException
      */
@@ -317,13 +370,14 @@ public class LexActivator {
     }
 
     /**
-     * Sets the lease duration for the activation.
+     * Sets the lease duration for the activation. The activation lease duration 
+     * is honoured when the allow client lease duration property is enabled.
      * 
-     * @param leaseDuration
+     * @param leaseDuration value of the lease duration. A value of -1 indicates unlimited lease duration.
      * 
      * @throws LexActivatorException
      */
-    public static void SetActivationLeaseDuration(int leaseDuration) throws LexActivatorException {
+    public static void SetActivationLeaseDuration(long leaseDuration) throws LexActivatorException {
         int status;
         status = LexActivatorNative.SetActivationLeaseDuration(leaseDuration);
         if (LA_OK != status) {
@@ -387,6 +441,21 @@ public class LexActivator {
         int status;
         status = Platform.isWindows() ? LexActivatorNative.SetCryptlexHost(new WString(host))
                 : LexActivatorNative.SetCryptlexHost(host);
+        if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Sets the two-factor authentication code for the user authentication.
+     *
+     * @param twoFactorAuthenticationCode the 2FA code
+     * @throws LexActivatorException
+     */
+    public static void SetTwoFactorAuthenticationCode(String twoFactorAuthenticationCode) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows() ? LexActivatorNative.SetTwoFactorAuthenticationCode(new WString(twoFactorAuthenticationCode))
+                : LexActivatorNative.SetTwoFactorAuthenticationCode(twoFactorAuthenticationCode);
         if (LA_OK != status) {
             throw new LexActivatorException(status);
         }
@@ -540,21 +609,22 @@ public class LexActivator {
     public static LicenseMeterAttribute GetLicenseMeterAttribute(String name)
             throws LexActivatorException, UnsupportedEncodingException {
         int status;
-        IntByReference allowedUses = new IntByReference(0);
-        IntByReference totalUses = new IntByReference(0);
-        IntByReference grossUses = new IntByReference(0);
+        LongByReference allowedUses = new LongByReference(0);
+        // These references can still hold the uint64_t values populated by the native function
+        LongByReference totalUses = new LongByReference(0);
+        LongByReference grossUses = new LongByReference(0);
 
         if (Platform.isWindows()) {
             status = LexActivatorNative.GetLicenseMeterAttribute(new WString(name), allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
-                        grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedBigInteger(totalUses.getValue()),
+                toUnsignedBigInteger(grossUses.getValue()));
             }
         } else {
             status = LexActivatorNative.GetLicenseMeterAttribute(name, allowedUses, totalUses, grossUses);
             if (LA_OK == status) {
-                return new LicenseMeterAttribute(name, allowedUses.getValue(), totalUses.getValue(),
-                        grossUses.getValue());
+                return new LicenseMeterAttribute(name, allowedUses.getValue(), toUnsignedBigInteger(totalUses.getValue()),
+                toUnsignedBigInteger(grossUses.getValue()));
             }
         }
         throw new LexActivatorException(status);
@@ -591,9 +661,9 @@ public class LexActivator {
      * @return Returns the allowed activations
      * @throws LexActivatorException
      */
-    public static int GetLicenseAllowedActivations() throws LexActivatorException {
+    public static long GetLicenseAllowedActivations() throws LexActivatorException {
         int status;
-        IntByReference allowedActivations = new IntByReference(0);
+        LongByReference allowedActivations = new LongByReference(0);
         status = LexActivatorNative.GetLicenseAllowedActivations(allowedActivations);
         switch (status) {
         case LA_OK:
@@ -625,6 +695,105 @@ public class LexActivator {
         }
     }
 
+    /**
+     * Gets the allowed deactivations of the license.
+     * 
+     * @return Returns the allowed deactivations
+     * @throws LexActivatorException
+     */
+    public static long GetLicenseAllowedDeactivations() throws LexActivatorException {
+        int status;
+        LongByReference allowedDeactivations = new LongByReference(0);
+        status = LexActivatorNative.GetLicenseAllowedDeactivations(allowedDeactivations);
+        switch (status) {
+        case LA_OK:
+            return allowedDeactivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the total deactivations of the license.
+     * 
+     * @return Returns the total deactivations
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseTotalDeactivations() throws LexActivatorException {
+        int status;
+        IntByReference totalDeactivations = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseTotalDeactivations(totalDeactivations);
+        switch (status) {
+        case LA_OK:
+            return totalDeactivations.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the license creation date timestamp.
+     * 
+     * @return Returns the timestamp
+     * @throws LexActivatorException
+     */
+	public static int GetLicenseCreationDate() throws LexActivatorException {
+        int status;
+        IntByReference creationDate = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseCreationDate(creationDate);
+        switch (status) {
+        case LA_OK:
+            return creationDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the activation creation date timestamp.
+     * 
+     * @return Returns the timestamp
+     * @throws LexActivatorException
+     */
+    public static int GetLicenseActivationDate() throws LexActivatorException {
+        int status;
+        IntByReference activationDate = new IntByReference(0);
+        status = LexActivatorNative.GetLicenseActivationDate(activationDate);
+        switch (status) {
+        case LA_OK:
+            return activationDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Gets the activation creation date timestamp for the current activation.
+     * 
+     * @return Returns the timestamp
+     * @throws LexActivatorException
+     */
+    public static int GetActivationCreationDate() throws LexActivatorException {
+        int status;
+        IntByReference activationCreationDate = new IntByReference(0);
+        status = LexActivatorNative.GetActivationCreationDate(activationCreationDate);
+        switch (status) {
+        case LA_OK:
+            return activationCreationDate.getValue();
+        case LA_FAIL:
+            return 0;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
     /**
      * Gets the license expiry date timestamp.
      *
@@ -792,6 +961,55 @@ public class LexActivator {
     }
 
     /**
+     * Gets the user licenses for the product.
+     * 
+     * This function sends a network request to Cryptlex servers to get the licenses.
+     * 
+     * Make sure AuthenticateUser() function is called before calling this function.
+     *
+     * @return Returns a list of user licenses.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+
+    public static List<UserLicense> GetUserLicenses() throws LexActivatorException, UnsupportedEncodingException{
+        int status;
+        int bufferSize = 4096;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetUserLicensesInternal(buffer, bufferSize);
+            if (LA_OK == status) {
+                String userLicensesJson = buffer.toString().trim();
+                if (!userLicensesJson.isEmpty()) {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        List<UserLicense> userLicenses = objectMapper.readValue(userLicensesJson, new TypeReference<List<UserLicense>>() {});
+                        return userLicenses;
+                    } catch (JsonProcessingException e) {}
+                } else {
+                    return new ArrayList<>();
+                } 
+            } 
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+            status = LexActivatorNative.GetUserLicensesInternal(buffer, bufferSize);
+            if (LA_OK == status) {
+                String userLicensesJson = new String(buffer.array(), "UTF-8").trim();
+                if (!userLicensesJson.isEmpty()) {   
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    try {
+                        List<UserLicense> userLicenses = objectMapper.readValue(userLicensesJson, new TypeReference<List<UserLicense>>() {});
+                        return userLicenses;
+                    } catch (JsonProcessingException e) {}
+                } else {
+                    return new ArrayList<>();
+                } 
+            }
+        } 
+        throw new LexActivatorException(status);
+    }
+
+    /**
      * Gets the address associated with the license organization.
      *
      * @return Returns the license organization address.
@@ -855,6 +1073,31 @@ public class LexActivator {
         } else {
             ByteBuffer buffer = ByteBuffer.allocate(256);
             status = LexActivatorNative.GetLicenseType(buffer, 256);
+            if (LA_OK == status) {
+                return new String(buffer.array(), "UTF-8").trim();
+            }
+        }
+        throw new LexActivatorException(status);
+    }
+
+    /**
+     * Gets the activation id.
+     * 
+     * @return Returns the activation id.
+     * @throws LexActivatorException
+     * @throws UnsupportedEncodingException
+     */
+    public static String GetActivationId() throws LexActivatorException, UnsupportedEncodingException {
+        int status;
+        if (Platform.isWindows()) {
+            CharBuffer buffer = CharBuffer.allocate(256);
+            status = LexActivatorNative.GetActivationId(buffer, 256);
+            if (LA_OK == status) {
+                return buffer.toString().trim();
+            }
+        } else {
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            status = LexActivatorNative.GetActivationId(buffer, 256);
             if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
@@ -1194,6 +1437,45 @@ public class LexActivator {
                 ? LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallback, releaseFlags, Pointer.NULL)
                 : LexActivatorNative.CheckReleaseUpdateInternal(privateReleaseUpdateCallbackA, releaseFlags, Pointer.NULL);
         if (LA_OK != status) {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * It sends the request to the Cryptlex servers to authenticate the user.
+     *
+     * @param email    user email address.
+     * @param password user password.
+     * @return LA_OK
+     * @throws LexActivatorException
+     */
+    public static int AuthenticateUser(String email, String password) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows()
+                ? LexActivatorNative.AuthenticateUser(new WString(email), new WString(password))
+                : LexActivatorNative.AuthenticateUser(email, password);
+        if (LA_OK == status) {
+            return LA_OK;
+        } else {
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     ** Authenticates the user via OIDC Id token.
+     *
+     * @param idToken The id token obtained from the OIDC provider.
+     * @return LA_OK
+     * @throws LexActivatorException
+     */
+    public static int AuthenticateUserWithIdToken(String idToken) throws LexActivatorException {
+        int status;
+        status = Platform.isWindows()
+                ? LexActivatorNative.AuthenticateUserWithIdToken(new WString(idToken))
+                : LexActivatorNative.AuthenticateUserWithIdToken(idToken);
+        if (LA_OK == status) {
+            return LA_OK;
+        } else {
             throw new LexActivatorException(status);
         }
     }

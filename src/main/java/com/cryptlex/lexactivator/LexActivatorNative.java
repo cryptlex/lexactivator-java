@@ -8,6 +8,7 @@ import com.sun.jna.WString;
 import java.nio.CharBuffer;
 import java.nio.ByteBuffer;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.LongByReference;
 import com.sun.jna.Callback;
 
 public class LexActivatorNative implements Library {
@@ -43,6 +44,10 @@ public class LexActivatorNative implements Library {
     public static native int SetDataDirectory(String directoryPath);
 
     public static native int SetDataDirectory(WString directoryPath);
+
+    public static native int SetDebugMode(int enable);
+
+    public static native int SetCacheMode(int enable);
 
     public static native int SetCustomDeviceFingerprint(String fingerprint);
 
@@ -84,7 +89,7 @@ public class LexActivatorNative implements Library {
 
     public static native int SetReleaseChannel(WString releaseChannel);
 
-    public static native int SetActivationLeaseDuration(int leaseDuration);
+    public static native int SetActivationLeaseDuration(long leaseDuration);
 
     public static native int SetOfflineActivationRequestMeterAttributeUses(String name, int uses);
 
@@ -97,6 +102,10 @@ public class LexActivatorNative implements Library {
     public static native int SetCryptlexHost(String host);
 
     public static native int SetCryptlexHost(WString host);
+
+    public static native int SetTwoFactorAuthenticationCode(String twoFactorAuthenticationCode);
+
+    public static native int SetTwoFactorAuthenticationCode(WString twoFactorAuthenticationCode);
 
     public static native int GetProductMetadata(String key, ByteBuffer value, int length);
 
@@ -118,21 +127,31 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
 
-    public static native int GetLicenseMeterAttribute(String name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
+    public static native int GetLicenseMeterAttribute(String name, LongByReference allowedUses, LongByReference totalUses, LongByReference grossUses);
 
-    public static native int GetLicenseMeterAttribute(WString name, IntByReference allowedUses, IntByReference totalUses, IntByReference grossUses);
+    public static native int GetLicenseMeterAttribute(WString name, LongByReference allowedUses, LongByReference totalUses, LongByReference grossUses);
 
     public static native int GetLicenseKey(ByteBuffer licenseKey, int length);
 
     public static native int GetLicenseKey(CharBuffer licenseKey, int length);
 
+    public static native int GetLicenseCreationDate(IntByReference creationDate);
+
+    public static native int GetLicenseActivationDate(IntByReference activationDate);
+
+    public static native int GetActivationCreationDate(IntByReference activationCreationDate);
+
     public static native int GetLicenseExpiryDate(IntByReference expiryDate);
 
     public static native int GetLicenseMaintenanceExpiryDate(IntByReference maintenanceExpiryDate);
 
-    public static native int GetLicenseAllowedActivations(IntByReference allowedActivations);
+    public static native int GetLicenseAllowedActivations(LongByReference allowedActivations);
 
     public static native int GetLicenseTotalActivations(IntByReference totalActivations);
+
+    public static native int GetLicenseAllowedDeactivations(LongByReference allowedDeactivations);
+
+    public static native int GetLicenseTotalDeactivations(IntByReference totalDeactivations);
 
     public static native int GetLicenseUserEmail(ByteBuffer email, int length);
 
@@ -158,9 +177,17 @@ public class LexActivatorNative implements Library {
 
     public static native int GetLicenseOrganizationAddressInternal(CharBuffer address, int length);
 
+    public static native int GetUserLicensesInternal(ByteBuffer userLicenses, int length);
+
+    public static native int GetUserLicensesInternal(CharBuffer userLicenses, int length);
+
     public static native int GetLicenseType(ByteBuffer licenseType, int length);
 
     public static native int GetLicenseType(CharBuffer licenseType, int length);
+
+    public static native int GetActivationId(ByteBuffer id, int length);
+
+    public static native int GetActivationId(CharBuffer id, int length);
 
     public static native int GetActivationMetadata(String key, ByteBuffer value, int length);
 
@@ -199,6 +226,14 @@ public class LexActivatorNative implements Library {
     public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackType releaseCallback, int releaseFlags, Pointer userData);
 
     public static native int CheckReleaseUpdateInternal(ReleaseUpdateCallbackTypeA releaseCallback, int releaseFlags, Pointer userData);
+    
+    public static native int AuthenticateUser(String email, String password);
+
+    public static native int AuthenticateUser(WString email, WString password);
+
+    public static native int AuthenticateUserWithIdToken(String idToken);
+
+    public static native int AuthenticateUserWithIdToken(WString idToken);
     
     public static native int ActivateLicense();
 
