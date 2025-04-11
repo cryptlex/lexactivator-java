@@ -17,8 +17,8 @@ public class Sample {
         try {
             // String path = System.getProperty("user.dir") + File.separator +"Product.dat";
             // LexActivator.SetProductFile(path);
-            LexActivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE");
-            LexActivator.SetProductId("PASTE_PRODUCT_ID", LexActivator.LA_USER);
+            LexActivator.SetProductData("QjhCMzYzQ0Y1QjBDNjdDMkFDQkRCRURCQjJGRkUxRTM=.W6xjK0PSnNVX/2tU/aGYM36gM8ttLV6sCpSgL+ZWm1f9W3zaYPobLxXY3DPGTLJ+xq6VoYrHr5ZG0WKcE4WaYmFO8c6udPbN6p7yVIRN68JPVyNYyzcRheYu4met+LSD693WmOljZcTqU0uvx8iUkScv6FfkJj8L0Bv9oz/M1WdYEwY1+N1iKEYzSfVPmSDk5gRRWW4O6GjPYWy8GRFHPmFhRz2/cO8EkNb0Quh5J48wcBGBcld/rtImOGG9+5RcDNYPIzYYPVSVDTlvrV9m8FjvAi1RzNgSiZGFMPlgc2HVb3/4IGlsIuQMUFP9BWR9fR1fmziOmauMKpxYl//BgIDpiWvMsYn9fbcDrDIDWLkiZRyJ7GY6oT8aP9VulbOjWhw6m0ikUSPjRrSICUBH5PHEmfh6otg//rO0WXUf0vUohqpWQpJGy2Ak/hMp6EmBgeX6BoZ1wbM896TJNSOXhGh74/GOODRTNl5RKhT0QWldNGk1+qVLGNFB0gENROIbGIyMIZtuIUkEQo35wxcgUDu50hT2nWX90Jn21mVoD5zxczAtvPUgVKs2nMSJqP7MlnBLtONlJ3VdgmrBT4iUs7Bu42EQYxojmTRAG9LHWeguZ5bVn3judc6uAY/zQcZolHiANpB+e2BfbjKt7t2Fsons6IZGC2U/D+BsJR/5bAlM+q0EVqkvLMHr1dbJsnhCEAyrgljFI6WWC+4TctjF6FTPlApwWahYWn92PlVK9cEX9iApJJCLGvRqbjp1Dd1yw1kROTmdF4evYJdTN8lT6A8EYUzTgLHs/STv9/E31kXjV6PVnaRS/XK+ahcrGKV3");
+            LexActivator.SetProductId("2a2d5582-a2f9-4cfd-9db3-bf819166fd9b", LexActivator.LA_USER);
             LexActivator.SetReleaseVersion("1.0.0");  // Set this to the release version of your app
             // Setting license callback is recommended for floating licenses
             // LicenseCallbackEventListener licenseEventListener = new LicenseCallbackEventListener();
@@ -26,6 +26,19 @@ public class Sample {
             status = LexActivator.IsLicenseGenuine();
             if (LexActivator.LA_OK == status) {
                 System.out.println("License is genuinely activated!");
+
+                String entitlementSetName = LexActivator.GetLicenseEntitlementSetName();
+                System.out.println("Entitlement Set Name: " + entitlementSetName);
+
+                String entitlementSetDisplayName = LexActivator.GetLicenseEntitlementSetDisplayName();
+                System.out.println("Entitlement Set Display Name: " + entitlementSetDisplayName);
+
+                String displayName = LexActivator.GetProductVersionDisplayName();
+                System.out.println("Product Version Display Name: " + displayName);
+
+                
+                
+                
 
                 // Checking for software release update
                 // ReleaseUpdateCallbackEventListener releaseUpdateEventListener = new ReleaseUpdateCallbackEventListener();
@@ -46,7 +59,7 @@ public class Sample {
                 } else if (LexActivator.LA_TRIAL_EXPIRED == trialStatus) {
                     System.out.println("Trial has expired!");
                     // Time to buy the product key and activate the app
-                    LexActivator.SetLicenseKey("PASTE_LICENSE_KEY");
+                    LexActivator.SetLicenseKey("5C809E-049639-4A6596-D819AE-30EDC0-BAFFBC");
                     LexActivator.SetActivationMetadata("key1", "value1");
                     // Activating the product
                     status = LexActivator.ActivateLicense(); // Ideally on a button click inside a dialog
@@ -73,6 +86,8 @@ public class Sample {
 
         } catch (LexActivatorException ex) {
             System.out.println(ex.getCode() + ": " + ex.getMessage());
+        } catch (UnsupportedEncodingException ex) {
+            System.out.println("Encoding error: " + ex.getMessage());
         }
     }
 
