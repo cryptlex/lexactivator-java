@@ -231,6 +231,10 @@ public class LexActivatorException extends Exception {
             message = "Client error.";
             break;
 
+        case LA_E_ACCOUNT_ID:
+            message = "Invalid account ID.";
+            break;
+
         case LA_E_LOGIN_TEMPORARILY_LOCKED:
             message = "The user account has been temporarily locked for 5 mins due to 5 failed attempts.";
             break;
@@ -257,6 +261,18 @@ public class LexActivatorException extends Exception {
 
         case LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED:
             message = "The free plan has reached it's activation limit.";
+            break;
+
+        case LA_E_FEATURE_ENTITLEMENTS_INVALID:
+            message = "Invalid feature entitlements.";
+            break;
+
+        case LA_E_FEATURE_ENTITLEMENT_NOT_FOUND:
+            message = "The feature entitlement does not exist.";
+            break;
+
+        case LA_E_ENTITLEMENT_SET_NOT_LINKED:
+            message = "No entitlement set is linked to the license.";
             break;
 
         default:
@@ -650,6 +666,13 @@ public class LexActivatorException extends Exception {
     public static final int LA_E_CLIENT = 92;
 
     /*
+     * CODE: LA_E_ACCOUNT_ID
+     * 
+     * MESSAGE: Invalid account ID.
+     */
+    public static final int LA_E_ACCOUNT_ID = 93;
+
+    /*
      * CODE: LA_E_LOGIN_TEMPORARILY_LOCKED
      * 
      * MESSAGE: The user account has been temporarily locked for 5 mins due to 5 failed attempts.
@@ -698,4 +721,24 @@ public class LexActivatorException extends Exception {
      */
     public static final int LA_E_FREE_PLAN_ACTIVATION_LIMIT_REACHED  = 106;
 
+    /*
+     * CODE: LA_E_FEATURE_ENTITLEMENTS_INVALID
+     * 
+     * MESSAGE: Invalid feature entitlements.
+     */
+    public static final int LA_E_FEATURE_ENTITLEMENTS_INVALID = 107;
+
+    /*
+     * CODE: LA_E_FEATURE_ENTITLEMENT_NOT_FOUND
+     * 
+     * MESSAGE: The feature entitlement does not exist.
+     */
+    public static final int LA_E_FEATURE_ENTITLEMENT_NOT_FOUND = 108;
+
+    /*
+     * CODE: LA_E_ENTITLEMENT_SET_NOT_LINKED
+     * 
+     * MESSAGE: No entitlement set is linked to the license.
+     */
+    public static final int LA_E_ENTITLEMENT_SET_NOT_LINKED = 109;
 }
