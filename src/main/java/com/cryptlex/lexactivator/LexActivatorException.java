@@ -275,6 +275,10 @@ public class LexActivatorException extends Exception {
             message = "No entitlement set is linked to the license.";
             break;
 
+        case LA_E_LICENSE_NOT_EFFECTIVE:
+            message = "The license cannot be activated before its effective date.";
+            break;
+
         default:
             message = "Unknown error!";
 
@@ -741,4 +745,11 @@ public class LexActivatorException extends Exception {
      * MESSAGE: No entitlement set is linked to the license.
      */
     public static final int LA_E_ENTITLEMENT_SET_NOT_LINKED = 109;
+
+    /*
+     * CODE: LA_E_LICENSE_NOT_EFFECTIVE
+     * 
+     * MESSAGE: The license cannot be activated before its effective date.
+     */
+    public static final int LA_E_LICENSE_NOT_EFFECTIVE = 110;
 }
