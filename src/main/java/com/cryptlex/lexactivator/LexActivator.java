@@ -798,6 +798,8 @@ public class LexActivator {
     /**
      * Gets the activation last synced date timestamp.
      * 
+     * Initially, this timestamp matches the activation creation date, and then updates with each successful server sync.
+     * 
      * @return Returns the timestamp
      * @throws LexActivatorException
      */
