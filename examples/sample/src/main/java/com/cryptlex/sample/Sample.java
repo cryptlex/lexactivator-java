@@ -15,8 +15,6 @@ public class Sample {
     public static void main(String[] args) {
         int status;
         try {
-            // String path = System.getProperty("user.dir") + File.separator +"Product.dat";
-            // LexActivator.SetProductFile(path);
             LexActivator.SetProductData("PASTE_CONTENT_OF_PRODUCT.DAT_FILE");
             LexActivator.SetProductId("PASTE_PRODUCT_ID", LexActivator.LA_USER);
             LexActivator.SetReleaseVersion("1.0.0");  // Set this to the release version of your app

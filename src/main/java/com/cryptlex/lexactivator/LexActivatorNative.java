@@ -123,6 +123,22 @@ public class LexActivatorNative implements Library {
     
     public static native int GetProductVersionFeatureFlag(WString name, IntByReference enabled, CharBuffer data, int length);
 
+    public static native int GetLicenseEntitlementSetName(ByteBuffer entitlementSetName, int length);
+
+    public static native int GetLicenseEntitlementSetName(CharBuffer entitlementSetName, int length);
+
+    public static native int GetLicenseEntitlementSetDisplayName(ByteBuffer entitlementSetDisplayName, int length);
+
+    public static native int GetLicenseEntitlementSetDisplayName(CharBuffer entitlementSetDisplayName, int length);
+
+    public static native int GetFeatureEntitlementsInternal(ByteBuffer featureEntitlementsJson, int length);
+
+    public static native int GetFeatureEntitlementsInternal(CharBuffer featureEntitlementsJson, int length);
+
+    public static native int GetFeatureEntitlementInternal(String featureName, ByteBuffer featureEntitlementJson, int length);
+
+    public static native int GetFeatureEntitlementInternal(WString featureName, CharBuffer featureEntitlementJson, int length);
+    
     public static native int GetLicenseMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetLicenseMetadata(WString key, CharBuffer value, int length);
