@@ -33,7 +33,7 @@ jobs:
 
   publish:
     needs: update-version
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
 
@@ -47,6 +47,9 @@ jobs:
       with:
          distribution: 'adopt'
          java-version: '11'
+
+    - name: Check Maven version
+      run: mvn -version
 
     - name: Update Version in pom.xml
       run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.packageVersion }} -DgenerateBackupPoms=false
