@@ -24,5 +24,5 @@ jobs:
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
         gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
-    - name: Test Build and Package
-      run: mvn -B -e -X clean package -Pdeploy -Drevision=1.0.0-test
+    - name: Test Full Deploy (No Publishing)
+      run: mvn -B clean deploy -Pdeploy -Drevision=1.0.0-test -DskipPublishing=true -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
