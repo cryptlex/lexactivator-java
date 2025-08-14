@@ -60,7 +60,7 @@ jobs:
       run: mvn -B versions:set -DnewVersion=${{ github.event.inputs.packageVersion }} -DgenerateBackupPoms=false
 
     - name: Publish to Central Portal
-      run: mvn -B -e -X clean deploy -Pdeploy -Drevision=${{ github.event.inputs.packageVersion }} -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+      run: mvn -B -e clean deploy -Pdeploy -Drevision=${{ github.event.inputs.packageVersion }} -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
       env:
         CENTRAL_USERNAME:  ${{ secrets.MAVEN_USERNAME }}   
         CENTRAL_PASSWORD:  ${{ secrets.MAVEN_PASSWORD }}   # Central Portal token
