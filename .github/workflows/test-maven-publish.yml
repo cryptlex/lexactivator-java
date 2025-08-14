@@ -1,8 +1,6 @@
 name: Test Maven Publish
 
 on:
-  push:
-    branches: ['**']  # Triggers on push to ANY branch
   pull_request:
     branches: ['**']  # Also on PRs to any branch
 
