@@ -1,0 +1,28 @@
+name: Test Maven Publish
+
+on:
+  pull_request:
+    branches: ['**']  # Also on PRs to any branch
+
+jobs:
+  test-publish:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Assemble Resources
+      run: ./download-libs.sh
+      
+    - name: Set up JDK 11 and Maven settings + GPG
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '11'
+        server-id: central
+        server-username: ${{ secrets.MAVEN_USERNAME }}
+        server-password: ${{ secrets.MAVEN_PASSWORD }}
+        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+        gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Test Build and Package
+      run: mvn -B -e -X clean package -Pdeploy -Drevision=1.0.0-test
