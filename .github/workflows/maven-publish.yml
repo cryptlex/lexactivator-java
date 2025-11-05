@@ -2,37 +2,9 @@ name: Maven Publish
 
 on:
   workflow_dispatch:
-    inputs:
-      libraryVersion:
-        description: 'Library Version'
-        required: true
-        default: ''
-      packageVersion:
-        description: 'Package Version'
-        required: true
-        default: ''
 
 jobs:
-  update-version:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      
-      - name: Update Version
-        run: |
-          sed -i '/VERSION=/!b;cVERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
-      - name: Commit, Tag and Push
-        run: |
-          git add ./download-libs.sh
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit -m "updated version" | exit 0
-          git tag ${{ github.event.inputs.packageVersion }}
-          git push & git push --tags
-
   publish:
-    needs: update-version
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
