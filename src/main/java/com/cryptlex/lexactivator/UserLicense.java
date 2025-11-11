@@ -18,6 +18,16 @@ public class UserLicense {
      */
     public String key;
 
+     /**
+     * Total number of activations for the license.
+     */
+    public long totalActivations;
+
+     /**
+     * Total number of deactivations for the license.
+     */
+    public long totalDeactivations;
+
     /**
      * The license type (node-locked or hosted-floating).
      */
