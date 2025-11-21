@@ -15,5 +15,10 @@ public class FeatureEntitlement {
      * The value of the feature.
      */
     public String value;
+
+    /**
+     * Timestamp when the license feature entitlement will expire.
+     */
+    public long expiresAt;
     
 }
