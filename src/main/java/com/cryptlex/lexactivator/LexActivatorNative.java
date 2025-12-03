@@ -221,6 +221,8 @@ public class LexActivatorNative implements Library {
 
     public static native int GetServerSyncGracePeriodExpiryDate(IntByReference expiryDate);
 
+    public static native int GetLastActivationError(IntByReference errorCode);
+
     public static native int GetTrialActivationMetadata(String key, ByteBuffer value, int length);
 
     public static native int GetTrialActivationMetadata(WString key, CharBuffer value, int length);
