@@ -1379,6 +1379,24 @@ public class LexActivator {
     }
 
     /**
+     * Gets the error code that caused the activation data to be cleared.
+     *
+     * @return Returns the error code that caused the activation data to be cleared.
+     * @throws LexActivatorException
+     */
+    public static int GetLastActivationError() throws LexActivatorException {
+        int status;
+        IntByReference errorCode = new IntByReference(0);
+        status = LexActivatorNative.GetLastActivationError(errorCode);
+        switch (status) {
+        case LA_OK:
+            return errorCode.getValue();
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Gets the trial activation metadata.
      *
      * @param key key to retrieve the value
