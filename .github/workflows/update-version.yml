@@ -25,9 +25,11 @@ jobs:
       - name: Update Version
         run: |
           sed -i '/VERSION=/!b;cVERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
+          sed -i '/<packaging>jar<\/packaging>/,/<name>/s/<version>[^<]*<\/version>/<version>${{ github.event.inputs.libraryVersion }}<\/version>/' pom.xml
       - name: Commit, Tag and Push
         run: |
           git add ./download-libs.sh
+          git add pom.xml
           git config user.name github-actions
           git config user.email github-actions@github.com
           git commit -m "chore(package version): updated version" | exit 0
