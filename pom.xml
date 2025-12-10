@@ -4,7 +4,7 @@
     <groupId>com.cryptlex.lexactivator</groupId>
     <artifactId>lexactivator</artifactId>
     <packaging>jar</packaging>
-    <version>${revision}</version>
+    <version>3.35.2</version>
     <name>LexActivator</name>
     <url>https://github.com/cryptlex/lexactivator-java</url>
     <description>LexActivator API wrapper for Java (licensing library).</description>
