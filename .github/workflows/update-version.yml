@@ -15,24 +15,29 @@ on:
 jobs:
   update-version:
     runs-on: ubuntu-latest
+    env:
+      LIBRARY_VERSION: ${{ github.event.inputs.libraryVersion }}
+      PACKAGE_VERSION: ${{ github.event.inputs.packageVersion }}
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Create new branch
-        run: git checkout -b release/${{ github.event.inputs.packageVersion }}
+        uses: actions/checkout@v4
       
       - name: Update Version
         run: |
-          sed -i '/VERSION=/!b;cVERSION=\"v${{ github.event.inputs.libraryVersion }}";' ./download-libs.sh
-          sed -i '/<packaging>jar<\/packaging>/,/<name>/s/<version>[^<]*<\/version>/<version>${{ github.event.inputs.libraryVersion }}<\/version>/' pom.xml
-      - name: Commit, Tag and Push
-        run: |
-          git add ./download-libs.sh
-          git add pom.xml
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit -m "chore(package version): updated version" | exit 0
-          git tag ${{ github.event.inputs.packageVersion }}
-          git push --set-upstream origin release/${{ github.event.inputs.packageVersion }} 
-          git push --tags
+          sed -i -E 's/^([[:space:]]*)VERSION="[^"]*"/\1VERSION="v${{ env.LIBRARY_VERSION }}"/' ./download-libs.sh
+          sed -i '/<packaging>jar<\/packaging>/,/<name>/s/<version>[^<]*<\/version>/<version>${{ env.LIBRARY_VERSION }}<\/version>/' pom.xml
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          branch: ci/${{ env.PACKAGE_VERSION }}
+          title: "chore: bump package version to ${{ env.PACKAGE_VERSION }}"
+          commit-message: "chore(package version): updated version"
+          body: |
+            Automated package version bump.
+          base: master
+          add-paths: |
+            ./download-libs.sh
+            pom.xml
+
