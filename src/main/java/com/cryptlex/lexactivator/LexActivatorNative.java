@@ -305,5 +305,7 @@ public class LexActivatorNative implements Library {
 
     public static native int ResetActivationMeterAttributeUses(WString name);
 
+    public static native int MigrateToSystemWideActivation(int oldPermissionFlag);
+
     public static native int Reset();
 }
