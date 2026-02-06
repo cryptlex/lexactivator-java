@@ -67,6 +67,15 @@
                         <filtering>false</filtering>
                         <directory>${basedir}/src/main/resources</directory>
                     </resource>
+                    <resource>
+                        <directory>${basedir}</directory>
+                        <includes>
+                            <include>LICENSE</include>
+                            <include>NOTICE</include>
+                        </includes>
+                        <targetPath>META-INF</targetPath>
+                        <filtering>false</filtering>
+                    </resource>
                 </resources>
 
                 <plugins>
