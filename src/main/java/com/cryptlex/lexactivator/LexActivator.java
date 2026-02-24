@@ -2080,6 +2080,29 @@ public class LexActivator {
     }
 
     /**
+     * Migrates existing license data to system-wide storage. Call this function
+     * after SetProductData(). If you intend to use a custom data directory after
+     * migration, set it first using SetDataDirectory(). <b>Note: </b> The function
+     * does not support migration from custom data directories.
+     *
+     * @param oldPermissionFlag previous permission flag used
+     * @return  LA_OK, LA_FAIL
+     * @throws LexActivatorException
+     */
+    public static int MigrateToSystemWideActivation(int oldPermissionFlag) throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.MigrateToSystemWideActivation(oldPermissionFlag);
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Resets the activation and trial data stored in the machine. This function is
      * meant for developer testing only. <b>Note: </b>The function does not reset
      * local(unverified) trial data.
