@@ -34,3 +34,22 @@ jobs:
         MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}   
         MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}   # Central Portal token
         MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+    - name: Extract version and create tag
+      run: |
+        VERSION=$(sed -n 's/^[[:space:]]*<version>\([^<]*\)<\/version>/\1/p' pom.xml | head -1)
+
+        [ -n "$VERSION" ] || exit 1
+
+        git tag "$VERSION" 2>/dev/null || echo "Tag already exists"
+        git push origin "$VERSION" || true
+
+    - name: Notify slack releases channel
+      uses: slackapi/slack-github-action@v2
+      with:
+        webhook: ${{ secrets.SLACK_RELEASES_PROD_WEBHOOK_URL }}
+        webhook-type: webhook-trigger
+        payload: |
+          status: "${{ job.status }}"
+          environment: "PRODUCTION"
+          project: "LexActivator Java"
