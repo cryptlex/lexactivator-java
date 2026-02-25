@@ -1,16 +1,19 @@
+lexactivator-java uses third-party libraries or other resources that may be
+distributed under licenses different than the lexactivator-java.
 
-THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
-============================================================
+In the event that we accidentally failed to list a required notice, please
+bring it to our attention. Post an issue or email us:
 
-== Apache-2.0 ==
+           support@cryptlex.com
 
-     Jackson-annotations (com.fasterxml.jackson.core:jackson-annotations:2.14.2 - https://github.com/FasterXML/jackson-annotations) 
-     Jackson-core (com.fasterxml.jackson.core:jackson-core:2.14.2 - https://github.com/FasterXML/jackson-core)
-     jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.14.2 - https://github.com/FasterXML/jackson)
-     Java Native Access (net.java.dev.jna:jna:5.10.0 - https://github.com/java-native-access/jna)
+The attached notices are provided for information only.
 
-------------------------------------------------------------
-
+License notice for:
+Jackson-annotations (com.fasterxml.jackson.core:jackson-annotations:2.14.2 - https://github.com/FasterXML/jackson-annotations)
+Jackson-core (com.fasterxml.jackson.core:jackson-core:2.14.2 - https://github.com/FasterXML/jackson-core)
+jackson-databind (com.fasterxml.jackson.core:jackson-databind:2.14.2 - https://github.com/FasterXML/jackson)
+Java Native Access (net.java.dev.jna:jna:5.10.0 - https://github.com/java-native-access/jna)
+-------------------------------------------------
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -212,5 +215,3 @@ THIRD-PARTY SOFTWARE NOTICES AND INFORMATION
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
-
-============================================================
