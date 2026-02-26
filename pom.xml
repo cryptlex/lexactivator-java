@@ -11,8 +11,8 @@
 
     <licenses>
         <license>
-            <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <name>Proprietary</name>
+            <url>https://docs.cryptlex.com/legal/terms-of-service</url>
             <distribution>repo</distribution>
         </license>
     </licenses>
@@ -66,6 +66,15 @@
                     <resource>
                         <filtering>false</filtering>
                         <directory>${basedir}/src/main/resources</directory>
+                    </resource>
+                    <resource>
+                        <directory>${basedir}</directory>
+                        <includes>
+                            <include>LICENSE</include>
+                            <include>NOTICE</include>
+                        </includes>
+                        <targetPath>META-INF</targetPath>
+                        <filtering>false</filtering>
                     </resource>
                 </resources>
 
