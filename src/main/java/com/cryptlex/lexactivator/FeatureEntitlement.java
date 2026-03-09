@@ -17,6 +17,11 @@ public class FeatureEntitlement {
     public String value;
 
     /**
+     * The default value of the feature inherited from the entitlement set.
+     */
+    public String baseValue;
+
+    /**
      * Timestamp when the license feature entitlement will expire.
      */
     public long expiresAt;
