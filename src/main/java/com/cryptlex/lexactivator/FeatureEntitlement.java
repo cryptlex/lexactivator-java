@@ -12,12 +12,14 @@ public class FeatureEntitlement {
     public String featureDisplayName;
 
     /**
-     * The value of the feature.
+     * Effective value of the feature. Contains the overridden value if set at the license level;
+     * otherwise, the entitlement set value.
      */
     public String value;
 
     /**
-     * The default value of the feature inherited from the entitlement set.
+     * Default value of the feature defined in the entitlement set; empty for features not inherited
+     * from an entitlement set.
      */
     public String baseValue;
 
