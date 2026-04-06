@@ -1866,6 +1866,33 @@ public class LexActivator {
     }
 
     /**
+     * Syncs the activation data with the Cryptlex server. This function should be
+     * called only if the license is already activated. This is a blocking call that
+     * performs a one-time synchronization to refresh the local license data. <b>Note:
+     * </b>For periodic validation, use IsLicenseGenuine() instead, which schedules
+     * background sync at a defined interval.
+     *
+     * @return LA_OK, LA_EXPIRED, LA_SUSPENDED, LA_FAIL
+     * @throws LexActivatorException
+     */
+    public static int SyncLicenseActivation() throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SyncLicenseActivation();
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_EXPIRED:
+            return LA_EXPIRED;
+        case LA_SUSPENDED:
+            return LA_SUSPENDED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
      * Starts the verified trial in your application by contacting the Cryptlex
      * servers. This function should be executed when your application starts first
      * time on the user's computer, ideally on a button click. <b>Note: </b>This
@@ -1877,6 +1904,31 @@ public class LexActivator {
     public static int ActivateTrial() throws LexActivatorException {
         int status;
         status = LexActivatorNative.ActivateTrial();
+        switch (status) {
+        case LA_OK:
+            return LA_OK;
+        case LA_TRIAL_EXPIRED:
+            return LA_TRIAL_EXPIRED;
+        case LA_FAIL:
+            return LA_FAIL;
+        default:
+            throw new LexActivatorException(status);
+        }
+    }
+
+    /**
+     * Syncs the trial activation data with the Cryptlex server. This function should
+     * be called only if the trial is already activated. This is a blocking call that
+     * performs a one-time synchronization to refresh the local trial data. <b>Note: </b>
+     * Unlike IsTrialGenuine(), which validates the trial activation locally only, this
+     * function forces an immediate server check.
+     *
+     * @return LA_OK, LA_TRIAL_EXPIRED, LA_FAIL
+     * @throws LexActivatorException
+     */
+    public static int SyncTrialActivation() throws LexActivatorException {
+        int status;
+        status = LexActivatorNative.SyncTrialActivation();
         switch (status) {
         case LA_OK:
             return LA_OK;
