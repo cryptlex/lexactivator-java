@@ -277,7 +277,11 @@ public class LexActivatorNative implements Library {
 
     public static native int IsLicenseValid();
 
+    public static native int SyncLicenseActivation();
+
     public static native int ActivateTrial();
+
+    public static native int SyncTrialActivation();
 
     public static native int ActivateTrialOffline(String filePath);
 
