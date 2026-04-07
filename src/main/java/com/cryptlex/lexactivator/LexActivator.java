@@ -1918,7 +1918,7 @@ public class LexActivator {
     }
 
     /**
-     * Synchronizes the trial activation data with the Cryptlex servers . The trial must
+     * Synchronizes the trial activation data with the Cryptlex servers. The trial must
      * already be activated when this function is called. This is a blocking call that
      * performs a one-time synchronization to refresh the local trial data. Unlike
      * IsTrialGenuine(), which validates the trial activation locally, this function
