@@ -750,14 +750,14 @@ public class LexActivator {
     public static String GetLicenseMetadata(String key) throws LexActivatorException, UnsupportedEncodingException {
         int status;
         if (Platform.isWindows()) {
-            CharBuffer buffer = CharBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseMetadata(new WString(key), buffer, 256);
+            CharBuffer buffer = CharBuffer.allocate(4096);
+            status = LexActivatorNative.GetLicenseMetadata(new WString(key), buffer, 4096);
             if (LA_OK == status) {
                 return buffer.toString().trim();
             }
         } else {
-            ByteBuffer buffer = ByteBuffer.allocate(256);
-            status = LexActivatorNative.GetLicenseMetadata(key, buffer, 256);
+            ByteBuffer buffer = ByteBuffer.allocate(4096);
+            status = LexActivatorNative.GetLicenseMetadata(key, buffer, 4096);
             if (LA_OK == status) {
                 return new String(buffer.array(), "UTF-8").trim();
             }
